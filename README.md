@@ -1,5 +1,7 @@
 # react-media-match
 
+[![NPM](https://nodei.co/npm/react-media-match.png?downloads=true&stars=true)](https://nodei.co/npm/react-media-match/)
+
 Mobile first react responsive framework made easy. The main difference from `react-media` - approach itself.
 
 react-media-match provides 2 components and one function, and no of them awaits query as a prop,
