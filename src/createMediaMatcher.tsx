@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Media from 'react-media';
+import * as RawMedia from 'react-media';
 import {adopt} from "react-adopt";
 import {MediaContext} from './context';
 
@@ -9,6 +9,9 @@ import {forEachName, pickMediaMatch} from "./utils";
 type AdoptMatches<T> = (matches: BoolOf<T>) => React.ReactNode | null;
 
 type Media = React.ReactElement<{children: (match:boolean) => React.ReactNode}>
+
+// Hack, dirty hack
+const Media = RawMedia.default || RawMedia;
 
 function createMatcher<T, G extends keyof T>(mediaRules: MediaRulesOf<T>): React.ComponentType<{ children: AdoptMatches<T> }> {
     return adopt(

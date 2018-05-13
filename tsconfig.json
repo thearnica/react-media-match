@@ -24,7 +24,7 @@
     "jsx": "react"
   },
   "files": [
-    "./custom-typings/react-adopt.d.ts",
-    "./custom-typings/react-media.d.ts"
+    "./src/custom-typings/react-adopt.d.ts",
+    "./src/custom-typings/react-media.d.ts"
   ]
 }
