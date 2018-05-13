@@ -1,5 +1,6 @@
 import {createMediaMatcher} from "./createMediaMatcher";
 import mediaDefaults from './mediaDefaults'
+import {SFC, ComponentType, ReactElement, StatelessComponent, ReactPortal} from 'react';
 
 const defaultMedia = createMediaMatcher(mediaDefaults);
 
@@ -11,22 +12,22 @@ const pickMatch = defaultMedia.pickMatch;
 
 /**
  * Provides Context for underlayed consumers
- * @type {React.SFC}
+ * @type {SFC}
  */
 const ProvideMediaMatchers = defaultMedia.ProvideMediaMatchers;
 /**
  * Consumes provided information from context and returns via renderProps
- * @type {React.SFC<{children: RenderMatch<any>}>}
+ * @type {SFC<{children: RenderMatch<any>}>}
  */
 const MediaMatches = defaultMedia.MediaMatches;
 /**
  * Calculates media match and renders a rule
- * @type {React.SFC<RenderOf<any>>}
+ * @type {SFC<RenderOf<any>>}
  */
 const InlineMediaMatcher = defaultMedia.InlineMediaMatcher;
 /**
  * Consumes provided information and renders matched rule
- * @type {React.SFC<RenderOf<any>>}
+ * @type {SFC<RenderOf<any>>}
  */
 const MediaMatcher = defaultMedia.MediaMatcher;
 

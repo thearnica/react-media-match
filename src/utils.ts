@@ -1,6 +1,6 @@
 import {MediaRulesOf, ObjectOf, BoolOf} from "./types";
 
-export function forEachName<T, K, R = Object & {[key in keyof T]: K}>
+export function forEachName<T, K, R = {[key in keyof T]: K}>
 (object: MediaRulesOf<T>, map: (key: string) => K): R {
     return Object
         .keys(object)
@@ -8,7 +8,7 @@ export function forEachName<T, K, R = Object & {[key in keyof T]: K}>
         .reduce((acc: any, line): R => ({
             ...acc,
             [line.key]: line.value
-        }), {} as R)
+        }), {})
 }
 
 export function pickMediaMatch<T, K>
