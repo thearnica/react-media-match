@@ -4,6 +4,8 @@
 
 Mobile first react responsive framework made easy. The main difference from `react-media` - approach itself.
 
+Once define all your media queries (2-3-4 usual), and them use them _simultaneously_! As long this is that you want - define how application should look like on all resolutions. Not one-by-one, as usual.
+
 react-media-match provides 2 components and one function, and no of them awaits query as a prop,
 
 ```js
@@ -47,6 +49,37 @@ react-media-match provides 2 components and one function, and no of them awaits 
 
  - `MediaMatcher` - component, renders path for active match
 
+## Example 
+
+```js
+<ProvideMediaMatchers>
+    <MediaMatcher
+    mobile={"mobile"}
+    tablet={null}
+    desktop={"desktop"}
+    />
+
+    <MediaMatcher
+        mobile={"mobile"}     
+        desktop={"desktop"}
+    />
+
+    <MediaMatches>
+    {matches => (
+        <span> testing {pickMatch(matches, {
+            mobile: "mobile",
+            tablet: "tablet",
+            desktop: "desktop",
+        })}</span>
+    )}
+    </MediaMatches>
+</ProvideMediaMatchers>
+```
+
+
+## Sandbox
+
+https://codesandbox.io/s/o7q3zlo0n9
 
 # Licence
 MIT
