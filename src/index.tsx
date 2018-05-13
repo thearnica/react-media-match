@@ -1,5 +1,6 @@
 import {createMediaMatcher} from "./createMediaMatcher";
 import mediaDefaults from './mediaDefaults'
+// @ts-ignore
 import {SFC, ComponentType, ReactElement, StatelessComponent, ReactPortal} from 'react';
 
 const defaultMedia = createMediaMatcher(mediaDefaults);
