@@ -1,0 +1,42 @@
+{
+  "name": "react-media-match",
+  "version": "1.0.0",
+  "description": "React made responsible",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "ts-react-toolbox test",
+    "bootstrap": "ts-react-toolbox init",
+    "dev": "ts-react-toolbox dev",
+    "test:ci": "ts-react-toolbox test --runInBand --coverage",
+    "build": "ts-react-toolbox build",
+    "release": "ts-react-toolbox release",
+    "lint": "ts-react-toolbox lint",
+    "static": "ts-react-toolbox publish",
+    "format": "ts-react-toolbox format",
+    "analyze": "ts-react-toolbox analyze"
+  },
+  "author": "Marina Korzunova<thearnica@gmail.com>",
+  "license": "ISC",
+  "engines": {
+    "node": ">=8.5.0"
+  },
+  "peerDependencies": {
+    "react": "^16.3.0"
+  },
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "keywords": [],
+  "repository": "",
+  "dependencies": {
+    "react-adopt": "^0.6.0",
+    "react-media": "^1.8.0"
+  },
+  "devDependencies": {
+    "@types/react": "^16.3.14",
+    "ts-react-toolbox": "^0.1.10",
+    "tslint": "^5.10.0",
+    "typescript": "^2.8.3"
+  }
+}
