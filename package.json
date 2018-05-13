@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@types/react": "^16.3.14",
+    "enzyme": "^3.3.0",
     "ts-react-toolbox": "^0.1.10",
     "tslint": "^5.10.0",
     "typescript": "^2.8.3"

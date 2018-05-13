@@ -1,10 +1,10 @@
 /// <reference types="react" />
-import * as React from "react";
-export declare type RenderMatch<T> = (matches: BoolOf<T>) => React.ReactNode;
+import { ReactNode } from "react";
+export declare type RenderMatch<T> = (matches: BoolOf<T>) => ReactNode;
 export declare type ObjectOf<T, K> = {
     [P in keyof T]: K;
 };
-export interface MediaQuery {
+export interface IMediaQuery {
     minWidth: number;
     maxWidth: number;
     screen: boolean;
@@ -13,7 +13,7 @@ export interface MediaQuery {
     resolution: string;
     orientation: 'landscape' | 'portrait';
 }
-export declare type MediaRule = string | MediaQuery;
+export declare type MediaRule = string | IMediaQuery;
 export declare type MediaRulesOf<T> = ObjectOf<T, MediaRule>;
 export declare type BoolOf<T> = ObjectOf<T, boolean>;
-export declare type RenderOf<T> = ObjectOf<T, React.ReactNode>;
+export declare type RenderOf<T> = ObjectOf<T, ReactNode>;

@@ -1,11 +1,10 @@
-import * as React from "react";
+import {ReactNode} from "react";
 
-export type RenderMatch<T> = (matches: BoolOf<T>) => React.ReactNode;
+export type RenderMatch<T> = (matches: BoolOf<T>) => ReactNode;
 
 export type ObjectOf<T, K> = { [P in keyof T]: K };
 
-
-export interface MediaQuery {
+export interface IMediaQuery {
     minWidth: number;
     maxWidth: number;
     screen: boolean;
@@ -15,12 +14,12 @@ export interface MediaQuery {
     orientation: 'landscape' | 'portrait'
 }
 
-export type MediaRule = string | MediaQuery;
+export type MediaRule = string | IMediaQuery;
 
 export type MediaRulesOf<T> = ObjectOf<T, MediaRule>;
 
 export type BoolOf<T> = ObjectOf<T, boolean>;
 
-export type RenderOf<T> = ObjectOf<T, React.ReactNode>;
+export type RenderOf<T> = ObjectOf<T, ReactNode>;
 
 
