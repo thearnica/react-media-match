@@ -25,7 +25,7 @@ export function pickMediaMatch<T, K>
 
     for (; index >= 0; index--) {
         const value = slots[keys[index]];
-        if (value || value === null) {
+        if (value !== undefined) {
             return value;
         }
     }

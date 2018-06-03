@@ -62,7 +62,7 @@ export default class App extends Component <{}, AppState> {
                     displaying all 2 + null:
                     <MediaMatcher
                         mobile={"mobile"}
-                         tablet={null}
+                        tablet={null}
                         desktop={"desktop"}
                     />
                     <InlineMediaMatcher
@@ -70,6 +70,13 @@ export default class App extends Component <{}, AppState> {
                         tablet={null}
                         desktop={"desktop"}
                     />
+                    <div> 0 for tablet?
+                        <InlineMediaMatcher
+                            mobile={"mobile"}
+                            tablet={0}
+                            desktop={"desktop"}
+                        />
+                    </div>
                     <MediaMatches>
                         {matches => (
                             <span> testing {pickMatch(matches, {

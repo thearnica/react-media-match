@@ -49,9 +49,13 @@ react-media-match provides 2 components and one function, and no of them awaits 
 
  - `MediaMatcher` - component, renders path for active match
 
+
 ## Sandbox
 
 https://codesandbox.io/s/o7q3zlo0n9
+
+# Testing
+ just provide `state` for ProvideMediaMatchers, and it will control all the nested matchers.
 
 # Licence
 MIT

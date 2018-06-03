@@ -3,12 +3,12 @@ import * as RawMedia from 'react-media';
 import {adopt} from "react-adopt";
 import {MediaContext} from './context';
 
-import {BoolOf, MediaRulesOf, ObjectOf, RenderMatch, RenderOf} from "./types";
+import {BoolOf, MediaRulesOf, ObjectOf, RenderMatch, RenderOf, IMediaQuery} from "./types";
 import {forEachName, pickMediaMatch} from "./utils";
 
 type AdoptMatches<T> = (matches: BoolOf<T>) => React.ReactNode | null;
 
-type Media = React.ReactElement<{children: (match:boolean) => React.ReactNode}>
+type Media = React.ReactElement<{ children: (match: boolean) => React.ReactNode }>
 
 // Hack, dirty hack
 const Media = RawMedia.default || RawMedia;
@@ -33,10 +33,18 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
         return pickMediaMatch<T, React.ReactNode>(breakPoints, matches, slots)
     };
 
-    const ProvideMediaMatchers: React.SFC = ({children}) => (
-        <Matches>
-            {matches => <MediaContext.Provider value={matches}>{children}</MediaContext.Provider>}
-        </Matches>
+    const ProvideMediaMatchers: React.SFC<{ state?: MediaRulesOf<T>, override?: false }> = ({children, state = null, override = false}) => (
+        <MediaContext.Consumer>
+            {parentMatch =>
+                <Matches>
+                    {
+                        (matches: any) =>
+                            <MediaContext.Provider
+                                value={state || {...(override ? {} : parentMatch), ...matches}}>{children}</MediaContext.Provider>
+                    }
+                </Matches>
+            }
+        </MediaContext.Consumer>
     );
 
     const MediaMatches: React.SFC<{ children: RenderMatch<T> }> = ({children}) => (
