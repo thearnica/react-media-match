@@ -70,6 +70,10 @@
     "@types/events" "*"
     "@types/node" "*"
 
+"@types/invariant@^2.2.29":
+  version "2.2.29"
+  resolved "https://registry.yarnpkg.com/@types/invariant/-/invariant-2.2.29.tgz#aa845204cd0a289f65d47e0de63a6a815e30cc66"
+
 "@types/jest@^22.2.0":
   version "22.2.3"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-22.2.3.tgz#0157c0316dc3722c43a7b71de3fdf3acbccef10d"
@@ -3659,7 +3663,7 @@ into-stream@^3.1.0:
     from2 "^2.1.1"
     p-is-promise "^1.1.0"
 
-invariant@^2.2.2:
+invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   dependencies:
@@ -5964,6 +5968,13 @@ react-dom@^16.2.0:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.0"
+
+react-gearbox@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-gearbox/-/react-gearbox-1.0.1.tgz#293905546bceabccce1a644f979d4654455df55e"
+  dependencies:
+    "@types/invariant" "^2.2.29"
+    invariant "^2.2.4"
 
 react-is@^16.3.1, react-is@^16.3.2:
   version "16.3.2"

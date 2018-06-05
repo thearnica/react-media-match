@@ -1,11 +1,24 @@
 import * as React from 'react';
 import {Component} from 'react';
-import {ProvideMediaMatchers, MediaMatcher, InlineMediaMatcher, pickMatch, MediaMatches} from "../src";
+import {
+    ProvideMediaMatchers,
+    MediaMatcher,
+    InlineMediaMatcher,
+    pickMatch,
+    MediaMatches,
+    MediaMock,
+    createMediaMatcher
+} from "../src";
 
 export interface AppState {
 
 }
 
+const SecodaryMedia = createMediaMatcher({
+    'mobile': '(max-width: 600px)',
+    'tablet': '(max-width: 900px)',
+    'desktop': '(min-width: 700px)',
+})
 
 export default class App extends Component <{}, AppState> {
     state: AppState = {}
@@ -34,59 +47,26 @@ export default class App extends Component <{}, AppState> {
                             })}</span>
                         )}
                     </MediaMatches>
-                </div>
-                <div>
-                    displaying all 2:
-                    <MediaMatcher
-                        mobile={"mobile"}
-                        // tablet={"tablet"}
-                        desktop={"desktop"}
-                    />
-                    <InlineMediaMatcher
-                        mobile={"mobile"}
-                        // tablet={"tablet"}
-                        desktop={"desktop"}
-                    />
-                    <MediaMatches>
-                        {matches => (
-                            <span> testing {pickMatch(matches, {
-                                mobile: "mobile",
-                                // tablet: "tablet",
-                                desktop: "desktop",
-                            })}</span>
-                        )}
-                    </MediaMatches>
-                </div>
-
-                <div>
-                    displaying all 2 + null:
-                    <MediaMatcher
-                        mobile={"mobile"}
-                        tablet={null}
-                        desktop={"desktop"}
-                    />
-                    <InlineMediaMatcher
-                        mobile={"mobile"}
-                        tablet={null}
-                        desktop={"desktop"}
-                    />
-                    <div> 0 for tablet?
-                        <InlineMediaMatcher
+                    <br/>
+                    <MediaMock tablet={true}>
+                        always tablet:
+                        <MediaMatcher
                             mobile={"mobile"}
-                            tablet={0}
+                            tablet={"tablet"}
                             desktop={"desktop"}
                         />
-                    </div>
-                    <MediaMatches>
-                        {matches => (
-                            <span> testing {pickMatch(matches, {
-                                mobile: "mobile",
-                                tablet: null,
-                                desktop: "desktop",
-                            })}</span>
-                        )}
-                    </MediaMatches>
+                    </MediaMock>
+
                 </div>
+                <div>
+                <SecodaryMedia.Provider>
+                    <SecodaryMedia.Matcher
+                       mobile="m-NEVER VISIBLE"
+                       tablet={ <MediaMatcher mobile="m" tablet="t" desktop="d" />}
+                       desktop="d-NEVER VISIBLE"
+                    >
+                    </SecodaryMedia.Matcher>
+                </SecodaryMedia.Provider>
             </ProvideMediaMatchers>
         )
     }

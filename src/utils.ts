@@ -32,3 +32,18 @@ export function pickMediaMatch<T, K>
 
     return null;
 }
+
+export type Names = {
+    [key: string]: any;
+}
+
+export function pickMatchValues(points: Names, props: Names) {
+    return Object
+        .keys(props)
+        .reduce((acc: any, key: string) => {
+            if (points[key] !== undefined) {
+                acc[key] = props[key];
+            }
+            return acc;
+        }, {})
+}

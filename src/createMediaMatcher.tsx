@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as RawMedia from 'react-media';
-import {adopt} from "react-adopt";
-import {MediaContext} from './context';
+import {gearbox} from "react-gearbox";
 
+// @ts-ignore
 import {BoolOf, MediaRulesOf, ObjectOf, RenderMatch, RenderOf, IMediaQuery} from "./types";
-import {forEachName, pickMediaMatch} from "./utils";
+import {forEachName, pickMatchValues, pickMediaMatch} from "./utils";
 
 type AdoptMatches<T> = (matches: BoolOf<T>) => React.ReactNode | null;
 
@@ -13,8 +13,8 @@ type Media = React.ReactElement<{ children: (match: boolean) => React.ReactNode 
 // Hack, dirty hack
 const Media = RawMedia.default || RawMedia;
 
-function createMatcher<T, G extends keyof T>(mediaRules: MediaRulesOf<T>): React.ComponentType<{ children: AdoptMatches<T> }> {
-    return adopt(
+function createMatcher<T, G extends keyof T>(mediaRules: MediaRulesOf<T>): React.ComponentType<{ render: boolean, children: AdoptMatches<T> }> {
+    return gearbox(
         forEachName<T, Media>(
             mediaRules,
             (rule: string) => <Media query={mediaRules[rule as G]}/>
@@ -23,6 +23,8 @@ function createMatcher<T, G extends keyof T>(mediaRules: MediaRulesOf<T>): React
 };
 
 export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
+    const MediaContext = React.createContext({});
+
     const Matches = createMatcher(breakPoints);
 
     function pickMatch<K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>): K | null {
@@ -36,7 +38,7 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
     const ProvideMediaMatchers: React.SFC<{ state?: MediaRulesOf<T>, override?: false }> = ({children, state = null, override = false}) => (
         <MediaContext.Consumer>
             {parentMatch =>
-                <Matches>
+                <Matches render>
                     {
                         (matches: any) =>
                             <MediaContext.Provider
@@ -56,19 +58,24 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
     );
 
     const InlineMediaMatcher: React.SFC<Partial<RenderOf<T>>> = (props) => (
-        <Matches>{matched => pickMatchEx(matched, props)}</Matches>
+        <Matches render>{matched => pickMatchEx(matched, props)}</Matches>
+    );
+
+    const Mock: React.SFC<Partial<RenderOf<T>>> = (props) => (
+        <MediaContext.Provider value={pickMatchValues(breakPoints, props)}>{props.children}</MediaContext.Provider>
     );
 
     return {
         pickMatch,
 
-        ProvideMediaMatchers,
+        Provider: ProvideMediaMatchers,
+        Mock,
 
-        MediaMatches,
-        InlineMediaMatcher,
+        Matches:MediaMatches,
+        Inline:InlineMediaMatcher,
 
-        MediaMatcher,
+        Matcher:MediaMatcher,
 
-        Matches
+        Gearbox: Matches
     }
 }

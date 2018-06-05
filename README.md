@@ -37,7 +37,13 @@ react-media-match provides 2 components and one function, and no of them awaits 
 ## API
  react-media-match provides an API for "default" queries, and a factory method to create custom media queries.
 
- `createMediaMatcher(breakPoints: { key: string })` - factory for a new API for provided breakpoints
+ - `createMediaMatcher(breakPoints: { key: string })` - factory for a new API for provided breakpoints.
+ The object with following props will be returned:
+   - pickMatch
+   - Matches
+   - Matcher
+   - Provider
+   - Mock
 
  There is also pre-exported API for default breakpoints - mobile, tablet, desktop
 
@@ -49,13 +55,28 @@ react-media-match provides 2 components and one function, and no of them awaits 
 
  - `MediaMatcher` - component, renders path for active match
 
+# Example
+```js
+ const Orientation = createMediaMatcher({
+   portrait: "(orientation: portrait)",
+   landscape: "(orientation: landscape)"
+ });
+
+ <Orientation.Match
+   portrait="One"
+   landscape="Second"
+ />
+```
 
 ## Sandbox
 
 https://codesandbox.io/s/o7q3zlo0n9
 
-# Testing
- just provide `state` for ProvideMediaMatchers, and it will control all the nested matchers.
+# Testing and Mocking
+ - `ProvideMediaMatchers` has a `state` paramiter, and you might specify it override any information, and control all the nested matchers.
+ - `MediaMock` will completely mock media settings.
+
+ Both mocks are not working for `Inline` component
 
 # Licence
 MIT

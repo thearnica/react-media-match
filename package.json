@@ -31,6 +31,7 @@
   "repository": "",
   "dependencies": {
     "react-adopt": "^0.6.0",
+    "react-gearbox": "^1.0.1",
     "react-media": "^1.8.0"
   },
   "devDependencies": {

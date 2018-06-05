@@ -17,28 +17,30 @@ const pickMatch = defaultMedia.pickMatch;
  * Provides Context for underlayed consumers
  * @type {SFC}
  */
-const ProvideMediaMatchers = defaultMedia.ProvideMediaMatchers;
+const ProvideMediaMatchers = defaultMedia.Provider;
 /**
  * Consumes provided information from context and returns via renderProps
  * @type {SFC<{children: RenderMatch<any>}>}
  */
-const MediaMatches = defaultMedia.MediaMatches;
+const MediaMatches = defaultMedia.Matches;
 /**
  * Calculates media match and renders a rule
  * @type {SFC<RenderOf<any>>}
  */
-const InlineMediaMatcher = defaultMedia.InlineMediaMatcher;
+const InlineMediaMatcher = defaultMedia.Inline;
 /**
  * Consumes provided information and renders matched rule
  * @type {SFC<RenderOf<any>>}
  */
-const MediaMatcher = defaultMedia.MediaMatcher;
+const MediaMatcher = defaultMedia.Matcher;
 
 /**
  * Calculates media match and returns via renderProps
  * @type {RPC<any, any>}
  */
-const Matches = defaultMedia.Matches;
+const Matches = defaultMedia.Gearbox;
+
+const MediaMock = defaultMedia.Mock;
 
 
 export {
@@ -53,5 +55,6 @@ export {
 
     MediaMatcher,
 
-    Matches
+    Matches,
+    MediaMock
 }
