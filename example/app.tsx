@@ -64,9 +64,9 @@ export default class App extends Component <{}, AppState> {
                        mobile="m-NEVER VISIBLE"
                        tablet={ <MediaMatcher mobile="m" tablet="t" desktop="d" />}
                        desktop="d-NEVER VISIBLE"
-                    >
-                    </SecodaryMedia.Matcher>
+                    />
                 </SecodaryMedia.Provider>
+                </div>
             </ProvideMediaMatchers>
         )
     }

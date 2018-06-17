@@ -30,13 +30,16 @@
   "keywords": [],
   "repository": "",
   "dependencies": {
-    "react-adopt": "^0.6.0",
-    "react-gearbox": "^1.0.1",
+    "prop-types": "^15.6.1",
+    "react-gearbox": "^1.1.2",
     "react-media": "^1.8.0"
   },
   "devDependencies": {
+    "@types/prop-types": "^15.5.3",
     "@types/react": "^16.3.14",
+    "@types/react-test-renderer": "^16.0.1",
     "enzyme": "^3.3.0",
+    "react-test-renderer": "^16.4.1",
     "ts-react-toolbox": "^0.1.10",
     "tslint": "^5.10.0",
     "typescript": "^2.8.3"
