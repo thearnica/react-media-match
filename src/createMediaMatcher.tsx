@@ -1,30 +1,27 @@
 import * as React from 'react';
-import * as RawMedia from 'react-media';
 import {gearbox} from "react-gearbox";
 import * as PropTypes from 'prop-types';
+import {Media} from './Media'
 
 // @ts-ignore
 import {BoolOf, MediaRulesOf, ObjectOf, RenderMatch, RenderOf, IMediaQuery} from "./types";
-import {forEachName, pickMatchValues, pickMediaMatch} from "./utils";
+import {forEachName, getMaxMatch, notNulls, pickMatchValues, pickMediaMatch} from "./utils";
+import {MediaServerSide} from "./SSR";
 
- type AdoptMatches<T> = (matches: BoolOf<T>) => React.ReactNode | null;
-
-type Media = React.ReactElement<{ children: (match: boolean) => React.ReactNode }>
-
-// Hack, dirty hack
-const Media = RawMedia.default || RawMedia;
+type AdoptMatches<T> = (matches: BoolOf<T>) => React.ReactNode | null;
+type MediaElement = React.ReactElement<any>;
 
 function createMatcher<T, G extends keyof T>(mediaRules: MediaRulesOf<T>): React.ComponentType<{
   render: boolean,
   local: boolean,
   children: AdoptMatches<T>
 }> {
-    return gearbox(
-        forEachName<T, Media>(
-            mediaRules,
-            (rule: string) => <Media query={mediaRules[rule as G]}/>
-        )
-    ) as any;
+  return gearbox(
+    forEachName<T, MediaElement>(
+      mediaRules,
+      (rule: string) => <Media query={mediaRules[rule as G]} children={null as any}/>
+    )
+  ) as any;
 };
 
 const castPointsTo = (points: { [key: string]: any }, targetType: any) => (
@@ -54,9 +51,13 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
       {parentMatch =>
         <Matches render local>
           {
-            (matches:any) =>
-              <MediaContext.Provider
-                value={state || {...(override ? {} : parentMatch), ...matches}}>{children}</MediaContext.Provider>
+            (matches: any) => {
+              const value = state || {...(override ? {} : parentMatch), ...notNulls(matches)};
+              return <MediaContext.Provider
+                value={value}
+                children={children}
+              />
+            }
           }
         </Matches>
       }
@@ -87,11 +88,28 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
   };
 
   const InlineMediaMatcher: React.SFC<Partial<RenderOf<T>>> = (props) => (
-    <Matches render local>{(matched:any) => pickMatchEx(matched, props)}</Matches>
+    <Matches render local>{(matched: any) => pickMatchEx(matched, props)}</Matches>
   );
 
   const Mock: React.SFC<Partial<RenderOf<T>>> = (props) => (
     <MediaContext.Provider value={pickMatchValues(breakPoints, props)}>{props.children}</MediaContext.Provider>
+  );
+
+  const ServerRender: React.SFC<{ predicted: keyof T, hydrated?: boolean, children: React.ReactNode }> = ({predicted, hydrated, children}) => (
+    <MediaContext.Provider value={{[predicted]: true}}>
+      <ProvideMediaMatchers>
+        <MediaContext.Consumer>
+          {matched => (
+            <MediaServerSide
+              fact={getMaxMatch(breakPoints, matched)}
+              predicted={predicted}
+              hydrated={!!hydrated}
+              children={children}
+            />
+          )}
+        </MediaContext.Consumer>
+      </ProvideMediaMatchers>
+    </MediaContext.Provider>
   );
 
   return {
@@ -104,6 +122,7 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
     Inline: InlineMediaMatcher,
 
     Matcher: MediaMatcher,
+    ServerRender,
 
     Gearbox: Matches
   }
