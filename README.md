@@ -7,9 +7,11 @@
 
 __Mobile first__ react responsive framework made easy. 
 
- - 🐍 "gap" less. In all the cases one display mode will be picked up, but only one
- - 💻 SSR friendly. Customize the target rendering mode, and generate result for any devide.
- - 💡 Provides Media Matchers and Media Pickers
+ - 🐍 "mobile-first", "gap-less", and bug-less rendering.
+   - In all the cases one rendering branch will be picked up, but only one!
+   - Never forget to render something, never render 2 branches simultaneously.
+ - 💻 SSR friendly. Customize the target rendering mode, and `SSR` for any devide.
+ - 💡 Provides Media Matchers and Media Pickers. Render different components based on media, or calculate strings.
  - 🧠 written in TypeScript
 
 Just:
@@ -30,24 +32,25 @@ react-media-match was made with maintainability and mobile first approach in min
 react-media-match provides 2 components and one function, and no of them awaits query as a prop,
 
 ```js
-<ProvideMediaMatchers>
+<ProvideMediaMatchers> // this component will calculate all Media's and put data into the React Context
     <MediaMatcher
         mobile={"render for mobile"}
-        // tablet={"tablet"} // mobile will be rendered for missed tablet
+        // tablet={"tablet"} // mobile will be rendered for "missed" tablet
         desktop={"render desktop"}
     />
     <MediaMatcher
         mobile={"render for mobile"}
-        tablet={null} // nothing will be rendered for tablet
+        tablet={null} // nothing will be rendered for tablet, as long you clearly defined it
         desktop={"render desktop"}
     />
-    <MediaMatches>
+    
+    <MediaMatches> // will provide matches information via render-props
         {matches => (
             <span> testing {
                 // pick matching values
                 pickMatch(matches, {
                     mobile: "mobile",
-                    // tablet: "tablet", // the same rules
+                    // tablet: "tablet", // the same rules are applied here
                     desktop: "desktop",
                 })
             }</span>
@@ -55,7 +58,7 @@ react-media-match provides 2 components and one function, and no of them awaits 
     </MediaMatches>
 </ProvideMediaMatchers>
 ```
-PS: Dont forget to __wrap all this with ProvideMediaMatchers__
+PS: Dont forget to __wrap all this with ProvideMediaMatchers__ - without it will always picks the "last" branch.
 
 ## Server Side Rendering
 There is no way to support MediaQuery on the Server Side, so the only way to generate expected result
@@ -77,7 +80,7 @@ in case prediction was wrong, and rendered tree will not match hydrated one.
     />
 </MediaServerRender>
 ```
-If prediction has failed - it will inform you.
+If prediction has failed - it will inform you, and might help to mitigate rendering issues.
 
 ## API
  react-media-match provides an API for "default" queries, and a factory method to create custom media queries.
