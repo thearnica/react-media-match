@@ -140,18 +140,19 @@ If prediction has failed - it will inform you, and might help to mitigate render
 https://codesandbox.io/s/o7q3zlo0n9
 
 # Testing and Mocking
+Just provide `state` for ProvideMediaMatchers, and it will control all the nested matchers. Could be used to provide __not media-based__ rules.
+
  - `ProvideMediaMatchers` has a `state` paramiter, and you might specify it override any information, and control all the nested matchers.
  - `MediaMock` will completely mock media settings.
 
- Both mocks are not working for `Inline` component
+ Both mocks are not working for `Inline` component.
+ 
+ Testing and mocking are related to SSR rendering, and you may use MediaServerRender for tests and Mocks for SSR as well.
 
 
 # Articles
 
 https://spectrum.chat/thread/2057cb44-ddd7-4fb2-98f8-c1d697bcf62d
-
-# Testing and Mocking
- Just provide `state` for ProvideMediaMatchers, and it will control all the nested matchers. Could be used to provide __not media-based__ rules.
 
 # Licence
 MIT
