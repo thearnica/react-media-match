@@ -31,8 +31,7 @@
   "repository": "",
   "dependencies": {
     "prop-types": "^15.6.1",
-    "react-gearbox": "^1.1.2",
-    "react-media": "^1.8.0"
+    "react-gearbox": "^1.1.2"
   },
   "devDependencies": {
     "@types/prop-types": "^15.5.3",

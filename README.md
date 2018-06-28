@@ -1,11 +1,20 @@
 # react-media-match
+====
+[![Build Status](https://travis-ci.org/thearnica/react-media-match.svg?branch=master)](https://travis-ci.org/thearnica/react-media-match)
+[![coverage-badge](https://img.shields.io/codecov/c/github/thearnica/react-media-match.svg?style=flat-square)](https://codecov.io/github/thearnica/react-media-match)
+[![NPM version](https://img.shields.io/npm/v/react-media-match.svg)](https://www.npmjs.com/package/react-media-match)
 
-[![NPM](https://nodei.co/npm/react-media-match.png?downloads=true&stars=true)](https://nodei.co/npm/react-media-match/)
 
-__Mobile first__ react responsive framework made easy. The main difference from `react-media` - everything.
+__Mobile first__ react responsive framework made easy. 
 
-Define once all your media queries (2-3-4 usual), and them use them _simultaneously_!
-Define how application should look like on all resolutions.
+ - 🐍 "gap" less. In all the cases one display mode will be picked up, but only one
+ - 💻 SSR friendly. Customize the target rendering mode, and generate result for any devide.
+ - 💡 Provides Media Matchers and Media Pickers
+ - 🧠 written in TypeScript
+
+Just:
+1. Define once all your media queries (2-3-4 usual), and them use them _simultaneously_!
+2. Define how application should look like on all resolutions. 
 
 Each Media Query is responsible only for a single "dimension" - width, height or orientation.
 - If you have defined what Query should render on _mobile_, but not everything else - it will always use mobile.
@@ -16,7 +25,7 @@ Each Media Query is responsible only for a single "dimension" - width, height or
 - If you need to respond to screen size and orientation - create 2 separate matchers, and work with them - separately!
 - If you need to respond to NOT screen or NOT media - just _provide_ values MediaMatcher should match againts and that's done!
 
-react-media-match was made with maintanability and mobile first approach in mind. It makes things simpler.
+react-media-match was made with maintainability and mobile first approach in mind. It makes things simpler.
 
 react-media-match provides 2 components and one function, and no of them awaits query as a prop,
 
@@ -48,6 +57,28 @@ react-media-match provides 2 components and one function, and no of them awaits 
 ```
 PS: Dont forget to __wrap all this with ProvideMediaMatchers__
 
+## Server Side Rendering
+There is no way to support MediaQuery on the Server Side, so the only way to generate expected result
+it __to mock__ predicted device.
+
+We are providing a special component which will mock data only on server size,
+and compare predicted media on componentMount on client size.
+
+It also has a special prop `hydrated` which will lead to __forced react tree remount__
+in case prediction was wrong, and rendered tree will not match hydrated one.
+(use only in case of `ReactDOM.hydrated`)
+ 
+```js
+<MediaServerRender predicted="desktop" hydrated>
+    <MediaMatcher
+        mobile={"render for mobile"}
+        // tablet={"tablet"} // mobile will be rendered for missed tablet
+        desktop={"render desktop"}
+    />
+</MediaServerRender>
+```
+If prediction has failed - it will inform you.
+
 ## API
  react-media-match provides an API for "default" queries, and a factory method to create custom media queries.
 
@@ -58,6 +89,7 @@ PS: Dont forget to __wrap all this with ProvideMediaMatchers__
    - Matcher
    - Provider
    - Mock
+   - SSR
 
  There is also pre-exported API for default breakpoints - mobile, tablet, desktop
 
@@ -68,6 +100,8 @@ PS: Dont forget to __wrap all this with ProvideMediaMatchers__
  - `MediaMatches` - component, returns current matchers as a render prop
 
  - `MediaMatcher` - component, renders path for active match
+ 
+ - `MediaServerRender` - component, helps render server-size
 
 # Example
  - Define secondary Query for orientation
@@ -97,7 +131,6 @@ PS: Dont forget to __wrap all this with ProvideMediaMatchers__
      ....
  </Orientation.Mock>
  ```
-
 
 ## Sandbox
 

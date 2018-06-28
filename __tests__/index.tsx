@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {create} from 'react-test-renderer';
-import {MediaMatcher, MediaMock, pickMatch} from '../src';
+import {MediaMatcher, MediaMock, pickMatch, MediaServerRender} from '../src';
 
 describe('Specs', () => {
   it('should render mobile', () => {
@@ -82,5 +82,46 @@ describe('Specs', () => {
       tablet: 2,
       desktop: 3,
     })).toBe(1);
+  })
+
+
+  describe('SSR', () => {
+    it('Render', () => {
+      const wrapper =
+        create(
+          <MediaServerRender predicted="tablet">
+            <MediaMatcher mobile="1" tablet="2" desktop="3"/>
+          </MediaServerRender>
+        );
+      expect(wrapper.toJSON()).toEqual("2");
+    });
+
+    it('Render:positive', () => {
+      jest.spyOn(console, 'error');
+      const wrapper =
+        create(
+          <MediaMock tablet>
+          <MediaServerRender predicted="tablet">
+            <MediaMatcher mobile="1" tablet="2" desktop="3"/>
+          </MediaServerRender>
+          </MediaMock>
+        );
+      expect(wrapper.toJSON()).toEqual("2");
+      expect(console.error).not.toHaveBeenCalled();
+    });
+
+    it.skip('Render:negative', () => {
+      jest.spyOn(console, 'error');
+      const wrapper =
+        create(
+          <MediaMock desktop>
+            <MediaServerRender predicted="tablet">
+              <MediaMatcher mobile="1" tablet="2" desktop="3"/>
+            </MediaServerRender>
+          </MediaMock>
+        );
+      expect(wrapper.toJSON()).toEqual("2");
+      expect(console.error).toHaveBeenCalled();
+    });
   })
 });

@@ -42,6 +42,11 @@ const Matches = defaultMedia.Gearbox;
 
 const MediaMock = defaultMedia.Mock;
 
+/**
+ * ServerSide rendering helper
+ */
+const MediaServerRender = defaultMedia.ServerRender;
+
 
 export {
     createMediaMatcher,
@@ -54,6 +59,8 @@ export {
     InlineMediaMatcher,
 
     MediaMatcher,
+
+    MediaServerRender,
 
     Matches,
     MediaMock
