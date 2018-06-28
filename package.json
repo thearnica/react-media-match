@@ -37,6 +37,7 @@
     "@types/prop-types": "^15.5.3",
     "@types/react": "^16.3.14",
     "@types/react-test-renderer": "^16.0.1",
+    "codecov": "^3.0.2",
     "enzyme": "^3.3.0",
     "react-test-renderer": "^16.4.1",
     "ts-react-toolbox": "^0.1.10",
