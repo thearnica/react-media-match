@@ -56,6 +56,19 @@ react-media-match provides 2 components and one function, and no of them awaits 
             }</span>
         )}
     </MediaMatches>
+    
+    <MediaMatches> // will provide matches information via render-props
+            {(_,pickMatch) => ( // you can get pickMatch from MediaMatches
+                <span> testing {
+                    // pick matching values
+                    pickMatch({
+                        mobile: "mobile",
+                        // tablet: "tablet", // the same rules are applied here
+                        desktop: "desktop",
+                    })
+                }</span>
+            )}
+        </MediaMatches>
 </ProvideMediaMatchers>
 ```
 PS: Dont forget to __wrap all this with ProvideMediaMatchers__ - without it will always picks the "last" branch.
@@ -81,6 +94,11 @@ in case prediction was wrong, and rendered tree will not match hydrated one.
 </MediaServerRender>
 ```
 If prediction has failed - it will inform you, and might help to mitigate rendering issues.
+
+#### How to predict device type
+You may use [ua-parser-js](https://github.com/faisalman/ua-parser-js), to detect device type, and pick desired resolution 
+based on this, or use [react-ugent](https://github.com/medipass/react-ugent) to make it a bit
+more declarative.
 
 ## API
  react-media-match provides an API for "default" queries, and a factory method to create custom media queries.

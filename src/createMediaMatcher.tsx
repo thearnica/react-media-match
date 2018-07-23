@@ -71,8 +71,10 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
     override: PropTypes.bool
   };
 
-  const MediaMatches: React.SFC<{ children: RenderMatch<T> }> = ({children}) => (
-    <MediaContext.Consumer>{matched => children(matched as BoolOf<T>)}</MediaContext.Consumer>
+  const MediaMatches: React.SFC<{ children: RenderMatch<T, any> }> = ({children}) => (
+    <MediaContext.Consumer>
+      {matched => children(matched as BoolOf<T>, (matches) => pickMatch(matched as BoolOf<T>, matches))}
+    </MediaContext.Consumer>
   );
 
   MediaMatches.propTypes = {
