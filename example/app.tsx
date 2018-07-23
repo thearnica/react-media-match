@@ -58,6 +58,15 @@ export default class App extends Component <{}, AppState> {
                 desktop: "desktop",
               })}</span>
             )}
+          </MediaMatches> ===
+          <MediaMatches>
+            {(_,pickMatch) => (
+              <span> = {pickMatch({
+                mobile: "mobile",
+                tablet: "tablet",
+                desktop: "desktop",
+              })}</span>
+            )}
           </MediaMatches>
 
           <br/>
@@ -105,6 +114,8 @@ export default class App extends Component <{}, AppState> {
 
         SSR
         <div>
+
+
           <MediaServerRender predicted="desktop">
             <MediaMatcher
               mobile={<span>mobile<Counter/></span>}
@@ -112,6 +123,8 @@ export default class App extends Component <{}, AppState> {
               desktop={<span>desktop<Counter/></span>}
             />
           </MediaServerRender>
+
+
         </div>
 
         <div>
