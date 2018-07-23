@@ -22,9 +22,5 @@
       "es2015.promise"
     ],
     "jsx": "react"
-  },
-  "files": [
-    "./src/custom-typings/react-adopt.d.ts",
-    "./src/custom-typings/react-media.d.ts"
-  ]
+  }
 }
