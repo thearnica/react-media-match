@@ -1,6 +1,6 @@
 {
   "name": "react-media-match",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "React made responsible",
   "main": "dist/index.js",
   "scripts": {
