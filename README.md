@@ -188,7 +188,8 @@ Just provide `state` for ProvideMediaMatchers, and it will control all the neste
 
 ## Articles
 
-https://spectrum.chat/thread/2057cb44-ddd7-4fb2-98f8-c1d697bcf62d
+- Medium article - [Adaptive?! Responsive? Reactive!](https://medium.com/@antonkorzunov/adaptive-responsive-reactive-62fb938d6191)
+- Spectrum chat - [React-Media-Match](https://spectrum.chat/thread/2057cb44-ddd7-4fb2-98f8-c1d697bcf62d)
 
 ## License
 
