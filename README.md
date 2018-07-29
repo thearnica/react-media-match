@@ -13,6 +13,14 @@ __Mobile first__ react responsive framework made easy.
  - 💻 SSR friendly. Customize the target rendering mode, and `SSR` for any device.
  - 💡 Provides Media Matchers and Media Pickers. Render different components based on media, or calculate strings.
  - 🧠 written in TypeScript
+ 
+ ## Usage
+ 
+ ```sh
+ npm install react-media-match
+ 
+ yarn add react-media-match
+ ```
 
 Just:
 1. Define once all your media queries (2-3-4 usual), and then use them _simultaneously_!
@@ -32,6 +40,8 @@ react-media-match was made with maintainability and mobile first approach in min
 react-media-match provides two components and one function, and none of them awaits query as a prop,
 
 ```js
+import { MediaMatcher, ProvideMediaMatchers } from "react-media-match";
+
 <ProvideMediaMatchers> // this component will calculate all Media's and put data into the React Context
     <MediaMatcher
         mobile={"render for mobile"}
@@ -86,6 +96,8 @@ in case prediction was wrong, and rendered tree will not match hydrated one.
 (use only in case of `ReactDOM.hydrated`)
  
 ```js
+import { MediaMatcher, MediaServerRender } from "react-media-match";
+
 <MediaServerRender predicted="desktop" hydrated>
     <MediaMatcher
         mobile={"render for mobile"}
@@ -129,6 +141,8 @@ more declarative.
 ## Example
  - Define secondary Query for orientation
 ```js
+import { createMediaMatcher } from "react-media-match";
+
  const Orientation = createMediaMatcher({
    portrait: "(orientation: portrait)",
    landscape: "(orientation: landscape)"
@@ -141,6 +155,8 @@ more declarative.
 ```
  - Define query based on user settings
  ```js
+ import { MediaMock, ProvideMediaMatchers } from "react-media-match";
+ 
  // override all data
  <ProvideMediaMatchers state={{mobile:true, tablet:false, desktop:false}}>
     ....
