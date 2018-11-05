@@ -5,7 +5,7 @@
 [![NPM version](https://img.shields.io/npm/v/react-media-match.svg)](https://www.npmjs.com/package/react-media-match)
 
 
-__Mobile first__ react responsive framework made easy. 
+__Mobile first__ react responsive framework made easy.
 
  - 🐍 "mobile-first", "gap-less", and bug-less rendering.
    - In all the cases one rendering branch will be picked, and only one!
@@ -13,18 +13,19 @@ __Mobile first__ react responsive framework made easy.
  - 💻 SSR friendly. Customize the target rendering mode, and `SSR` for any device.
  - 💡 Provides Media Matchers and Media Pickers. Render different components based on media, or calculate strings.
  - 🧠 written in TypeScript
- 
+ - 🌩 just 1.5kb
+
  ## Usage
- 
+
  ```sh
  npm install react-media-match
- 
+
  yarn add react-media-match
  ```
 
 Just:
 1. Define once all your media queries (2-3-4 usual), and then use them _simultaneously_!
-2. Define how application should look like on all resolutions. 
+2. Define how application should look like on all resolutions.
 
 Each Media Query is responsible only for a single "dimension" - width, height or orientation.
 - If you have defined what Query should render on _mobile_, but not everything else - it will always use mobile.
@@ -53,7 +54,7 @@ import { MediaMatcher, ProvideMediaMatchers } from "react-media-match";
         tablet={null} // nothing will be rendered for tablet, as long you clearly defined it
         desktop={"render desktop"}
     />
-    
+
     <MediaMatches> // will provide matches information via render-props
         {matches => (
             <span> testing {
@@ -66,7 +67,7 @@ import { MediaMatcher, ProvideMediaMatchers } from "react-media-match";
             }</span>
         )}
     </MediaMatches>
-    
+
     <MediaMatches> // will provide matches information via render-props
             {(_,pickMatch) => ( // you can get pickMatch from MediaMatches
                 <span> testing {
@@ -94,7 +95,7 @@ and compare predicted media on componentMount on client size.
 It also has a special prop `hydrated` which will lead to __forced react tree remount__
 in case prediction was wrong, and rendered tree will not match hydrated one.
 (use only in case of `ReactDOM.hydrated`)
- 
+
 ```js
 import { MediaMatcher, MediaServerRender } from "react-media-match";
 
@@ -135,7 +136,7 @@ more declarative.
  - `MediaMatches` - component, returns current matchers as a render prop
 
  - `MediaMatcher` - component, renders path for active match
- 
+
  - `MediaServerRender` - component, helps render server-size
 
 ## Example
@@ -156,7 +157,7 @@ import { createMediaMatcher } from "react-media-match";
  - Define query based on user settings
  ```js
  import { MediaMock, ProvideMediaMatchers } from "react-media-match";
- 
+
  // override all data
  <ProvideMediaMatchers state={{mobile:true, tablet:false, desktop:false}}>
     ....
@@ -182,7 +183,7 @@ Just provide `state` for ProvideMediaMatchers, and it will control all the neste
  - `MediaMock` will completely mock media settings.
 
  Both mocks are not working for `Inline` component.
- 
+
  Testing and mocking are related to SSR rendering, and you may use MediaServerRender for tests and Mocks for SSR as well.
 
 

@@ -3,7 +3,7 @@ import mediaDefaults from './mediaDefaults'
 // @ts-ignore
 import {SFC, ComponentType, ReactElement, StatelessComponent, ReactPortal} from 'react';
 // @ts-ignore
-import {IMediaQuery} from './types';
+import {BoolOf, IMediaQuery} from './types';
 
 const defaultMedia = createMediaMatcher(mediaDefaults);
 
@@ -38,7 +38,7 @@ const MediaMatcher = defaultMedia.Matcher;
  * Calculates media match and returns via renderProps
  * @type {RPC<any, any>}
  */
-const Matches = defaultMedia.Gearbox;
+const Matches: React.Consumer<BoolOf<typeof mediaDefaults>> = defaultMedia.Gearbox as any;
 
 const MediaMock = defaultMedia.Mock;
 

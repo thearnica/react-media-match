@@ -2,7 +2,6 @@
   "name": "react-media-match",
   "version": "1.4.1",
   "description": "React made responsible",
-  "main": "dist/index.js",
   "scripts": {
     "test": "ts-react-toolbox test",
     "bootstrap": "ts-react-toolbox init",
@@ -17,23 +16,34 @@
     "analyze": "ts-react-toolbox analyze"
   },
   "author": "Marina Korzunova<thearnica@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "engines": {
     "node": ">=8.5.0"
   },
   "peerDependencies": {
     "react": "^16.3.0"
   },
-  "types": "dist/index.d.ts",
+  "types": "dist/es5/index.d.ts",
   "files": [
     "dist"
   ],
-  "keywords": [],
-  "repository": "",
+  "keywords": [
+    "react",
+    "media",
+    "responsible",
+    "adaptive"
+  ],
+  "repository": "https://github.com/thearnica/react-media-match",
   "dependencies": {
-    "prop-types": "^15.6.1",
-    "react-gearbox": "^1.1.2"
+    "prop-types": "^15.6.1"
   },
+  "size-limit": [
+    {
+      "path": "dist/es2015/index.js",
+      "limit": "9 KB"
+    }
+  ],
+  "sideEffects": false,
   "devDependencies": {
     "@types/prop-types": "^15.5.3",
     "@types/react": "^16.3.14",
@@ -41,8 +51,12 @@
     "codecov": "^3.0.2",
     "enzyme": "^3.3.0",
     "react-test-renderer": "^16.4.1",
-    "ts-react-toolbox": "^0.1.10",
+    "size-limit": "^0.21.0",
+    "ts-react-toolbox": "^0.1.22",
     "tslint": "^5.10.0",
     "typescript": "^2.8.3"
-  }
+  },
+  "main": "dist/es5/index.js",
+  "jsnext:main": "dist/es2015/index.js",
+  "module": "dist/es2015/index.js"
 }

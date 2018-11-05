@@ -1,28 +1,11 @@
 import * as React from 'react';
-import {gearbox} from "react-gearbox";
 import * as PropTypes from 'prop-types';
-import {Media} from './Media'
+import {Media, BoolHash} from './Media'
 
 // @ts-ignore
 import {BoolOf, MediaRulesOf, ObjectOf, RenderMatch, RenderOf, IMediaQuery} from "./types";
-import {forEachName, getMaxMatch, notNulls, pickMatchValues, pickMediaMatch} from "./utils";
+import {getMaxMatch, notNulls, pickMatchValues, pickMediaMatch} from "./utils";
 import {MediaServerSide} from "./SSR";
-
-type AdoptMatches<T> = (matches: BoolOf<T>) => React.ReactNode | null;
-type MediaElement = React.ReactElement<any>;
-
-function createMatcher<T, G extends keyof T>(mediaRules: MediaRulesOf<T>): React.ComponentType<{
-  render: boolean,
-  local: boolean,
-  children: AdoptMatches<T>
-}> {
-  return gearbox(
-    forEachName<T, MediaElement>(
-      mediaRules,
-      (rule: string) => <Media query={mediaRules[rule as G]} children={null as any}/>
-    )
-  ) as any;
-};
 
 const castPointsTo = (points: { [key: string]: any }, targetType: any) => (
   Object
@@ -33,33 +16,45 @@ const castPointsTo = (points: { [key: string]: any }, targetType: any) => (
     }, {})
 );
 
-export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
-  const MediaContext = React.createContext({});
+// export type MediaMatcherType<T, M> = {
+//   pickMatch(matches: BoolOf<T>, slots: M): React.ReactNode | null,
+//
+//   Provider: React.SFC<{ state?: MediaRulesOf<T>, override?: false }>;
+//   Mock: React.SFC<Partial<RenderOf<T>>>;
+//
+//   Matches: React.SFC<{ children: RenderMatch<T, any> }>,
+//   Inline: React.SFC<Partial<RenderOf<T>>>,
+//
+//   Matcher: React.SFC<Partial<RenderOf<T>>>,
+//   ServerRender: React.SFC<{ predicted: keyof T, hydrated?: boolean, children: React.ReactNode }>,
+//
+//   Gearbox: React.Consumer<BoolHash>,
+// }
 
-  const Matches = createMatcher(breakPoints);
+export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
+  const MediaContext = React.createContext<BoolHash>({});
 
   function pickMatch<K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>): K | null {
     return pickMediaMatch<T, K>(breakPoints, matches, slots)
-  };
+  }
 
   function pickMatchEx<M extends Partial<ObjectOf<T, React.ReactNode>>>(matches: BoolOf<T>, slots: M): React.ReactNode | null {
     return pickMediaMatch<T, React.ReactNode>(breakPoints, matches, slots)
-  };
+  }
 
   const ProvideMediaMatchers: React.SFC<{ state?: MediaRulesOf<T>, override?: false }> = ({children, state = null, override = false}) => (
     <MediaContext.Consumer>
       {parentMatch =>
-        <Matches render local>
-          {
-            (matches: any) => {
-              const value = state || {...(override ? {} : parentMatch), ...notNulls(matches)};
-              return <MediaContext.Provider
-                value={value}
-                children={children}
-              />
-            }
+        <Media queries={breakPoints}>
+          {(matches) => {
+            const value: BoolHash = (state as any) || {...(override ? {} : parentMatch), ...notNulls(matches)};
+            return <MediaContext.Provider
+              value={value}
+              children={children}
+            />
           }
-        </Matches>
+          }
+        </Media>
       }
     </MediaContext.Consumer>
   );
@@ -81,7 +76,7 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
     children: PropTypes.func.isRequired
   };
 
-  const MediaMatcher: React.SFC<Partial<RenderOf<T>>> = (props) => (
+  const MediaMatcher: React.SFC<Partial<RenderOf<T>> & {children:never}> = (props) => (
     <MediaContext.Consumer>{matched => pickMatchEx(matched as BoolOf<T>, props)}</MediaContext.Consumer>
   );
 
@@ -90,7 +85,7 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
   };
 
   const InlineMediaMatcher: React.SFC<Partial<RenderOf<T>>> = (props) => (
-    <Matches render local>{(matched: any) => pickMatchEx(matched, props)}</Matches>
+    <MediaContext.Consumer>{(matched: any) => pickMatchEx(matched, props)}</MediaContext.Consumer>
   );
 
   const Mock: React.SFC<Partial<RenderOf<T>>> = (props) => (
@@ -126,6 +121,6 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
     Matcher: MediaMatcher,
     ServerRender,
 
-    Gearbox: Matches
+    Gearbox: MediaContext.Consumer
   }
 }
