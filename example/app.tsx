@@ -8,7 +8,7 @@ import {
   MediaMatches,
   MediaMock,
   MediaServerRender,
-  createMediaMatcher
+  createMediaMatcher, Above, Below
 } from "../src";
 
 export interface AppState {
@@ -38,6 +38,22 @@ export default class App extends Component <{}, AppState> {
     return (
       <ProvideMediaMatchers>
         <div>
+          <Above mobile>
+            see me only ABOVE mobile
+          </Above>
+          <br/>
+          <Above tablet>
+            see me only ABOVE tablet
+          </Above>
+          <br/>
+          <Below tablet>
+            see me only BELOW tablet
+          </Below>
+          <br/>
+          <Below desktop>
+            see me only BELOW desktop
+          </Below>
+          <br/>
           displaying all 3 (should be the same, and reflect active media):
           <br/>
           <MediaMatcher

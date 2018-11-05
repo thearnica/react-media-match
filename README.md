@@ -54,6 +54,10 @@ import { MediaMatcher, ProvideMediaMatchers } from "react-media-match";
         tablet={null} // nothing will be rendered for tablet, as long you clearly defined it
         desktop={"render desktop"}
     />
+    
+    // there are also range Components
+    <Above mobile>will be rendered on tablet and desktop</Above>
+    <Below desktop>will be rendered on moble and tablet</Above>        
 
     <MediaMatches> // will provide matches information via render-props
         {matches => (
@@ -84,42 +88,12 @@ import { MediaMatcher, ProvideMediaMatchers } from "react-media-match";
 ```
 PS: Don’t forget to __wrap all this with ProvideMediaMatchers__ - without it MediaMatches will always picks the "last" branch.
 
-## Server-Side Rendering
-
-There is no way to support MediaQuery on the Server Side, so the only way to generate the expected result
-is __to mock__ a predicted device.
-
-We are providing a special component which will mock data only on server size,
-and compare predicted media on componentMount on client size.
-
-It also has a special prop `hydrated` which will lead to __forced react tree remount__
-in case prediction was wrong, and rendered tree will not match hydrated one.
-(use only in case of `ReactDOM.hydrated`)
-
-```js
-import { MediaMatcher, MediaServerRender } from "react-media-match";
-
-<MediaServerRender predicted="desktop" hydrated>
-    <MediaMatcher
-        mobile={"render for mobile"}
-        // tablet={"tablet"} // mobile will be rendered for "skipped" tablet
-        desktop={"render desktop"}
-    />
-</MediaServerRender>
-```
-If prediction has failed - it will inform you, and might help to mitigate rendering issues.
-
-#### How to predict device type
-
-You may use [ua-parser-js](https://github.com/faisalman/ua-parser-js), to detect device type, and pick desired screen resolution, or use [react-ugent](https://github.com/medipass/react-ugent) to make it a bit
-more declarative.
-
 ## API
 
  react-media-match provides an API for "default" queries, and a factory method to create custom media queries.
 
  - `createMediaMatcher(breakPoints: { key: string })` - factory for a new API for provided breakpoints.
- The object with following props will be returned:
+ The object with following keys will be returned:
    - pickMatch
    - Matches
    - Matcher
@@ -136,6 +110,10 @@ more declarative.
  - `MediaMatches` - component, returns current matchers as a render prop
 
  - `MediaMatcher` - component, renders path for active match
+ 
+ - `Above` - component, render children above specified point
+ 
+ - `Below` - component, render children below specified point
 
  - `MediaServerRender` - component, helps render server-size
 
@@ -171,6 +149,36 @@ import { createMediaMatcher } from "react-media-match";
      ....
  </Orientation.Mock>
  ```
+ 
+## Server-Side Rendering
+
+There is no way to support MediaQuery on the Server Side, so the only way to generate the expected result
+is __to mock__ a predicted device.
+
+We are providing a special component which will mock data only on server size,
+and compare predicted media on componentMount on client size.
+
+It also has a special prop `hydrated` which will lead to __forced react tree remount__
+in case prediction was wrong, and rendered tree will not match hydrated one.
+(use only in case of `ReactDOM.hydrated`)
+
+```js
+import { MediaMatcher, MediaServerRender } from "react-media-match";
+
+<MediaServerRender predicted="desktop" hydrated>
+    <MediaMatcher
+        mobile={"render for mobile"}
+        // tablet={"tablet"} // mobile will be rendered for "skipped" tablet
+        desktop={"render desktop"}
+    />
+</MediaServerRender>
+```
+If prediction has failed - it will inform you, and might help to mitigate rendering issues.
+
+#### How to predict device type
+
+You may use [ua-parser-js](https://github.com/faisalman/ua-parser-js), to detect device type, and pick desired screen resolution, or use [react-ugent](https://github.com/medipass/react-ugent) to make it a bit
+more declarative. 
 
 ### Sandbox
 

@@ -43,6 +43,16 @@ const Matches: React.Consumer<BoolOf<typeof mediaDefaults>> = defaultMedia.Gearb
 const MediaMock = defaultMedia.Mock;
 
 /**
+ * Renders only below specific break point
+ */
+const Below = defaultMedia.Below;
+
+/**
+ * Renders only above specific break point
+ */
+const Above = defaultMedia.Above;
+
+/**
  * ServerSide rendering helper
  */
 const MediaServerRender = defaultMedia.ServerRender;
@@ -57,6 +67,8 @@ export {
 
     MediaMatches,
     InlineMediaMatcher,
+    Above,
+    Below,
 
     MediaMatcher,
 

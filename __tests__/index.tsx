@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {create} from 'react-test-renderer';
-import {MediaMatcher, MediaMock, pickMatch, MediaServerRender} from '../src';
+import {MediaMatcher, MediaMock, pickMatch, MediaServerRender, Above, Below} from '../src';
 
 describe('Specs', () => {
   it('should render mobile', () => {
@@ -51,6 +51,42 @@ describe('Specs', () => {
         </MediaMock>
       );
     expect(wrapper.toJSON()).toEqual("1");
+  });
+
+  it('Above render', () => {
+    const wrapper1 =
+      create(
+        <MediaMock mobile>
+          <Above mobile>content</Above>
+        </MediaMock>
+      );
+    expect(wrapper1.toJSON()).toEqual(null);
+
+    const wrapper2 =
+      create(
+        <MediaMock tablet>
+          <Above mobile>content</Above>
+        </MediaMock>
+      );
+    expect(wrapper2.toJSON()).toEqual("content");
+  });
+
+  it('Below render', () => {
+    const wrapper1 =
+      create(
+        <MediaMock tablet>
+          <Below tablet>content</Below>
+        </MediaMock>
+      );
+    expect(wrapper1.toJSON()).toEqual(null);
+
+    const wrapper2 =
+      create(
+        <MediaMock mobile>
+          <Below tablet>content</Below>
+        </MediaMock>
+      );
+    expect(wrapper2.toJSON()).toEqual("content");
   });
 
   it('pickMatch', () => {

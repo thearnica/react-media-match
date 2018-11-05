@@ -4,7 +4,7 @@ import {Media, BoolHash} from './Media'
 
 // @ts-ignore
 import {BoolOf, MediaRulesOf, ObjectOf, RenderMatch, RenderOf, IMediaQuery} from "./types";
-import {getMaxMatch, notNulls, pickMatchValues, pickMediaMatch} from "./utils";
+import {getMaxMatch, inBetween, notNulls, pickMatchValues, pickMediaMatch} from "./utils";
 import {MediaServerSide} from "./SSR";
 
 const castPointsTo = (points: { [key: string]: any }, targetType: any) => (
@@ -15,6 +15,8 @@ const castPointsTo = (points: { [key: string]: any }, targetType: any) => (
       return acc
     }, {})
 );
+
+export type NoChildren = { children?: never };
 
 // export type MediaMatcherType<T, M> = {
 //   pickMatch(matches: BoolOf<T>, slots: M): React.ReactNode | null,
@@ -76,7 +78,7 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
     children: PropTypes.func.isRequired
   };
 
-  const MediaMatcher: React.SFC<Partial<RenderOf<T>> & {children:never}> = (props) => (
+  const MediaMatcher: React.SFC<Partial<RenderOf<T>> & NoChildren> = (props) => (
     <MediaContext.Consumer>{matched => pickMatchEx(matched as BoolOf<T>, props)}</MediaContext.Consumer>
   );
 
@@ -90,6 +92,14 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
 
   const Mock: React.SFC<Partial<RenderOf<T>>> = (props) => (
     <MediaContext.Provider value={pickMatchValues(breakPoints, props)}>{props.children}</MediaContext.Provider>
+  );
+
+  const Below: React.SFC<Partial<BoolOf<T>>> = (props) => (
+    <MediaMatcher {...inBetween(breakPoints, props, props.children, true)}/>
+  );
+
+  const Above: React.SFC<Partial<BoolOf<T>>> = (props) => (
+    <MediaMatcher {...inBetween(breakPoints, props, props.children, false)}/>
   );
 
   const ServerRender: React.SFC<{ predicted: keyof T, hydrated?: boolean, children: React.ReactNode }> = ({predicted, hydrated, children}) => (
@@ -117,6 +127,8 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
 
     Matches: MediaMatches,
     Inline: InlineMediaMatcher,
+    Above,
+    Below,
 
     Matcher: MediaMatcher,
     ServerRender,
