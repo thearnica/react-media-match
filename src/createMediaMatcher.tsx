@@ -16,6 +16,10 @@ const castPointsTo = (points: { [key: string]: any }, targetType: any) => (
     }, {})
 );
 
+interface Including {
+  including?: boolean;
+}
+
 export type NoChildren = { children?: never };
 
 // export type MediaMatcherType<T, M> = {
@@ -94,12 +98,12 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
     <MediaContext.Provider value={pickMatchValues(breakPoints, props)}>{props.children}</MediaContext.Provider>
   );
 
-  const Below: React.SFC<Partial<BoolOf<T>>> = (props) => (
-    <MediaMatcher {...inBetween(breakPoints, props, props.children, true)}/>
+  const Below: React.SFC<Partial<BoolOf<T>> & Including> = (props) => (
+    <MediaMatcher {...inBetween(breakPoints, props, props.children, props.including ? false : true, true)}/>
   );
 
-  const Above: React.SFC<Partial<BoolOf<T>>> = (props) => (
-    <MediaMatcher {...inBetween(breakPoints, props, props.children, false)}/>
+  const Above: React.SFC<Partial<BoolOf<T>> & Including> = (props) => (
+    <MediaMatcher {...inBetween(breakPoints, props, props.children, props.including ? true : false, false)}/>
   );
 
   const ServerRender: React.SFC<{ predicted: keyof T, hydrated?: boolean, children: React.ReactNode }> = ({predicted, hydrated, children}) => (

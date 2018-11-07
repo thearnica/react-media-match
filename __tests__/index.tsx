@@ -71,6 +71,24 @@ describe('Specs', () => {
     expect(wrapper2.toJSON()).toEqual("content");
   });
 
+  it('Above including render', () => {
+    const wrapper1 =
+      create(
+        <MediaMock mobile>
+          <Above including mobile>content</Above>
+        </MediaMock>
+      );
+    expect(wrapper1.toJSON()).toEqual("content");
+
+    const wrapper2 =
+      create(
+        <MediaMock mobile>
+          <Above including tablet>content</Above>
+        </MediaMock>
+      );
+    expect(wrapper2.toJSON()).toEqual(null);
+  });
+
   it('Below render', () => {
     const wrapper1 =
       create(
@@ -87,6 +105,24 @@ describe('Specs', () => {
         </MediaMock>
       );
     expect(wrapper2.toJSON()).toEqual("content");
+  });
+
+  it('Below including ender', () => {
+    const wrapper1 =
+      create(
+        <MediaMock tablet>
+          <Below including tablet>content</Below>
+        </MediaMock>
+      );
+    expect(wrapper1.toJSON()).toEqual("content");
+
+    const wrapper2 =
+      create(
+        <MediaMock desktop>
+          <Below including tablet>content</Below>
+        </MediaMock>
+      );
+    expect(wrapper2.toJSON()).toEqual(null);
   });
 
   it('pickMatch', () => {

@@ -42,12 +42,24 @@ export default class App extends Component <{}, AppState> {
             see me only ABOVE mobile
           </Above>
           <br/>
+          <Above including mobile>
+            see me only ABOVE +mobile
+          </Above>
+          <br/>
           <Above tablet>
             see me only ABOVE tablet
           </Above>
           <br/>
+          <Above including tablet>
+            see me only ABOVE +tablet
+          </Above>
+          <br/>
           <Below tablet>
             see me only BELOW tablet
+          </Below>
+          <br/>
+          <Below including tablet>
+            see me only BELOW +tablet
           </Below>
           <br/>
           <Below desktop>

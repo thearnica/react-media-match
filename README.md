@@ -12,7 +12,8 @@ __Mobile first__ react responsive framework made easy.
    - Never forget to render something, never render two branches simultaneously.
  - 💻 SSR friendly. Customize the target rendering mode, and `SSR` for any device.
  - 💡 Provides Media Matchers and Media Pickers. Render different components based on media, or calculate strings.
- - 🧠 written in TypeScript
+ - 🧠 Good typing. Written in TypeScript
+ - 🚀 more performant that usual.
  - 🌩 just 1.5kb
 
  ## Usage
@@ -57,7 +58,8 @@ import { MediaMatcher, ProvideMediaMatchers } from "react-media-match";
     
     // there are also range Components
     <Above mobile>will be rendered on tablet and desktop</Above>
-    <Below desktop>will be rendered on moble and tablet</Above>        
+    <Below desktop>will be rendered on mobile and tablet</Above>
+    <Below including desktop>will be rendered on mobile, tablet and desktop</Above>
 
     <MediaMatches> // will provide matches information via render-props
         {matches => (
@@ -111,9 +113,9 @@ PS: Don’t forget to __wrap all this with ProvideMediaMatchers__ - without it M
 
  - `MediaMatcher` - component, renders path for active match
  
- - `Above` - component, render children above specified point
+ - `Above` - component, render children above specified point. Or including specified point if `including` prop is set. 
  
- - `Below` - component, render children below specified point
+ - `Below` - component, render children below specified point. Or including specified point if `including` prop is set.
 
  - `MediaServerRender` - component, helps render server-size
 
@@ -194,6 +196,9 @@ Just provide `state` for ProvideMediaMatchers, and it will control all the neste
 
  Testing and mocking are related to SSR rendering, and you may use MediaServerRender for tests and Mocks for SSR as well.
 
+
+## See also
+- [react-media-query-hoc](https://github.com/DomainGroupOSS/react-media-query-hoc) implements the same idea of SSR friendly and Multiple-breakpoints approach. 
 
 ## Articles
 

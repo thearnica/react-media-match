@@ -62,7 +62,7 @@ export function pickMatchValues(points: Names, props: Names) {
     }, {})
 }
 
-export function inBetween(breakPoints: Names, points: any, value: any, invert: boolean) {
+export function inBetween(breakPoints: Names, points: any, value: any, invert: boolean, include: boolean) {
   let pass = false;
   return Object
     .keys(breakPoints)
@@ -70,7 +70,7 @@ export function inBetween(breakPoints: Names, points: any, value: any, invert: b
       if (invert && points[key]) {
         pass = true;
       }
-      acc[key] = (invert ? pass : !pass) ? null : value;
+      acc[key] = (include ? pass : !pass) ? null : value;
       if (!invert && points[key]) {
         pass = true;
       }
