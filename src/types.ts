@@ -12,4 +12,6 @@ export type BoolOf<T> = ObjectOf<T, boolean>;
 
 export type RenderOf<T> = ObjectOf<T, ReactNode>;
 
-
+export interface Including {
+  including?: boolean;
+}

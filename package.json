@@ -40,7 +40,7 @@
   "size-limit": [
     {
       "path": "dist/es2015/index.js",
-      "limit": "9 KB"
+      "limit": "2.5 KB"
     }
   ],
   "sideEffects": false,

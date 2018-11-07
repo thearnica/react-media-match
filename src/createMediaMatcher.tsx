@@ -3,7 +3,7 @@ import * as PropTypes from 'prop-types';
 import {Media, BoolHash} from './Media'
 
 // @ts-ignore
-import {BoolOf, MediaRulesOf, ObjectOf, RenderMatch, RenderOf, IMediaQuery} from "./types";
+import {BoolOf, MediaRulesOf, ObjectOf, RenderMatch, RenderOf, IMediaQuery, Including} from "./types";
 import {getMaxMatch, inBetween, notNulls, pickMatchValues, pickMediaMatch} from "./utils";
 import {MediaServerSide} from "./SSR";
 
@@ -15,10 +15,6 @@ const castPointsTo = (points: { [key: string]: any }, targetType: any) => (
       return acc
     }, {})
 );
-
-interface Including {
-  including?: boolean;
-}
 
 export type NoChildren = { children?: never };
 
