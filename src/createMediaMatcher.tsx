@@ -18,22 +18,25 @@ const castPointsTo = (points: { [key: string]: any }, targetType: any) => (
 
 export type NoChildren = { children?: never };
 
-// export type MediaMatcherType<T, M> = {
-//   pickMatch(matches: BoolOf<T>, slots: M): React.ReactNode | null,
-//
-//   Provider: React.SFC<{ state?: MediaRulesOf<T>, override?: false }>;
-//   Mock: React.SFC<Partial<RenderOf<T>>>;
-//
-//   Matches: React.SFC<{ children: RenderMatch<T, any> }>,
-//   Inline: React.SFC<Partial<RenderOf<T>>>,
-//
-//   Matcher: React.SFC<Partial<RenderOf<T>>>,
-//   ServerRender: React.SFC<{ predicted: keyof T, hydrated?: boolean, children: React.ReactNode }>,
-//
-//   Gearbox: React.Consumer<BoolHash>,
-// }
+export type MediaMatcherType<T> = {
+  pickMatch<K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>): React.ReactNode | null,
 
-export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
+  Provider: React.SFC<{ state?: MediaRulesOf<T>, override?: false }>;
+  Mock: React.SFC<Partial<RenderOf<T>>>;
+
+  Matches: React.SFC<{ children: RenderMatch<T, any> }>,
+  Inline: React.SFC<Partial<RenderOf<T>>>,
+
+  Below: React.SFC<Partial<BoolOf<T>> & Including>,
+  Above: React.SFC<Partial<BoolOf<T>> & Including>,
+
+  Matcher: React.SFC<Partial<RenderOf<T>>>,
+  ServerRender: React.SFC<{ predicted: keyof T, hydrated?: boolean, children: React.ReactNode }>,
+
+  Gearbox: React.Consumer<BoolHash>,
+}
+
+export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>): MediaMatcherType<T> {
   const MediaContext = React.createContext<BoolHash>({});
 
   function pickMatch<K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>): K | null {
@@ -124,15 +127,15 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>) {
 
     Provider: ProvideMediaMatchers,
     Mock,
-
+    //
     Matches: MediaMatches,
     Inline: InlineMediaMatcher,
     Above,
     Below,
-
+    //
     Matcher: MediaMatcher,
     ServerRender,
-
+    //
     Gearbox: MediaContext.Consumer
   }
 }
