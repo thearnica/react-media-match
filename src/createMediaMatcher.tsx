@@ -34,6 +34,7 @@ export type MediaMatcherType<T> = {
   ServerRender: React.SFC<{ predicted: keyof T, hydrated?: boolean, children: React.ReactNode }>,
 
   Gearbox: React.Consumer<BoolHash>,
+  Consumer: React.Consumer<BoolHash>,
 }
 
 export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>): MediaMatcherType<T> {
@@ -136,6 +137,7 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>): MediaMatche
     Matcher: MediaMatcher,
     ServerRender,
     //
-    Gearbox: MediaContext.Consumer
+    Gearbox: MediaContext.Consumer,
+    Consumer: MediaContext.Consumer
   }
 }

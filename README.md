@@ -102,6 +102,7 @@ PS: Don’t forget to __wrap all this with ProvideMediaMatchers__ - without it M
    - Provider
    - Mock
    - SSR
+   - Consumer
 
  There is also pre-exported API for default breakpoints - mobile, tablet, desktop
 
@@ -111,13 +112,15 @@ PS: Don’t forget to __wrap all this with ProvideMediaMatchers__ - without it M
 
  - `MediaMatches` - component, returns current matchers as a render prop
 
- - `MediaMatcher` - component, renders path for active match
+ - `MediaMatcher` - component, renders path for active match 
  
  - `Above` - component, render children above specified point. Or including specified point if `including` prop is set. 
  
  - `Below` - component, render children below specified point. Or including specified point if `including` prop is set.
 
  - `MediaServerRender` - component, helps render server-size
+ 
+ - `MediaConsumer` - React Context Consumer
 
 ## Example
  - Define secondary Query for orientation
@@ -151,6 +154,27 @@ import { createMediaMatcher } from "react-media-match";
      ....
  </Orientation.Mock>
  ```
+ 
+### Usage in life cycle events
+> Requires React16.6+
+```js
+import {MediaConsumer, pickMatch} from 'react-media-match';
+// use createMediaMatcher to create your own matches
+
+class App extends React.Component {
+  
+  // provide Consumer as a contextType
+  static contextType = MediaConsumer;
+  
+  componentDidMount() {
+    // use `pickMatch` matching the consumer
+    pickMatch(this.context, {
+      mobile: 'a',
+      tablet: 'b'
+    })
+  }
+}
+``` 
  
 ## Server-Side Rendering
 

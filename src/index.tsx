@@ -38,7 +38,7 @@ const MediaMatcher = defaultMedia.Matcher;
  * Calculates media match and returns via renderProps
  * @type {RPC<any, any>}
  */
-const Matches: React.Consumer<BoolOf<typeof mediaDefaults>> = defaultMedia.Gearbox as any;
+const Matches = defaultMedia.Matches;
 
 const MediaMock = defaultMedia.Mock;
 
@@ -56,6 +56,8 @@ const Above = defaultMedia.Above;
  * ServerSide rendering helper
  */
 const MediaServerRender = defaultMedia.ServerRender;
+
+const MediaConsumer = defaultMedia.Consumer;
 
 
 export {
@@ -75,5 +77,7 @@ export {
     MediaServerRender,
 
     Matches,
-    MediaMock
+    MediaMock,
+
+    MediaConsumer,
 }
