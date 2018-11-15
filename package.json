@@ -1,6 +1,6 @@
 {
   "name": "react-media-match",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "React made responsible",
   "scripts": {
     "test": "ts-react-toolbox test",
