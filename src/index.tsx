@@ -1,7 +1,7 @@
 import {createMediaMatcher, MediaMatcherType} from "./createMediaMatcher";
 import mediaDefaults from './mediaDefaults'
 // @ts-ignore
-import {SFC, ComponentType, ReactElement, StatelessComponent, ReactPortal} from 'react';
+import {SFC, ComponentType, ReactElement, StatelessComponent, ReactPortal, ConsumerProps} from 'react';
 // @ts-ignore
 import {BoolOf, IMediaQuery, Including} from './types';
 

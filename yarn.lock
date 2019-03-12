@@ -9217,10 +9217,10 @@ tryer@^1.0.0:
   resolved "https://registry.yarnpkg.com/tryer/-/tryer-1.0.0.tgz#027b69fa823225e551cace3ef03b11f6ab37c1d7"
   integrity sha1-Antp+oIyJeVRys4+8DsR9qs3wdc=
 
-ts-react-toolbox@^0.1.22:
-  version "0.1.22"
-  resolved "https://registry.yarnpkg.com/ts-react-toolbox/-/ts-react-toolbox-0.1.22.tgz#de2b30b03223651638128653986f54a883976c19"
-  integrity sha512-ttmFDBcBYrwNiIJ5B1/A9MLF++/PmW9R38HB4bAp7so7zdy3Cp5HaTuThtOnsQNbeVy8viTBAivVerLav0veTA==
+ts-react-toolbox@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/ts-react-toolbox/-/ts-react-toolbox-0.2.2.tgz#fb1e7aa89b169dcb93bf1600f7fb9b92dcf159e4"
+  integrity sha512-dPm3jEroNDlhg7Jx95BoFItzSDjCRoK4uT8Fs2po2qwAVtWWLHaj+6Qn8TkfyMAP7uqGU+8pa/dxuxqFqwSc3w==
   dependencies:
     "@types/enzyme" "^3.1.9"
     "@types/jest" "^23.3.1"
@@ -9246,6 +9246,7 @@ ts-react-toolbox@^0.1.22:
     react-dom "^16.2.0"
     react-gh-corner "^1.1.2"
     styled-components "^3.3.2"
+    tslib "^1.9.3"
     tslint "^5.9.1"
     tslint-config-prettier "^1.10.0"
     tslint-react "^3.5.1"
@@ -9260,7 +9261,7 @@ tslib@^1.8.0, tslib@^1.8.1:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.0.tgz#e37a86fda8cbbaf23a057f473c9f4dc64e5fc2e8"
   integrity sha512-f/qGG2tUkrISBlQZEjEqoZ3B2+npJjIf04H1wuAv9iA8i04Icp+61KRXxFdha22670NJopsZCIjhC3SnjPRKrQ==
 
-tslib@^1.9.0:
+tslib@^1.9.0, tslib@^1.9.3:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.3.tgz#d7e4dd79245d85428c4d7e4822a79917954ca286"
   integrity sha512-4krF8scpejhaOgqzBEcGM7yDIEfi0/8+8zDRZhNZZ2kjmHJ4hv3zCbQWxoJGz1iw5U0Jl0nma13xzHXcncMavQ==
