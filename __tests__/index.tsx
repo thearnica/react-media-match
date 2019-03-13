@@ -128,6 +128,49 @@ describe('Specs', () => {
   it('pickMatch', () => {
     expect(pickMatch({
       mobile: false,
+      tablet: false,
+      desktop: false,
+    }, {
+      tablet: 2,
+    })).toBe(2);
+
+    expect(pickMatch({
+      mobile: false,
+      tablet: false,
+      desktop: false,
+    }, {
+    })).toBe(undefined);
+
+    expect(pickMatch({
+      mobile: false,
+      tablet: false,
+      desktop: false,
+    }, {
+      desktop: 3,
+    })).toBe(3);
+
+    expect(pickMatch({
+      mobile: false,
+      tablet: false,
+      desktop: false,
+    }, {
+      mobile: 1,
+      tablet: 2,
+      desktop: 3,
+    })).toBe(3);
+
+    expect(pickMatch({
+      mobile: true,
+      tablet: true,
+      desktop: true,
+    }, {
+      mobile: 1,
+      tablet: 2,
+      desktop: 3,
+    })).toBe(1);
+
+    expect(pickMatch({
+      mobile: false,
       tablet: true,
       desktop: false,
     }, {
@@ -156,7 +199,6 @@ describe('Specs', () => {
     })).toBe(1);
   })
 
-
   describe('SSR', () => {
     it('Render', () => {
       const wrapper =
@@ -173,9 +215,9 @@ describe('Specs', () => {
       const wrapper =
         create(
           <MediaMock tablet>
-          <MediaServerRender predicted="tablet">
-            <MediaMatcher mobile="1" tablet="2" desktop="3"/>
-          </MediaServerRender>
+            <MediaServerRender predicted="tablet">
+              <MediaMatcher mobile="1" tablet="2" desktop="3"/>
+            </MediaServerRender>
           </MediaMock>
         );
       expect(wrapper.toJSON()).toEqual("2");

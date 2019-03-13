@@ -19,7 +19,7 @@ const castPointsTo = (points: { [key: string]: any }, targetType: any) => (
 export type NoChildren = { children?: never };
 
 export type MediaMatcherType<T> = {
-  pickMatch<K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>): React.ReactNode | null,
+  pickMatch<K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>): K,
 
   Provider: React.SFC<{ state?: MediaRulesOf<T>, override?: false }>;
   Mock: React.SFC<Partial<RenderOf<T>>>;
@@ -40,11 +40,11 @@ export type MediaMatcherType<T> = {
 export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>): MediaMatcherType<T> {
   const MediaContext = React.createContext<BoolHash>({});
 
-  function pickMatch<K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>): K | null {
+  function pickMatch<K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>): K {
     return pickMediaMatch<T, K>(breakPoints, matches, slots)
   }
 
-  function pickMatchEx<M extends Partial<ObjectOf<T, React.ReactNode>>>(matches: BoolOf<T>, slots: M): React.ReactNode | null {
+  function pickMatchEx<M extends Partial<ObjectOf<T, React.ReactNode>>>(matches: BoolOf<T>, slots: M): React.ReactNode {
     return pickMediaMatch<T, React.ReactNode>(breakPoints, matches, slots)
   }
 
