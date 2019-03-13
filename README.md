@@ -13,7 +13,7 @@ __Mobile first__ react responsive framework made easy.
  - 💻 SSR friendly. Customize the target rendering mode, and `SSR` for any device.
  - 💡 Provides Media Matchers and Media Pickers. Render different components based on media, or calculate strings.
  - 🧠 Good typing. Written in TypeScript
- - 🚀 more performant that usual.
+ - 🚀 more performant than usual - there is only one top level query
  - 🌩 just 1.5kb
 
  ## Usage
