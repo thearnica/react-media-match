@@ -9,6 +9,7 @@ import {
   MediaMock,
   MediaServerRender,
   createMediaMatcher, Above, Below
+  useMedia,
 } from "../src";
 
 export interface AppState {
@@ -31,12 +32,23 @@ class Counter extends React.Component {
   }
 }
 
+const HookTest = () => {
+  const displayedMedia = useMedia({
+    mobile: 'mobile',
+    tablet: 'tablet',
+    desktop: 'desktop'
+  });
+
+  return <span>this is {displayedMedia}</span>;
+}
+
 export default class App extends Component <{}, AppState> {
   state: AppState = {}
 
   render() {
     return (
       <ProvideMediaMatchers>
+        <HookTest />
         <div>
           <Above mobile>
             see me only ABOVE mobile

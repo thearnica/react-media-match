@@ -97,6 +97,7 @@ PS: Don’t forget to __wrap all this with ProvideMediaMatchers__ - without it M
  - `createMediaMatcher(breakPoints: { key: string })` - factory for a new API for provided breakpoints.
  The object with following keys will be returned:
    - pickMatch
+   - useMedia
    - Matches
    - Matcher
    - Provider
@@ -106,7 +107,9 @@ PS: Don’t forget to __wrap all this with ProvideMediaMatchers__ - without it M
 
  There is also pre-exported API for default breakpoints - mobile, tablet, desktop
 
- - `pickMatch(matches, matchers)` - function, return value from matchers matching matches.
+ - `pickMatch(mediaMatches, matchers)` - function, returns value from matchers matching `matchers`.
+ 
+ - `useMatch(matchers)` - hook, returns value from matchers matching matches. This call is equal to `pickMatch` with autowired context.
 
  - `ProvideMediaMatchers` - component, calculates media queries and stores them in context.
 
@@ -114,9 +117,9 @@ PS: Don’t forget to __wrap all this with ProvideMediaMatchers__ - without it M
 
  - `MediaMatcher` - component, renders path for active match 
  
- - `Above` - component, render children above specified point. Or including specified point if `including` prop is set. 
+ - `Above` - component, renders children above specified point. Or including specified point if `including` prop is set. 
  
- - `Below` - component, render children below specified point. Or including specified point if `including` prop is set.
+ - `Below` - component, renders children below specified point. Or including specified point if `including` prop is set.
 
  - `MediaServerRender` - component, helps render server-size
  
@@ -154,6 +157,20 @@ import { createMediaMatcher } from "react-media-match";
      ....
  </Orientation.Mock>
  ```
+ 
+### Usage with hooks
+Keep in mind - only _value picker_ should be used as a hook, the _render selection_ should
+be declarative and use `MediaMatcher`.
+```js
+const MyComponent = ({shortName, name}) => {
+  const title = useMedia({
+    mobile: shortName,
+    tablet: name,
+  });
+  
+  return <span>Hello {title}</span>
+}
+```
  
 ### Usage in life cycle events
 > Requires React16.6+
