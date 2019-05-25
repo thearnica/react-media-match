@@ -7,7 +7,7 @@
 
 __Mobile first__ react responsive framework made easy.
 
- - 🐍 "mobile-first", "gap-less", and bug-less rendering.
+ - 🐍 "mobile-first", "gap-less", and __bug-less__ rendering.
    - In all the cases one rendering branch will be picked, and only one!
    - Never forget to render something, never render two branches simultaneously.
  - 💻 SSR friendly. Customize the target rendering mode, and `SSR` for any device.
@@ -191,7 +191,36 @@ class App extends React.Component {
     })
   }
 }
-``` 
+```
+
+## Top level provider
+If you want to react to a _media change_ you __have__ to wrap your application with `ProvideMediaMatchers`.
+But if you don't - you might skip this moment.
+
+### For example - media for "device pointer type"
+Mobile phones(touch devices) don't have "hover" effects, while the onces with `mouse` - do support it.
+More of it - this could not be changed in runtime - device type is constant.
+
+This information might be quite important - for example you might control _autoFocus_, as long as 
+_auto-focusing_ input on a _touch_ device would open a `virtual keyboard`(consuming 50% of the screen), which may be
+not desired.
+
+In this case you might omit `ProvideMediaMatchers` and use _default_ values, which would be computed on start time.  
+```js
+const HoverMedia = createMediaMatcher({
+  touchDevice: "(hover: none)",
+  mouseDevice: "(hover: hover)",
+});
+
+const MyComponent = () => {
+  const autoFocus = HoverMedia.useMedia({
+    touchDevice: false,
+    mouseDevice: true,
+  });
+  
+  return <input autoFocus={autoFocus}/>
+}
+```
  
 ## Server-Side Rendering
 
@@ -218,7 +247,7 @@ import { MediaMatcher, MediaServerRender } from "react-media-match";
 ```
 If prediction has failed - it will inform you, and might help to mitigate rendering issues.
 
-#### How to predict device type
+#### How to predict a device type
 
 You may use [ua-parser-js](https://github.com/faisalman/ua-parser-js), to detect device type, and pick desired screen resolution, or use [react-ugent](https://github.com/medipass/react-ugent) to make it a bit
 more declarative. 
