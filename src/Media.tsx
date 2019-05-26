@@ -2,10 +2,12 @@ import * as React from "react";
 
 export type BoolHash = { [key: string]: boolean };
 
+export interface IQuery {
+  [key: string]: string;
+}
+
 export interface MediaProps {
-  queries: {
-    [key: string]: string;
-  },
+  queries: IQuery,
   children: (matches: BoolHash) => React.ReactNode;
 }
 
@@ -16,6 +18,20 @@ export interface MediaState {
   },
   keys: string[];
 }
+
+export const executeMediaQuery = (queries: IQuery) => {
+  const matches: BoolHash = {};
+  if (!(typeof window !== "object" || !window.matchMedia)) {
+    if (window) {
+      Object
+        .keys(queries)
+        .forEach(media => {
+          matches[media] = window.matchMedia(queries[media]).matches;
+        });
+    }
+  }
+  return matches;
+};
 
 export class Media extends React.Component<MediaProps, MediaState> {
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import {Media, BoolHash} from './Media'
+import {Media, BoolHash, executeMediaQuery} from './Media'
 
 // @ts-ignore
 import {BoolOf, MediaRulesOf, ObjectOf, RenderMatch, RenderOf, IMediaQuery, Including} from "./types";
@@ -39,7 +39,7 @@ export type MediaMatcherType<T> = {
 }
 
 export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>): MediaMatcherType<T> {
-  const MediaContext = React.createContext<BoolHash>({});
+  const MediaContext = React.createContext<BoolHash>(executeMediaQuery(breakPoints));
 
   function pickMatch<K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>): K | null {
     return pickMediaMatch<T, K>(breakPoints, matches, slots)
