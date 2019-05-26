@@ -1,7 +1,6 @@
+import * as React from "react";
 import {createMediaMatcher, MediaMatcherType} from "./createMediaMatcher";
 import mediaDefaults from './mediaDefaults'
-// @ts-ignore
-import {SFC, ComponentType, ReactElement, StatelessComponent, ReactPortal, ConsumerProps} from 'react';
 // @ts-ignore
 import {BoolOf, IMediaQuery, Including} from './types';
 
@@ -59,6 +58,11 @@ const MediaServerRender = defaultMedia.ServerRender;
 
 const MediaConsumer = defaultMedia.Consumer;
 
+/**
+ * pickMatchHookAPI
+ */
+const useMedia = defaultMedia.useMedia;
+
 
 export {
     createMediaMatcher,
@@ -80,4 +84,6 @@ export {
     MediaMock,
 
     MediaConsumer,
+
+    useMedia,
 }

@@ -7,13 +7,13 @@
 
 __Mobile first__ react responsive framework made easy.
 
- - 🐍 "mobile-first", "gap-less", and bug-less rendering.
+ - 🐍 "mobile-first", "gap-less", and __bug-less__ rendering.
    - In all the cases one rendering branch will be picked, and only one!
    - Never forget to render something, never render two branches simultaneously.
  - 💻 SSR friendly. Customize the target rendering mode, and `SSR` for any device.
  - 💡 Provides Media Matchers and Media Pickers. Render different components based on media, or calculate strings.
  - 🧠 Good typing. Written in TypeScript
- - 🚀 more performant that usual.
+ - 🚀 more performant than usual - there is only one top level query
  - 🌩 just 1.5kb
 
  ## Usage
@@ -97,6 +97,7 @@ PS: Don’t forget to __wrap all this with ProvideMediaMatchers__ - without it M
  - `createMediaMatcher(breakPoints: { key: string })` - factory for a new API for provided breakpoints.
  The object with following keys will be returned:
    - pickMatch
+   - useMedia
    - Matches
    - Matcher
    - Provider
@@ -106,7 +107,9 @@ PS: Don’t forget to __wrap all this with ProvideMediaMatchers__ - without it M
 
  There is also pre-exported API for default breakpoints - mobile, tablet, desktop
 
- - `pickMatch(matches, matchers)` - function, return value from matchers matching matches.
+ - `pickMatch(mediaMatches, matchers)` - function, returns value from matchers matching `matchers`.
+ 
+ - `useMatch(matchers)` - hook, returns value from matchers matching matches. This call is equal to `pickMatch` with autowired context.
 
  - `ProvideMediaMatchers` - component, calculates media queries and stores them in context.
 
@@ -114,9 +117,9 @@ PS: Don’t forget to __wrap all this with ProvideMediaMatchers__ - without it M
 
  - `MediaMatcher` - component, renders path for active match 
  
- - `Above` - component, render children above specified point. Or including specified point if `including` prop is set. 
+ - `Above` - component, renders children above specified point. Or including specified point if `including` prop is set. 
  
- - `Below` - component, render children below specified point. Or including specified point if `including` prop is set.
+ - `Below` - component, renders children below specified point. Or including specified point if `including` prop is set.
 
  - `MediaServerRender` - component, helps render server-size
  
@@ -155,6 +158,20 @@ import { createMediaMatcher } from "react-media-match";
  </Orientation.Mock>
  ```
  
+### Usage with hooks
+Keep in mind - only _value picker_ should be used as a hook, the _render selection_ should
+be declarative and use `MediaMatcher`.
+```js
+const MyComponent = ({shortName, name}) => {
+  const title = useMedia({
+    mobile: shortName,
+    tablet: name,
+  });
+  
+  return <span>Hello {title}</span>
+}
+```
+ 
 ### Usage in life cycle events
 > Requires React16.6+
 ```js
@@ -174,7 +191,36 @@ class App extends React.Component {
     })
   }
 }
-``` 
+```
+
+## Top level provider
+If you want to react to a _media change_ you __have__ to wrap your application with `ProvideMediaMatchers`.
+But if you don't - you might skip this moment.
+
+### For example - media for "device pointer type"
+Mobile phones(touch devices) don't have "hover" effects, while the onces with `mouse` - do support it.
+More of it - this could not be changed in runtime - device type is constant.
+
+This information might be quite important - for example you might control _autoFocus_, as long as 
+_auto-focusing_ input on a _touch_ device would open a `virtual keyboard`(consuming 50% of the screen), which may be
+not desired.
+
+In this case you might omit `ProvideMediaMatchers` and use _default_ values, which would be computed on start time.  
+```js
+const HoverMedia = createMediaMatcher({
+  touchDevice: "(hover: none)",
+  mouseDevice: "(hover: hover)",
+});
+
+const MyComponent = () => {
+  const autoFocus = HoverMedia.useMedia({
+    touchDevice: false,
+    mouseDevice: true,
+  });
+  
+  return <input autoFocus={autoFocus}/>
+}
+```
  
 ## Server-Side Rendering
 
@@ -201,7 +247,7 @@ import { MediaMatcher, MediaServerRender } from "react-media-match";
 ```
 If prediction has failed - it will inform you, and might help to mitigate rendering issues.
 
-#### How to predict device type
+#### How to predict a device type
 
 You may use [ua-parser-js](https://github.com/faisalman/ua-parser-js), to detect device type, and pick desired screen resolution, or use [react-ugent](https://github.com/medipass/react-ugent) to make it a bit
 more declarative. 

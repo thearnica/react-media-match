@@ -8,7 +8,8 @@ import {
   MediaMatches,
   MediaMock,
   MediaServerRender,
-  createMediaMatcher, Above, Below
+  createMediaMatcher, Above, Below,
+  useMedia,
 } from "../src";
 
 export interface AppState {
@@ -19,16 +20,40 @@ const SecodaryMedia = createMediaMatcher({
   'mobile': '(max-width: 600px)',
   'tablet': '(max-width: 900px)',
   'desktop': '(min-width: 700px)',
-})
+});
 
-let cntcnt=0;
+const HoverMedia = createMediaMatcher({
+  touchDevice: "(hover: none)",
+  mouseDevice: "(hover: hover)",
+});
+
+let cntcnt = 0;
 
 class Counter extends React.Component {
   private cnt = 1
 
-  render(){
+  render() {
     return <span>{this.cnt++} {cntcnt++}</span>;
   }
+}
+
+const HookTest = () => {
+  const displayedMedia = useMedia({
+    mobile: 'mobile',
+    tablet: 'tablet',
+    desktop: 'desktop'
+  });
+
+  return <span>this is {displayedMedia}</span>;
+}
+
+const HoverHookTest = () => {
+  const displayedMedia = HoverMedia.useMedia({
+    touchDevice: 'touch',
+    mouseDevice: 'mouse',
+  });
+
+  return <span>this is {displayedMedia} (without provider)</span>;
 }
 
 export default class App extends Component <{}, AppState> {
@@ -37,6 +62,8 @@ export default class App extends Component <{}, AppState> {
   render() {
     return (
       <ProvideMediaMatchers>
+        <HookTest/>
+        <HoverHookTest />>
         <div>
           <Above mobile>
             see me only ABOVE mobile
@@ -88,7 +115,7 @@ export default class App extends Component <{}, AppState> {
             )}
           </MediaMatches> ===
           <MediaMatches>
-            {(_,pickMatch) => (
+            {(_, pickMatch) => (
               <span> = {pickMatch({
                 mobile: "mobile",
                 tablet: "tablet",
