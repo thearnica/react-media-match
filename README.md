@@ -3,18 +3,19 @@
 [![Build Status](https://travis-ci.org/thearnica/react-media-match.svg?branch=master)](https://travis-ci.org/thearnica/react-media-match)
 [![coverage-badge](https://img.shields.io/codecov/c/github/thearnica/react-media-match.svg?style=flat-square)](https://codecov.io/github/thearnica/react-media-match)
 [![NPM version](https://img.shields.io/npm/v/react-media-match.svg)](https://www.npmjs.com/package/react-media-match)
-
+[![bundle size](https://badgen.net/bundlephobia/minzip/react-media-match)](https://bundlephobia.com/result?p=react-media-match)
+[![downloads](https://badgen.net/npm/dm/react-media-match)](https://www.npmtrends.com/react-media-match)
 
 __Mobile first__ react responsive framework made easy.
 
- - 🐍 "mobile-first", "gap-less", and __bug-less__ rendering.
+ - 🐍 "mobile-first", "gap-less", and (!)__bug-less__ rendering.
    - In all the cases one rendering branch will be picked, and only one!
    - Never forget to render something, never render two branches simultaneously.
  - 💻 SSR friendly. Customize the target rendering mode, and `SSR` for any device.
- - 💡 Provides Media Matchers and Media Pickers. Render different components based on media, or calculate strings.
- - 🧠 Good typing. Written in TypeScript
+ - 💡 Provides Media Matchers to render Comonents and Media Pickers to pick a value depending on the current media.
+ - 🎣 Has hooks interface
+ - 🧠 Good typing out of the box - written in TypeScript
  - 🚀 more performant than usual - there is only one top level query
- - 🌩 just 1.5kb
 
  ## Usage
 
@@ -75,17 +76,17 @@ import { MediaMatcher, ProvideMediaMatchers } from "react-media-match";
     </MediaMatches>
 
     <MediaMatches> // will provide matches information via render-props
-            {(_,pickMatch) => ( // you can get pickMatch from MediaMatches
-                <span> testing {
-                    // pick matching values
-                    pickMatch({
-                        mobile: "mobile",
-                        // tablet: "tablet", // the same rules are applied here
-                        desktop: "desktop",
-                    })
-                }</span>
-            )}
-        </MediaMatches>
+       {(_,pickMatch) => ( // you can get pickMatch from MediaMatches
+           <span> testing {
+               // pick matching values
+               pickMatch({
+                   mobile: "mobile",
+                   // tablet: "tablet", // the same rules are applied here
+                   desktop: "desktop",
+               })
+           }</span>
+       )}
+    </MediaMatches>
 </ProvideMediaMatchers>
 ```
 PS: Don’t forget to __wrap all this with ProvideMediaMatchers__ - without it MediaMatches will always picks the "last" branch.
