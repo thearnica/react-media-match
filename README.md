@@ -8,14 +8,15 @@
 
 __Mobile first__ react responsive framework made easy.
 
- - 🐍 "mobile-first", "gap-less", and (!)__bug-less__ rendering.
+ - 🐍 mobile-first "gap-less", and (!)__bug-less__ approach.
    - In all the cases one rendering branch will be picked, and only one!
    - Never forget to render something, never render two branches simultaneously.
- - 💻 SSR friendly. Customize the target rendering mode, and `SSR` for any device.
+ - 💻 SSR friendly. Customize the target rendering mode and `SSR` for any device.
  - 💡 Provides Media Matchers to render Comonents and Media Pickers to pick a value depending on the current media.
  - 🎣 Has hooks interface
  - 🧠 Good typing out of the box - written in TypeScript
  - 🚀 more performant than usual - there is only one top level query
+ - 🧨 Controllable matchers
 
  ## Usage
 
@@ -25,6 +26,15 @@ __Mobile first__ react responsive framework made easy.
  yarn add react-media-match
  ```
 
+The core idea is to use object hashes to define how something should look like on all targets, protecting from wide bug variations and making everything more declarative.
+```
+<MediaMatcher
+    mobile={"render for mobile"}
+    // tablet={"tablet"} // mobile will be rendered for "skipped" tablet
+    desktop={"render desktop"}
+/>
+```
+### Concepts
 Just:
 1. Define once all your media queries (2-3-4 usual), and then use them _simultaneously_!
 2. Define how application should look like on all resolutions.
