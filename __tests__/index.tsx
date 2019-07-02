@@ -1,8 +1,18 @@
 import * as React from 'react';
 import {create} from 'react-test-renderer';
-import {MediaMatcher, MediaMock, pickMatch, MediaServerRender, Above, Below} from '../src';
+import {MediaMatcher, MediaMock, pickMatch, MediaServerRender, Above, Below, ProvideMediaMatchers} from '../src';
 
 describe('Specs', () => {
+  it('should render mobile using ProvideMediaMatchers override', () => {
+    const wrapper =
+      create(
+        <ProvideMediaMatchers state={{mobile: true, desktop: false, tablet: false}}>
+          <MediaMatcher mobile="1" tablet="2" desktop="3"/>
+        </ProvideMediaMatchers>
+      );
+    expect(wrapper.toJSON()).toEqual("1");
+  });
+
   it('should render mobile', () => {
     const wrapper =
       create(

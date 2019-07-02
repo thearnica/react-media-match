@@ -1,4 +1,5 @@
 import * as React from "react";
+import {MediaRulesOf, BoolOf} from "./types";
 
 export type BoolHash = { [key: string]: boolean };
 
@@ -19,14 +20,14 @@ export interface MediaState {
   keys: string[];
 }
 
-export const executeMediaQuery = (queries: IQuery) => {
-  const matches: BoolHash = {};
+export function executeMediaQuery<T>(queries: MediaRulesOf<T>): BoolOf<T> {
+  const matches: BoolOf<T> = {} as any;
   if (!(typeof window !== "object" || !window.matchMedia)) {
     if (window) {
       Object
         .keys(queries)
-        .forEach(media => {
-          matches[media] = window.matchMedia(queries[media]).matches;
+        .forEach((media) => {
+          (matches as any)[media] = window.matchMedia((queries as any)[media]).matches;
         });
     }
   }

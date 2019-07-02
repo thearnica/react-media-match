@@ -11,7 +11,7 @@ export function forEachName<T, K, R = { [key in keyof T]: K }>
     }), {})
 }
 
-export function getMaxMatch<T>(mediaRules: MediaRulesOf<T>, matches: BoolOf<any>): string {
+export function getMaxMatch<T>(mediaRules: MediaRulesOf<T>, matches: Partial<BoolOf<any>>): string {
   const keys = Object.keys(mediaRules);
   const len = keys.length;
 
@@ -26,7 +26,7 @@ export function getMaxMatch<T>(mediaRules: MediaRulesOf<T>, matches: BoolOf<any>
 }
 
 export function pickMediaMatch<T, K>
-(mediaRules: MediaRulesOf<T>, matches: BoolOf<any>, slots: Partial<ObjectOf<any, K>>): K {
+(mediaRules: MediaRulesOf<T>, matches: Partial<BoolOf<any>>, slots: Partial<ObjectOf<any, K>>): K {
   const keys = Object.keys(mediaRules);
   const len = keys.length;
 
@@ -79,7 +79,7 @@ export function inBetween(breakPoints: Names, points: any, value: any, invert: b
     }, {})
 }
 
-export function notNulls(matches: { [key: string]: boolean | undefined }): { [key: string]: boolean | undefined } {
+export function notNulls(matches: { [key: string]: boolean | undefined }): { [key: string]: boolean } {
   return Object
     .keys(matches)
     .reduce((acc: any, key) => {
