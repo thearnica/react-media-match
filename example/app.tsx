@@ -8,7 +8,8 @@ import {
   MediaMatches,
   MediaMock,
   MediaServerRender,
-  createMediaMatcher
+  createMediaMatcher, Above, Below,
+  useMedia,
 } from "../src";
 
 export interface AppState {
@@ -19,16 +20,40 @@ const SecodaryMedia = createMediaMatcher({
   'mobile': '(max-width: 600px)',
   'tablet': '(max-width: 900px)',
   'desktop': '(min-width: 700px)',
-})
+});
 
-let cntcnt=0;
+const HoverMedia = createMediaMatcher({
+  touchDevice: "(hover: none)",
+  mouseDevice: "(hover: hover)",
+});
+
+let cntcnt = 0;
 
 class Counter extends React.Component {
   private cnt = 1
 
-  render(){
+  render() {
     return <span>{this.cnt++} {cntcnt++}</span>;
   }
+}
+
+const HookTest = () => {
+  const displayedMedia = useMedia({
+    mobile: 'mobile',
+    tablet: 'tablet',
+    desktop: 'desktop'
+  });
+
+  return <span>this is {displayedMedia}</span>;
+}
+
+const HoverHookTest = () => {
+  const displayedMedia = HoverMedia.useMedia({
+    touchDevice: 'touch',
+    mouseDevice: 'mouse',
+  });
+
+  return <span>this is {displayedMedia} (without provider)</span>;
 }
 
 export default class App extends Component <{}, AppState> {
@@ -37,7 +62,37 @@ export default class App extends Component <{}, AppState> {
   render() {
     return (
       <ProvideMediaMatchers>
+        <HookTest/>
+        <HoverHookTest />>
         <div>
+          <Above mobile>
+            see me only ABOVE mobile
+          </Above>
+          <br/>
+          <Above including mobile>
+            see me only ABOVE +mobile
+          </Above>
+          <br/>
+          <Above tablet>
+            see me only ABOVE tablet
+          </Above>
+          <br/>
+          <Above including tablet>
+            see me only ABOVE +tablet
+          </Above>
+          <br/>
+          <Below tablet>
+            see me only BELOW tablet
+          </Below>
+          <br/>
+          <Below including tablet>
+            see me only BELOW +tablet
+          </Below>
+          <br/>
+          <Below desktop>
+            see me only BELOW desktop
+          </Below>
+          <br/>
           displaying all 3 (should be the same, and reflect active media):
           <br/>
           <MediaMatcher
@@ -53,6 +108,15 @@ export default class App extends Component <{}, AppState> {
           <MediaMatches>
             {matches => (
               <span> = {pickMatch(matches, {
+                mobile: "mobile",
+                tablet: "tablet",
+                desktop: "desktop",
+              })}</span>
+            )}
+          </MediaMatches> ===
+          <MediaMatches>
+            {(_, pickMatch) => (
+              <span> = {pickMatch({
                 mobile: "mobile",
                 tablet: "tablet",
                 desktop: "desktop",
@@ -105,6 +169,8 @@ export default class App extends Component <{}, AppState> {
 
         SSR
         <div>
+
+
           <MediaServerRender predicted="desktop">
             <MediaMatcher
               mobile={<span>mobile<Counter/></span>}
@@ -112,6 +178,8 @@ export default class App extends Component <{}, AppState> {
               desktop={<span>desktop<Counter/></span>}
             />
           </MediaServerRender>
+
+
         </div>
 
         <div>

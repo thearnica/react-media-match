@@ -1,6 +1,6 @@
 import {MediaRulesOf, ObjectOf, BoolOf} from "./types";
 
-export function forEachName<T, K, R = {[key in keyof T]: K}>
+export function forEachName<T, K, R = { [key in keyof T]: K }>
 (object: MediaRulesOf<T>, map: (key: string) => K): R {
   return Object
     .keys(object)
@@ -26,10 +26,10 @@ export function getMaxMatch<T>(mediaRules: MediaRulesOf<T>, matches: BoolOf<any>
 }
 
 export function pickMediaMatch<T, K>
-(mediaRules: MediaRulesOf<T>, matches: BoolOf<any>, slots: Partial<ObjectOf<any, K>>): K | null {
+(mediaRules: MediaRulesOf<T>, matches: BoolOf<any>, slots: Partial<ObjectOf<any, K>>): K {
   const keys = Object.keys(mediaRules);
   const len = keys.length;
-  
+
   let index = 0;
   for (; index < len; index++) {
     if (matches[keys[index]]) {
@@ -44,7 +44,8 @@ export function pickMediaMatch<T, K>
     }
   }
 
-  return null;
+  // could be only possible if no slots is given, so K is undefined
+  return undefined as any;
 }
 
 export type Names = {
@@ -57,6 +58,22 @@ export function pickMatchValues(points: Names, props: Names) {
     .reduce((acc: any, key: string) => {
       if (points[key] !== undefined) {
         acc[key] = props[key];
+      }
+      return acc;
+    }, {})
+}
+
+export function inBetween(breakPoints: Names, points: any, value: any, invert: boolean, include: boolean) {
+  let pass = false;
+  return Object
+    .keys(breakPoints)
+    .reduce((acc: any, key: string) => {
+      if (invert && points[key]) {
+        pass = true;
+      }
+      acc[key] = (include ? pass : !pass) ? null : value;
+      if (!invert && points[key]) {
+        pass = true;
       }
       return acc;
     }, {})

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {create} from 'react-test-renderer';
-import {MediaMatcher, MediaMock, pickMatch, MediaServerRender} from '../src';
+import {MediaMatcher, MediaMock, pickMatch, MediaServerRender, Above, Below} from '../src';
 
 describe('Specs', () => {
   it('should render mobile', () => {
@@ -53,7 +53,122 @@ describe('Specs', () => {
     expect(wrapper.toJSON()).toEqual("1");
   });
 
+  it('Above render', () => {
+    const wrapper1 =
+      create(
+        <MediaMock mobile>
+          <Above mobile>content</Above>
+        </MediaMock>
+      );
+    expect(wrapper1.toJSON()).toEqual(null);
+
+    const wrapper2 =
+      create(
+        <MediaMock tablet>
+          <Above mobile>content</Above>
+        </MediaMock>
+      );
+    expect(wrapper2.toJSON()).toEqual("content");
+  });
+
+  it('Above including render', () => {
+    const wrapper1 =
+      create(
+        <MediaMock mobile>
+          <Above including mobile>content</Above>
+        </MediaMock>
+      );
+    expect(wrapper1.toJSON()).toEqual("content");
+
+    const wrapper2 =
+      create(
+        <MediaMock mobile>
+          <Above including tablet>content</Above>
+        </MediaMock>
+      );
+    expect(wrapper2.toJSON()).toEqual(null);
+  });
+
+  it('Below render', () => {
+    const wrapper1 =
+      create(
+        <MediaMock tablet>
+          <Below tablet>content</Below>
+        </MediaMock>
+      );
+    expect(wrapper1.toJSON()).toEqual(null);
+
+    const wrapper2 =
+      create(
+        <MediaMock mobile>
+          <Below tablet>content</Below>
+        </MediaMock>
+      );
+    expect(wrapper2.toJSON()).toEqual("content");
+  });
+
+  it('Below including ender', () => {
+    const wrapper1 =
+      create(
+        <MediaMock tablet>
+          <Below including tablet>content</Below>
+        </MediaMock>
+      );
+    expect(wrapper1.toJSON()).toEqual("content");
+
+    const wrapper2 =
+      create(
+        <MediaMock desktop>
+          <Below including tablet>content</Below>
+        </MediaMock>
+      );
+    expect(wrapper2.toJSON()).toEqual(null);
+  });
+
   it('pickMatch', () => {
+    expect(pickMatch({
+      mobile: false,
+      tablet: false,
+      desktop: false,
+    }, {
+      tablet: 2,
+    })).toBe(2);
+
+    expect(pickMatch({
+      mobile: false,
+      tablet: false,
+      desktop: false,
+    }, {
+    })).toBe(undefined);
+
+    expect(pickMatch({
+      mobile: false,
+      tablet: false,
+      desktop: false,
+    }, {
+      desktop: 3,
+    })).toBe(3);
+
+    expect(pickMatch({
+      mobile: false,
+      tablet: false,
+      desktop: false,
+    }, {
+      mobile: 1,
+      tablet: 2,
+      desktop: 3,
+    })).toBe(3);
+
+    expect(pickMatch({
+      mobile: true,
+      tablet: true,
+      desktop: true,
+    }, {
+      mobile: 1,
+      tablet: 2,
+      desktop: 3,
+    })).toBe(1);
+
     expect(pickMatch({
       mobile: false,
       tablet: true,
@@ -84,7 +199,6 @@ describe('Specs', () => {
     })).toBe(1);
   })
 
-
   describe('SSR', () => {
     it('Render', () => {
       const wrapper =
@@ -101,9 +215,9 @@ describe('Specs', () => {
       const wrapper =
         create(
           <MediaMock tablet>
-          <MediaServerRender predicted="tablet">
-            <MediaMatcher mobile="1" tablet="2" desktop="3"/>
-          </MediaServerRender>
+            <MediaServerRender predicted="tablet">
+              <MediaMatcher mobile="1" tablet="2" desktop="3"/>
+            </MediaServerRender>
           </MediaMock>
         );
       expect(wrapper.toJSON()).toEqual("2");

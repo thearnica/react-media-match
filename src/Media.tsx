@@ -1,41 +1,76 @@
 import * as React from "react";
 
-export interface MediaProps {
-  query: string,
-  children: (match: boolean | undefined) => React.ReactNode;
+export type BoolHash = { [key: string]: boolean };
+
+export interface IQuery {
+  [key: string]: string;
 }
 
-export class Media extends React.Component<MediaProps, {
-  matches: (boolean | undefined)
-}> {
+export interface MediaProps {
+  queries: IQuery,
+  children: (matches: BoolHash) => React.ReactNode;
+}
 
-  state = {
-    matches: undefined as any
+export interface MediaState {
+  matches: BoolHash,
+  matchers: {
+    [key: string]: MediaQueryList;
+  },
+  keys: string[];
+}
+
+export const executeMediaQuery = (queries: IQuery) => {
+  const matches: BoolHash = {};
+  if (!(typeof window !== "object" || !window.matchMedia)) {
+    if (window) {
+      Object
+        .keys(queries)
+        .forEach(media => {
+          matches[media] = window.matchMedia(queries[media]).matches;
+        });
+    }
+  }
+  return matches;
+};
+
+export class Media extends React.Component<MediaProps, MediaState> {
+
+  state: MediaState = {
+    matches: {},
+    matchers: {},
+    keys: [],
   };
-
-  mediaQueryList: MediaQueryList | null = null;
 
   constructor(props: MediaProps) {
     super(props);
 
     if (typeof window !== "object" || !window.matchMedia) return;
 
-    this.mediaQueryList = window.matchMedia(this.props.query);
-    this.state.matches = this.mediaQueryList.matches;
+    const {queries} = props;
+    const keys = Object.keys(queries);
+    this.state.keys = keys;
+    Object
+      .keys(queries)
+      .forEach(media => {
+        this.state.matches[media] = (this.state.matchers[media] = window.matchMedia(queries[media])).matches;
+      });
   }
 
-  updateMatches = () => this.setState({matches: this.mediaQueryList!.matches});
+  updateMatches = () => this.setState(({keys, matchers}) => ({
+    matches: keys.reduce((acc: BoolHash, key) => {
+      acc[key] = matchers[key].matches;
+      return acc;
+    }, {})
+  }));
 
   componentDidMount() {
-    if (this.mediaQueryList) {
-      this.mediaQueryList.addListener(this.updateMatches);
-    }
+    const {keys, matchers} = this.state;
+    keys.forEach(key => matchers[key].addListener(this.updateMatches));
   }
 
   componentWillUnmount() {
-    if (this.mediaQueryList) {
-      this.mediaQueryList.removeListener(this.updateMatches);
-    }
+    const {keys, matchers} = this.state;
+    keys.forEach(key => matchers[key].removeListener(this.updateMatches));
   }
 
   render() {

@@ -1,9 +1,8 @@
-import {createMediaMatcher} from "./createMediaMatcher";
+import * as React from "react";
+import {createMediaMatcher, MediaMatcherType} from "./createMediaMatcher";
 import mediaDefaults from './mediaDefaults'
 // @ts-ignore
-import {SFC, ComponentType, ReactElement, StatelessComponent, ReactPortal} from 'react';
-// @ts-ignore
-import {IMediaQuery} from './types';
+import {BoolOf, IMediaQuery, Including} from './types';
 
 const defaultMedia = createMediaMatcher(mediaDefaults);
 
@@ -38,14 +37,31 @@ const MediaMatcher = defaultMedia.Matcher;
  * Calculates media match and returns via renderProps
  * @type {RPC<any, any>}
  */
-const Matches = defaultMedia.Gearbox;
+const Matches = defaultMedia.Matches;
 
 const MediaMock = defaultMedia.Mock;
+
+/**
+ * Renders only below specific break point
+ */
+const Below = defaultMedia.Below;
+
+/**
+ * Renders only above specific break point
+ */
+const Above = defaultMedia.Above;
 
 /**
  * ServerSide rendering helper
  */
 const MediaServerRender = defaultMedia.ServerRender;
+
+const MediaConsumer = defaultMedia.Consumer;
+
+/**
+ * pickMatchHookAPI
+ */
+const useMedia = defaultMedia.useMedia;
 
 
 export {
@@ -57,11 +73,17 @@ export {
 
     MediaMatches,
     InlineMediaMatcher,
+    Above,
+    Below,
 
     MediaMatcher,
 
     MediaServerRender,
 
     Matches,
-    MediaMock
+    MediaMock,
+
+    MediaConsumer,
+
+    useMedia,
 }

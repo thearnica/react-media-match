@@ -1,14 +1,14 @@
 {
   "name": "react-media-match",
-  "version": "1.3.1",
+  "version": "1.9.0",
   "description": "React made responsible",
-  "main": "dist/index.js",
   "scripts": {
     "test": "ts-react-toolbox test",
     "bootstrap": "ts-react-toolbox init",
     "dev": "ts-react-toolbox dev",
     "test:ci": "ts-react-toolbox test --runInBand --coverage",
-    "build": "ts-react-toolbox build",
+    "build": "rm -rf ./dist/* && ts-react-toolbox build",
+    "prepublishOnly": "yarn build",
     "release": "ts-react-toolbox release",
     "lint": "ts-react-toolbox lint",
     "static": "ts-react-toolbox publish",
@@ -16,32 +16,55 @@
     "analyze": "ts-react-toolbox analyze"
   },
   "author": "Marina Korzunova<thearnica@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "engines": {
     "node": ">=8.5.0"
   },
   "peerDependencies": {
     "react": "^16.3.0"
   },
-  "types": "dist/index.d.ts",
+  "types": "dist/es5/index.d.ts",
   "files": [
     "dist"
   ],
-  "keywords": [],
-  "repository": "",
+  "keywords": [
+    "react",
+    "media",
+    "responsible",
+    "adaptive"
+  ],
+  "repository": "https://github.com/thearnica/react-media-match",
   "dependencies": {
     "prop-types": "^15.6.1",
-    "react-gearbox": "^2.1.0"
+    "tslib": "^1.9.3"
   },
+  "size-limit": [
+    {
+      "path": "dist/es2015/index.js",
+      "limit": "2.5 KB"
+    }
+  ],
+  "sideEffects": false,
   "devDependencies": {
-    "@types/prop-types": "^15.5.3",
-    "@types/react": "^16.3.14",
-    "@types/react-test-renderer": "^16.0.1",
+    "@types/prop-types": "^15.7.1",
+    "@types/react": "^16.8.17",
+    "@types/react-test-renderer": "^16.8.1",
     "codecov": "^3.0.2",
     "enzyme": "^3.3.0",
-    "react-test-renderer": "^16.4.1",
-    "ts-react-toolbox": "^0.1.10",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-test-renderer": "^16.8.6",
+    "size-limit": "^1.3.2",
+    "ts-react-toolbox": "^0.2.2",
     "tslint": "^5.10.0",
     "typescript": "^2.8.3"
+  },
+  "main": "dist/es5/index.js",
+  "jsnext:main": "dist/es2015/index.js",
+  "module": "dist/es2015/index.js",
+  "resolutions": {
+    "@types/react": "^16.8.17",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   }
 }
