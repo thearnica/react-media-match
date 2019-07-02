@@ -5,6 +5,7 @@
 [![NPM version](https://img.shields.io/npm/v/react-media-match.svg)](https://www.npmjs.com/package/react-media-match)
 [![bundle size](https://badgen.net/bundlephobia/minzip/react-media-match)](https://bundlephobia.com/result?p=react-media-match)
 [![downloads](https://badgen.net/npm/dm/react-media-match)](https://www.npmtrends.com/react-media-match)
+[![Greenkeeper badge](https://badges.greenkeeper.io/thearnica/react-media-match.svg)](https://greenkeeper.io/)
 
 __Mobile first__ react responsive framework made easy.
 
