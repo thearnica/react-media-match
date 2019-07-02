@@ -54,7 +54,7 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>): MediaMatche
     return pickMediaMatch<T, React.ReactNode>(breakPoints, matches, slots)
   }
 
-  const ProvideMediaMatchers: React.SFC<{ state?: MediaRulesOf<T>, override?: false }> = ({children, state = null, override = false}) => (
+  const ProvideMediaMatchers: React.SFC<{ state?: BoolOf<T>, override?: false }> = ({children, state = null, override = false}) => (
     <MediaContext.Consumer>
       {parentMatch =>
         <Media queries={breakPoints}>
