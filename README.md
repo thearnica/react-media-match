@@ -7,11 +7,9 @@
 [![downloads](https://badgen.net/npm/dm/react-media-match)](https://www.npmtrends.com/react-media-match)
 [![Greenkeeper badge](https://badges.greenkeeper.io/thearnica/react-media-match.svg)](https://greenkeeper.io/)
 
-> Media targets and "sensors" are not toys - they define the __state__ of your Application. Like the Finite State Machine state. Thus - firstly don't mix conserns, and secondary - handle it as a whole.
+Media targets and "sensors" are not toys - they define the __state__ of your Application. Like the Finite __State Machine__ state. Thus - firstly don't mix __conserns__, and secondary - handle it as a whole.
 
  - 🐍 mobile-first "gap-less", and (!)__bug-less__ approach.
-   - In all the cases one rendering branch will be picked, and only one!
-   - Never forget to render something, and never render two branches simultaneously.
  - 💻 SSR friendly. Customize the target rendering mode and `SSR` for any device.
  - 💡 Provides `Media Matchers` to render Components and `Media Pickers` to pick a value depending on the current media.
  - 🎣 Provide `hooks` interface for `pickers`
@@ -34,7 +32,7 @@ The core idea is to use object hashes to define how something should look __on a
 
 <MediaMatcher
     mobile={"render for mobile"}
-    // tablet={"tablet"} // mobile will be rendered for "skipped" tablet
+    // tablet={"tablet"} // mobile will be rendered for a "skipped" tablet - "pick value to the left"
     desktop={"render desktop"}
 />
 ```
