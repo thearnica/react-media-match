@@ -6,7 +6,7 @@ export type ObjectOf<T, K> = { [P in keyof T]: K };
 
 export type MediaRule = string;
 
-export type MediaRulesOf<T> = ObjectOf<T, MediaRule>;
+export type MediaRulesOf<T> = ObjectOf<T, MediaRule> | ObjectOf<T, boolean>;
 
 export type BoolOf<T> = ObjectOf<T, boolean>;
 

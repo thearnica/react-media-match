@@ -4,7 +4,7 @@ import {MediaRulesOf, BoolOf} from "./types";
 export type BoolHash = { [key: string]: boolean };
 
 export interface IQuery {
-  [key: string]: string;
+  [key: string]: string | boolean;
 }
 
 export interface MediaProps {
@@ -20,17 +20,24 @@ export interface MediaState {
   keys: string[];
 }
 
+const matchWindowMedia = (query: string) => {
+  if (typeof window === "object" && window.matchMedia) {
+    return window.matchMedia(query).matches;
+  }
+
+  return false;
+};
+
 export function executeMediaQuery<T>(queries: MediaRulesOf<T>): BoolOf<T> {
   const matches: BoolOf<T> = {} as any;
-  if (!(typeof window !== "object" || !window.matchMedia)) {
-    if (window) {
-      Object
-        .keys(queries)
-        .forEach((media) => {
-          (matches as any)[media] = window.matchMedia((queries as any)[media]).matches;
-        });
-    }
-  }
+  Object
+    .keys(queries)
+    .forEach((media) => {
+      const query = (queries as any)[media];
+
+      (matches as any)[media] = typeof query === "string" ? matchWindowMedia(query) : query;
+    });
+
   return matches;
 };
 
@@ -53,7 +60,12 @@ export class Media extends React.Component<MediaProps, MediaState> {
     Object
       .keys(queries)
       .forEach(media => {
-        this.state.matches[media] = (this.state.matchers[media] = window.matchMedia(queries[media])).matches;
+        const query = queries[media];
+        if(query === "string") {
+          this.state.matches[media] = (this.state.matchers[media] = window.matchMedia(query)).matches;
+        } else {
+          this.state.matches[media] = query as boolean;
+        }
       });
   }
 
