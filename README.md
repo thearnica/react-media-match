@@ -7,14 +7,14 @@
 [![downloads](https://badgen.net/npm/dm/react-media-match)](https://www.npmtrends.com/react-media-match)
 [![Greenkeeper badge](https://badges.greenkeeper.io/thearnica/react-media-match.svg)](https://greenkeeper.io/)
 
-__Mobile first__ react responsive framework made easy.
+> Media targets and "sensors" are not toys - they define the __state__ of your Application. Like the Finite State Machine state. Thus - firstly don't mix conserns, and secondary - handle it as a whole.
 
  - 🐍 mobile-first "gap-less", and (!)__bug-less__ approach.
    - In all the cases one rendering branch will be picked, and only one!
-   - Never forget to render something, never render two branches simultaneously.
+   - Never forget to render something, and never render two branches simultaneously.
  - 💻 SSR friendly. Customize the target rendering mode and `SSR` for any device.
- - 💡 Provides Media Matchers to render Comonents and Media Pickers to pick a value depending on the current media.
- - 🎣 Has hooks interface
+ - 💡 Provides `Media Matchers` to render Components and `Media Pickers` to pick a value depending on the current media.
+ - 🎣 Provide `hooks` interface for `pickers`
  - 🧠 Good typing out of the box - written in TypeScript
  - 🚀 more performant than usual - there is only one top level query
  - 🧨 Controllable matchers
@@ -27,36 +27,46 @@ __Mobile first__ react responsive framework made easy.
  yarn add react-media-match
  ```
 
-The core idea is to use object hashes to define how something should look like on all targets, protecting from wide bug variations and making everything more declarative.
-```
+The core idea is to use object hashes to define how something should look __on all targets__, protecting from wide bug variations and making everything more declarative and readable.
+
+```jsx
+// MediaMatcher defines a "fork" for all media targets __simultaneously__ - coherence and collocation
+
 <MediaMatcher
     mobile={"render for mobile"}
     // tablet={"tablet"} // mobile will be rendered for "skipped" tablet
     desktop={"render desktop"}
 />
 ```
+
+- You shall never mix `size` and `orientation`, `hover` and `reduced-motion` - they are different __slices__ of a one big state.
+- For the every case you might have two or more __intervals__ - mobile/tablet/desktop, or portrait/landscape, or hover/no-hover, and visa versa.
+- Every matcher should match only one consern, and every matcher should handle all possible variations __simultaneously__ - situation when you forgot to handle some __edge case__ is just not possible.
+
+### Sandbox
+
+https://codesandbox.io/s/o7q3zlo0n9
+
 ### Concepts
 Just:
-1. Define once all your media queries (2-3-4 usual), and then use them _simultaneously_!
-2. Define how application should look like on all resolutions.
+- Define once all your media queries (2-3-4 usual), and then use them _simultaneously_!
+- Define how application should look like on all resolutions.
 
-Each Media Query is responsible only for a single "dimension" - width, height or orientation.
+Each Media Query is responsible only for a single `dimension` - width, height or orientation.
 - If you have defined what Query should render on _mobile_, but not everything else - it will always use mobile.
 - defined _mobile_ and _desktop_, but not _tablet_ or _laptop_? It will use "value to the left".
 
-"Pick value to the left" is the core concept. It protects you from mistakes, and allows to skip intermediate resolutions, if they should inherit styles from "lesser" query.
+__Pick value to the left__ is the core concept. It protects you from mistakes, and allows to skip intermediate resolutions, if they should inherit styles from "lesser" query.
 
-- If you need to respond to screen size and orientation - create 2 separate matchers, and work with them - separately!
-- If you need to respond to NOT screen or NOT media - just _provide_ values MediaMatcher should match against and that's done!
-
-react-media-match was made with maintainability and mobile first approach in mind. It makes things simpler.
-
-react-media-match provides two components and one function, and none of them awaits query as a prop,
+> If you need to respond to `screen size` and `orientation` - create 2 separate matchers, and work with them - separately!
 
 ```js
 import { MediaMatcher, ProvideMediaMatchers } from "react-media-match";
 
-<ProvideMediaMatchers> // this component will calculate all Media's and put data into the React Context
+// this component will calculate all Media's and put data into the React Context
+// if you will not provide it - values would be caclucaed only once, on the application start
+// keep in mind - some values (like hoverability) could not change, and it's legal to skip some providers.
+<ProvideMediaMatchers> 
     <MediaMatcher
         mobile={"render for mobile"}
         // tablet={"tablet"} // mobile will be rendered for "skipped" tablet
@@ -64,11 +74,11 @@ import { MediaMatcher, ProvideMediaMatchers } from "react-media-match";
     />
     <MediaMatcher
         mobile={"render for mobile"}
-        tablet={null} // nothing will be rendered for tablet, as long you clearly defined it
+        tablet={null} // nothing will be rendered for tablet, as long you clearly "defined" it
         desktop={"render desktop"}
     />
     
-    // there are also range Components
+    // there are also "Range" Components
     <Above mobile>will be rendered on tablet and desktop</Above>
     <Below desktop>will be rendered on mobile and tablet</Above>
     <Below including desktop>will be rendered on mobile, tablet and desktop</Above>
@@ -87,10 +97,10 @@ import { MediaMatcher, ProvideMediaMatchers } from "react-media-match";
     </MediaMatches>
 
     <MediaMatches> // will provide matches information via render-props
-       {(_,pickMatch) => ( // you can get pickMatch from MediaMatches
+       {(_,pickThisMatch) => ( // you can get pickMatch from MediaMatches
            <span> testing {
-               // pick matching values
-               pickMatch({
+               // pick matching values, there is no need to provide "matches"
+               pickThisMatch({
                    mobile: "mobile",
                    // tablet: "tablet", // the same rules are applied here
                    desktop: "desktop",
@@ -98,6 +108,8 @@ import { MediaMatcher, ProvideMediaMatchers } from "react-media-match";
            }</span>
        )}
     </MediaMatches>
+    
+    // there is also "hooks" API for pickMatch
 </ProvideMediaMatchers>
 ```
 PS: Don’t forget to __wrap all this with ProvideMediaMatchers__ - without it MediaMatches will always picks the "last" branch.
@@ -108,16 +120,18 @@ PS: Don’t forget to __wrap all this with ProvideMediaMatchers__ - without it M
 
  - `createMediaMatcher(breakPoints: { key: string })` - factory for a new API for provided breakpoints.
  The object with following keys will be returned:
-   - pickMatch
-   - useMedia
-   - Matches
-   - Matcher
-   - Provider
-   - Mock
-   - SSR
-   - Consumer
+   - `pickMatch`
+   - `useMedia`
+   - `Matches`
+   - `Matcher`
+   - `Provider`
+   - `Mock`
+   - `SSR`
+   - `Consumer`
 
- There is also pre-exported API for default breakpoints - mobile, tablet, desktop
+## Default API
+
+ There is also pre-exported API for default breakpoints - `mobile`, `tablet`, `desktop`
 
  - `pickMatch(mediaMatches, matchers)` - function, returns value from matchers matching `matchers`.
  
@@ -152,23 +166,6 @@ import { createMediaMatcher } from "react-media-match";
    landscape="Second"
  />
 ```
- - Define query based on user settings
- ```js
- import { MediaMock, ProvideMediaMatchers } from "react-media-match";
-
- // override all data
- <ProvideMediaMatchers state={{mobile:true, tablet:false, desktop:false}}>
-    ....
- </ProvideMediaMatchers>
-
- <MediaMock mobile>
-     ....
- </MediaMock>
-
- <Orientation.Mock portrait>
-     ....
- </Orientation.Mock>
- ```
  
 ### Usage with hooks
 Keep in mind - only _value picker_ should be used as a hook, the _render selection_ should
@@ -264,9 +261,24 @@ If prediction has failed - it will inform you, and might help to mitigate render
 You may use [ua-parser-js](https://github.com/faisalman/ua-parser-js), to detect device type, and pick desired screen resolution, or use [react-ugent](https://github.com/medipass/react-ugent) to make it a bit
 more declarative. 
 
-### Sandbox
+## Non media based matches
+Define query based on user settings
+ ```js
+ import { MediaMock, ProvideMediaMatchers } from "react-media-match";
 
-https://codesandbox.io/s/o7q3zlo0n9
+ // override all the data
+ <ProvideMediaMatchers state={{mobile:true, tablet:false, desktop:false}}>
+    ....
+ </ProvideMediaMatchers>
+
+ <MediaMock mobile>
+     ....
+ </MediaMock>
+
+ <Orientation.Mock portrait>
+     ....
+ </Orientation.Mock>
+ ```
 
 # Testing and Mocking
 Just provide `state` for ProvideMediaMatchers, and it will control all the nested matchers. Could be used to provide __not media-based__ rules.
