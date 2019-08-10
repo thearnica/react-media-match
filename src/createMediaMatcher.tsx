@@ -22,7 +22,7 @@ export type MediaMatcherType<T> = {
   pickMatch<K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>): K,
   useMedia<K>(slots: Partial<ObjectOf<T, K>>): K | null,
 
-  Provider: React.SFC<{ state?: BoolOf<T>, override?: false }>;
+  Provider: React.SFC<{ state?: BoolOf<T>}>;
   Mock: React.SFC<Partial<RenderOf<T>>>;
 
   Matches: React.SFC<{ children: RenderMatch<T, any> }>,
@@ -54,12 +54,15 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>): MediaMatche
     return pickMediaMatch<T, React.ReactNode>(breakPoints, matches, slots)
   }
 
-  const ProvideMediaMatchers: React.SFC<{ state?: BoolOf<T>, override?: false }> = ({children, state = null, override = false}) => (
+  const ProvideMediaMatchers: React.SFC<{ state?: BoolOf<T> }> = ({children, state = null}) => (
     <MediaContext.Consumer>
-      {parentMatch =>
+      {(parentMatch:any) =>
         <Media queries={breakPoints}>
           {(matches) => {
-            const value: BoolOf<T> = state || {...(override ? {} as any : parentMatch), ...notNulls(matches)};
+            const value: BoolOf<T> = state || {
+              ...notNulls(matches),
+              ...(parentMatch || {}),
+            };
             return <MediaContext.Provider
               value={value}
               children={children}

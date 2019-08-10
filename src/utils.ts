@@ -43,7 +43,7 @@ export function pickMediaMatch<T, K>
       return value;
     }
   }
-
+  
   // could be only possible if no slots is given, so K is undefined
   return undefined as any;
 }
