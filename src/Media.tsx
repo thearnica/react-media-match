@@ -61,7 +61,7 @@ export class Media extends React.Component<MediaProps, MediaState> {
       .keys(queries)
       .forEach(media => {
         const query = queries[media];
-        if(query === "string") {
+        if(typeof query === "string") {
           this.state.matches[media] = (this.state.matchers[media] = window.matchMedia(query)).matches;
         } else {
           this.state.matches[media] = query as boolean;
