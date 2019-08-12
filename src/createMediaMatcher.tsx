@@ -22,7 +22,7 @@ export type MediaMatcherType<T> = {
   pickMatch<K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>): K,
   useMedia<K>(slots: Partial<ObjectOf<T, K>>): K | null,
 
-  Provider: React.SFC<{ state?: BoolOf<T>}>;
+  Provider: React.SFC<{ state?: BoolOf<T> }>;
   Mock: React.SFC<Partial<RenderOf<T>>>;
 
   Matches: React.SFC<{ children: RenderMatch<T, any> }>,
@@ -39,15 +39,27 @@ export type MediaMatcherType<T> = {
 }
 
 export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>): MediaMatcherType<T> {
-  const MediaContext = React.createContext<Partial<BoolOf<T>>>(executeMediaQuery(breakPoints));
+  const mediaDefaults = executeMediaQuery(breakPoints);
+  const initialValue = {} as any;
+  const MediaContext = React.createContext<Partial<BoolOf<T>>>(initialValue);
+
+  const getMediaMatches = (matches: BoolOf<T>) => (
+    matches === initialValue ? mediaDefaults : matches
+  );
+
+  const consume = (cb: (match: BoolOf<T>) => React.ReactNode) => (
+    <MediaContext.Consumer>
+      {matched => cb(getMediaMatches(matched as BoolOf<T>))}
+    </MediaContext.Consumer>
+  );
 
   function pickMatch<K>(matches: Partial<BoolOf<T>>, slots: Partial<ObjectOf<T, K>>): K {
     return pickMediaMatch<T, K>(breakPoints, matches, slots)
   }
 
   function useMedia<K>(slots: Partial<ObjectOf<T, K>>): K | null {
-    const matches = React.useContext(MediaContext);
-    return pickMatch(matches , slots);
+    const matches = getMediaMatches(React.useContext(MediaContext) as BoolOf<T>);
+    return pickMatch(matches, slots);
   }
 
   function pickMatchEx<M extends Partial<ObjectOf<T, React.ReactNode>>>(matches: Partial<BoolOf<T>>, slots: M): React.ReactNode {
@@ -56,7 +68,7 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>): MediaMatche
 
   const ProvideMediaMatchers: React.SFC<{ state?: BoolOf<T> }> = ({children, state = null}) => (
     <MediaContext.Consumer>
-      {(parentMatch:any) =>
+      {(parentMatch: any) =>
         <Media queries={breakPoints}>
           {(matches) => {
             const value: BoolOf<T> = state || {
@@ -67,8 +79,7 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>): MediaMatche
               value={value}
               children={children}
             />
-          }
-          }
+          }}
         </Media>
       }
     </MediaContext.Consumer>
@@ -78,13 +89,12 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>): MediaMatche
     state: PropTypes.shape({
       ...castPointsTo(breakPoints, PropTypes.bool)
     }) as any,
-    override: PropTypes.bool
   } : {} as any;
 
   const MediaMatches: React.SFC<{ children: RenderMatch<T, any> }> = ({children}) => (
-    <MediaContext.Consumer>
-      {matched => children(matched as BoolOf<T>, (matches) => pickMatch(matched as BoolOf<T>, matches))}
-    </MediaContext.Consumer>
+    consume(
+      matched => children(matched, (matches) => pickMatch(matched as BoolOf<T>, matches))
+    )
   );
 
   MediaMatches.propTypes = process.env.NODE_ENV !== "production" ? {
@@ -92,7 +102,7 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>): MediaMatche
   } : {};
 
   const MediaMatcher: React.SFC<Partial<RenderOf<T>> & NoChildren> = (props) => (
-    <MediaContext.Consumer>{matched => pickMatchEx(matched as BoolOf<T>, props)}</MediaContext.Consumer>
+    consume(matched => pickMatchEx(matched as BoolOf<T>, props))
   );
 
   MediaMatcher.propTypes = process.env.NODE_ENV !== "production" ? {
@@ -100,7 +110,7 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>): MediaMatche
   } : {};
 
   const InlineMediaMatcher: React.SFC<Partial<RenderOf<T>>> = (props) => (
-    <MediaContext.Consumer>{(matched) => pickMatchEx(matched, props)}</MediaContext.Consumer>
+    consume(matched => pickMatchEx(matched, props))
   );
 
   const Mock: React.SFC<Partial<RenderOf<T>>> = (props) => (

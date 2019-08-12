@@ -61,7 +61,7 @@ export class Media extends React.Component<MediaProps, MediaState> {
       .keys(queries)
       .forEach(media => {
         const query = queries[media];
-        if(typeof query === "string") {
+        if (typeof query === "string") {
           this.state.matches[media] = (this.state.matchers[media] = window.matchMedia(query)).matches;
         } else {
           this.state.matches[media] = query as boolean;
@@ -69,21 +69,25 @@ export class Media extends React.Component<MediaProps, MediaState> {
       });
   }
 
-  updateMatches = () => this.setState(({keys, matchers}) => ({
-    matches: keys.reduce((acc: BoolHash, key) => {
-      acc[key] = matchers[key].matches;
-      return acc;
-    }, {})
-  }));
+  updateMatches = () => (
+    this.setState(({keys, matchers, matches}) => ({
+      matches: keys.reduce((acc: BoolHash, key) => {
+        acc[key] = matchers[key].matches;
+        return acc;
+      }, {
+        ...matches
+      })
+    }))
+  );
 
   componentDidMount() {
-    const {keys, matchers} = this.state;
-    keys.forEach(key => matchers[key].addListener(this.updateMatches));
+    const {matchers} = this.state;
+    Object.keys(matchers).forEach(match => matchers[match].addListener(this.updateMatches));
   }
 
   componentWillUnmount() {
-    const {keys, matchers} = this.state;
-    keys.forEach(key => matchers[key].removeListener(this.updateMatches));
+    const {matchers} = this.state;
+    Object.keys(matchers).forEach(match => matchers[match].removeListener(this.updateMatches));
   }
 
   render() {
