@@ -27,6 +27,11 @@ const HoverMedia = createMediaMatcher({
   mouseDevice: "(hover: hover)",
 });
 
+const FixedMedia = createMediaMatcher({
+  true: true,
+  false: false,
+});
+
 let cntcnt = 0;
 
 class Counter extends React.Component {
@@ -45,7 +50,7 @@ const HookTest = () => {
   });
 
   return <span>this is {displayedMedia}</span>;
-}
+};
 
 const HoverHookTest = () => {
   const displayedMedia = HoverMedia.useMedia({
@@ -54,16 +59,32 @@ const HoverHookTest = () => {
   });
 
   return <span>this is {displayedMedia} (without provider)</span>;
-}
+};
+
+const FixedHookTest = () => {
+  const fixed = FixedMedia.useMedia({
+    true: 'true',
+    false: 'false',
+  });
+
+  return <span>fixed {fixed}</span>;
+};
 
 export default class App extends Component <{}, AppState> {
-  state: AppState = {}
+  state: AppState = {};
 
   render() {
     return (
       <ProvideMediaMatchers>
         <HookTest/>
-        <HoverHookTest />>
+
+        <br/>
+        <HoverHookTest/>
+        <br/>
+        <FixedHookTest/>
+        <FixedMedia.Provider>
+          <FixedHookTest/>
+        </FixedMedia.Provider>
         <div>
           <Above mobile>
             see me only ABOVE mobile
@@ -152,6 +173,18 @@ export default class App extends Component <{}, AppState> {
               tablet={"tablet"}
               desktop={"desktop"}
             />
+          </MediaMock>
+
+          <br/><br/>
+          And this also:
+          <MediaMock tablet={true}>
+            <ProvideMediaMatchers>
+              <MediaMatcher
+                mobile={"mobile"}
+                tablet={"tablet"}
+                desktop={"desktop"}
+              />
+            </ProvideMediaMatchers>
           </MediaMock>
 
         </div>

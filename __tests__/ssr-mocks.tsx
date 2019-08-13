@@ -5,6 +5,22 @@ import {
 } from '../src';
 
 describe('Specs', () => {
+  it('all false branches', () => {
+    const SideMatch = createMediaMatcher({
+      client: false,
+      server: false,
+    });
+
+    const wrapper =
+      create(
+        <SideMatch.Matcher
+          client="client"
+          server="server"
+        />
+      );
+    expect(wrapper.toJSON()).toEqual("server");
+  });
+
   it('emulate ClientSideOnly component', () => {
     const SideMatch = createMediaMatcher({
       client: false,
