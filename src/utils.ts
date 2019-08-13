@@ -79,6 +79,17 @@ export function inBetween(breakPoints: Names, points: any, value: any, invert: b
     }, {})
 }
 
+export function nothingSet(matches: { [key: string]: any }): { [key: string]: boolean } {
+  return Object
+    .keys(matches)
+    .reduce((acc: any, key) => {
+      acc[key] = false;
+
+      return acc;
+    }, {})
+}
+
+
 export function notNulls(matches: { [key: string]: boolean | undefined }): { [key: string]: boolean } {
   return Object
     .keys(matches)

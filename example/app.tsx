@@ -77,6 +77,7 @@ export default class App extends Component <{}, AppState> {
     return (
       <ProvideMediaMatchers>
         <HookTest/>
+
         <br/>
         <HoverHookTest/>
         <br/>
@@ -172,6 +173,18 @@ export default class App extends Component <{}, AppState> {
               tablet={"tablet"}
               desktop={"desktop"}
             />
+          </MediaMock>
+
+          <br/><br/>
+          And this also:
+          <MediaMock tablet={true}>
+            <ProvideMediaMatchers>
+              <MediaMatcher
+                mobile={"mobile"}
+                tablet={"tablet"}
+                desktop={"desktop"}
+              />
+            </ProvideMediaMatchers>
           </MediaMock>
 
         </div>

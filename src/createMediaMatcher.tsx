@@ -4,7 +4,7 @@ import {Media, executeMediaQuery} from './Media'
 
 // @ts-ignore
 import {BoolOf, MediaRulesOf, ObjectOf, RenderMatch, RenderOf, IMediaQuery, Including} from "./types";
-import {getMaxMatch, inBetween, notNulls, pickMatchValues, pickMediaMatch} from "./utils";
+import {getMaxMatch, inBetween, nothingSet, notNulls, pickMatchValues, pickMediaMatch} from "./utils";
 import {MediaServerSide} from "./SSR";
 
 const castPointsTo = (points: { [key: string]: any }, targetType: any) => (
@@ -24,6 +24,7 @@ export type MediaMatcherType<T> = {
 
   Provider: React.SFC<{ state?: BoolOf<T> }>;
   Mock: React.SFC<Partial<RenderOf<T>>>;
+  Override: React.SFC<Partial<RenderOf<T>>>;
 
   Matches: React.SFC<{ children: RenderMatch<T, any> }>,
   Inline: React.SFC<Partial<RenderOf<T>>>,
@@ -113,8 +114,27 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>): MediaMatche
     consume(matched => pickMatchEx(matched, props))
   );
 
-  const Mock: React.SFC<Partial<RenderOf<T>>> = (props) => (
-    <MediaContext.Provider value={pickMatchValues(breakPoints, props)}>{props.children}</MediaContext.Provider>
+  const Mock: React.SFC<Partial<RenderOf<T>>> = (props: any) => (
+    <MediaContext.Provider
+      value={pickMatchValues(breakPoints, {...nothingSet(breakPoints), ...props})}
+    >
+      {props.children}
+    </MediaContext.Provider>
+  );
+
+  const Override: React.SFC<Partial<RenderOf<T>>> = (props: any) => (
+    <MediaContext.Consumer>
+      {(parentMatch: any) => {
+        const value: BoolOf<T> = {
+          ...notNulls(parentMatch),
+          ...pickMatchValues(breakPoints, props),
+        };
+        return <MediaContext.Provider
+          value={value}
+          children={props.children}
+        />
+      }}
+    </MediaContext.Consumer>
   );
 
   const Below: React.SFC<Partial<BoolOf<T>> & Including> = (props) => (
@@ -148,6 +168,7 @@ export function createMediaMatcher<T>(breakPoints: MediaRulesOf<T>): MediaMatche
 
     Provider: ProvideMediaMatchers,
     Mock,
+    Override,
     //
     Matches: MediaMatches,
     Inline: InlineMediaMatcher,
