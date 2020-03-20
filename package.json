@@ -47,7 +47,7 @@
   "sideEffects": false,
   "devDependencies": {
     "@types/prop-types": "^15.7.1",
-    "@types/react": "^16.8.17",
+    "@types/react": "^16.9.25",
     "@types/react-test-renderer": "^16.8.1",
     "codecov": "^3.0.2",
     "enzyme": "^3.3.0",
