@@ -36,7 +36,7 @@
   "repository": "https://github.com/thearnica/react-media-match",
   "dependencies": {
     "prop-types": "^15.6.1",
-    "tslib": "^1.9.3"
+    "tslib": "^1.12.0"
   },
   "size-limit": [
     {
