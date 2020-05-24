@@ -8,7 +8,7 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/thearnica/react-media-match.svg)](https://greenkeeper.io/)
 
 Media targets and "sensors" are not toys - they define the __state__ of your Application. Like a Finite __State Machine__ `state`. 
-Handle it holistically.
+Handle it holistically. Do not use react media query - use media match.
 
  - 🐍 mobile-first "gap-less", and (!)__bug-less__ approach.
  - 💻 SSR friendly. Customize the target rendering mode and `SSR` for any device.
