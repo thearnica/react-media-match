@@ -30,6 +30,7 @@ You shall never mix `size` and `orientation`, `hover` and `reduced-motion` - the
 
 💡 If you need to respond to `screen size` and `orientation` - create 2 separate matchers, and use them separately!
 
+
 - __Rule 2__: Don't match explicit target - think in states
 For the every case you might have two or more `states`, only one of which can be active in a single point of view 
   - mobile/tablet/desktop - who you are, 
@@ -39,11 +40,13 @@ For the every case you might have two or more `states`, only one of which can be
   
 👉 Each Media Query should be responsible only for a single `dimension` - width, height, hover or orientation.
   
+  
 - __Rule 3__: Intervals
 Started with desktop and mobile? Then added tablet? Then added small mobile, and then large desktop? You shall be ready for a change.
 All API in react-media-matcher follow the __pick value to the left__ pattern, making impossible situations when you might miss a target.
 
 👉 __Pick value to the left__ is the core concept. It protects you from mistakes, and allows to skip intermediate resolutions, if they should inherit styles from "lesser" query.
+
 
 
 - __Rule 4__: Match all rules at once
