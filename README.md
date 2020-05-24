@@ -7,7 +7,8 @@
 [![downloads](https://badgen.net/npm/dm/react-media-match)](https://www.npmtrends.com/react-media-match)
 [![Greenkeeper badge](https://badges.greenkeeper.io/thearnica/react-media-match.svg)](https://greenkeeper.io/)
 
-Media targets and "sensors" are not toys - they define the __state__ of your Application. Like the Finite __State Machine__ state. Thus - firstly don't mix __conserns__, and secondary - handle it as a whole.
+Media targets and "sensors" are not toys - they define the __state__ of your Application. Like a Finite __State Machine__ `state`. 
+Handle it holistically.
 
  - 🐍 mobile-first "gap-less", and (!)__bug-less__ approach.
  - 💻 SSR friendly. Customize the target rendering mode and `SSR` for any device.
@@ -16,6 +17,36 @@ Media targets and "sensors" are not toys - they define the __state__ of your App
  - 🧠 Good typing out of the box - written in TypeScript
  - 🚀 more performant than usual - there is only one top level query
  - 🧨 Controllable matchers
+ 
+### Sandbox
+
+https://codesandbox.io/s/o7q3zlo0n9
+
+
+## Rules
+- Rule 1: Don't mix __conserns__
+
+You shall never mix `size` and `orientation`, `hover` and `reduced-motion` - they are different __slices__ of a one big state.
+💡 If you need to respond to `screen size` and `orientation` - create 2 separate matchers, and use them separately!
+
+- Rule 2: Don't match explicit target - think in states
+For the every case you might have two or more `states`, only one of which can be active in a single point of view 
+  - mobile/tablet/desktop - who you are, 
+  - portrait/landscape - how you are holding it
+  - hover/no-hover - there is no way they both can be true
+  - and visa versa.
+👉 Each Media Query should be responsible only for a single `dimension` - width, height, hover or orientation.
+  
+- Rule 3: Intervals
+Started with desktop and mobile? Then added tablet? Then added small mobile, and then large desktop? You shall be ready for a change.
+All API in react-media-matcher follow the __pick value to the left__ pattern, making impossible situations when you might miss a target.
+👉 __Pick value to the left__ is the core concept. It protects you from mistakes, and allows to skip intermediate resolutions, if they should inherit styles from "lesser" query.
+
+
+- Rule 4: Match all rules at once
+Every matcher should match only one consern, and every matcher should handle all possible variations __simultaneously__ - it's not about what do to in case of mobile, it's also what to do in any other case.
+👉 The core idea is to use object hashes to define how something should look __on all targets__, protecting from wide bug variations and making everything more declarative and readable.
+
 
  ## Usage
 
@@ -25,38 +56,37 @@ Media targets and "sensors" are not toys - they define the __state__ of your App
  yarn add react-media-match
  ```
 
-The core idea is to use object hashes to define how something should look __on all targets__, protecting from wide bug variations and making everything more declarative and readable.
-
+- render "forking"
 ```jsx
-// MediaMatcher defines a "fork" for all media targets __simultaneously__ - coherence and collocation
-
 <MediaMatcher
     mobile={"render for mobile"}
     // tablet={"tablet"} // mobile will be rendered for a "skipped" tablet - "pick value to the left"
     desktop={"render desktop"}
 />
 ```
+- hook interface
+```js
+const title = useMedia({
+    mobile: shortName,
+    tablet: name,
+    // desktop: tablet will be used 
+  });
+```
+  
+- custom media
+```js
+const Orientation = createMediaMatcher({
+   portrait: "(orientation: portrait)",
+   landscape: "(orientation: landscape)"
+ });
 
-- You shall never mix `size` and `orientation`, `hover` and `reduced-motion` - they are different __slices__ of a one big state.
-- For the every case you might have two or more __intervals__ - mobile/tablet/desktop, or portrait/landscape, or hover/no-hover, and visa versa.
-- Every matcher should match only one consern, and every matcher should handle all possible variations __simultaneously__ - situation when you forgot to handle some __edge case__ is just not possible.
+ <Orientation.Match
+   portrait="One"
+   landscape="Second"
+ />
+```
 
-### Sandbox
-
-https://codesandbox.io/s/o7q3zlo0n9
-
-### Concepts
-Just:
-- Define once all your media queries (2-3-4 usual), and then use them _simultaneously_!
-- Define how application should look like on all resolutions.
-
-Each Media Query is responsible only for a single `dimension` - width, height or orientation.
-- If you have defined what Query should render on _mobile_, but not everything else - it will always use mobile.
-- defined _mobile_ and _desktop_, but not _tablet_ or _laptop_? It will use "value to the left".
-
-__Pick value to the left__ is the core concept. It protects you from mistakes, and allows to skip intermediate resolutions, if they should inherit styles from "lesser" query.
-
-> If you need to respond to `screen size` and `orientation` - create 2 separate matchers, and work with them - separately!
+### More examples of usage
 
 ```js
 import { MediaMatcher, ProvideMediaMatchers } from "react-media-match";
