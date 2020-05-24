@@ -24,12 +24,13 @@ https://codesandbox.io/s/o7q3zlo0n9
 
 
 ## Rules
-- Rule 1: Don't mix __conserns__
+- __Rule 1__: Don't mix __conserns__
 
 You shall never mix `size` and `orientation`, `hover` and `reduced-motion` - they are different __slices__ of a one big state.
+
 💡 If you need to respond to `screen size` and `orientation` - create 2 separate matchers, and use them separately!
 
-- Rule 2: Don't match explicit target - think in states
+- __Rule 2__: Don't match explicit target - think in states
 For the every case you might have two or more `states`, only one of which can be active in a single point of view 
   - mobile/tablet/desktop - who you are, 
   - portrait/landscape - how you are holding it
@@ -38,14 +39,14 @@ For the every case you might have two or more `states`, only one of which can be
   
 👉 Each Media Query should be responsible only for a single `dimension` - width, height, hover or orientation.
   
-- Rule 3: Intervals
+- __Rule 3__: Intervals
 Started with desktop and mobile? Then added tablet? Then added small mobile, and then large desktop? You shall be ready for a change.
 All API in react-media-matcher follow the __pick value to the left__ pattern, making impossible situations when you might miss a target.
 
 👉 __Pick value to the left__ is the core concept. It protects you from mistakes, and allows to skip intermediate resolutions, if they should inherit styles from "lesser" query.
 
 
-- Rule 4: Match all rules at once
+- __Rule 4__: Match all rules at once
 Every matcher should match only one consern, and every matcher should handle all possible variations __simultaneously__ - it's not about what do to in case of mobile, it's also what to do in any other case.
 
 👉 The core idea is to use object hashes to define how something should look __on all targets__, protecting from wide bug variations and making everything more declarative and readable.
