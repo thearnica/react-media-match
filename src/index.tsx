@@ -1,4 +1,6 @@
+// @ts-ignore
 import * as React from "react";
+// @ts-ignore
 import {createMediaMatcher, MediaMatcherType} from "./createMediaMatcher";
 import mediaDefaults from './mediaDefaults'
 // @ts-ignore
@@ -13,7 +15,7 @@ const defaultMedia = createMediaMatcher(mediaDefaults);
 const pickMatch = defaultMedia.pickMatch;
 
 /**
- * Provides Context for underlayed consumers
+ * Provides Context for underlying consumers
  * @type {SFC}
  */
 const ProvideMediaMatchers = defaultMedia.Provider;
