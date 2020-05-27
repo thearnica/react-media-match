@@ -1,4 +1,4 @@
-import {createMediaMatcher} from "./createMediaMatcher";
+import { createMediaMatcher } from './createMediaMatcher';
 
 /**
  * bootstrap breakpoints (max-width)
@@ -24,8 +24,8 @@ export const breakpoints = createMediaMatcher({
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@media/orientation
  */
 export const orientation = createMediaMatcher({
-  portrait: "(orientation: portrait)",
-  landscape: "(orientation: landscape)"
+  portrait: '(orientation: portrait)',
+  landscape: '(orientation: landscape)',
 });
 
 /**
@@ -35,10 +35,10 @@ export const orientation = createMediaMatcher({
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@media/hover
  */
 export const hover = createMediaMatcher({
-  touchDevice: "(hover: none)",
-  incapable: "(hover: none)",
-  capable: "(hover: hover)",
-  mouseDevice: "(hover: hover)",
+  touchDevice: '(hover: none)',
+  incapable: '(hover: none)',
+  capable: '(hover: hover)',
+  mouseDevice: '(hover: hover)',
 });
 
 /**
@@ -60,8 +60,5 @@ export const darkMode = createMediaMatcher({
  */
 export const reducedMotion = createMediaMatcher({
   normal: true as any,
-  reduce: "(prefers-reduced-motion: reduce)",
+  reduce: '(prefers-reduced-motion: reduce)',
 });
-
-
-

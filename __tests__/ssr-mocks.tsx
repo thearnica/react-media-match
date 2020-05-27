@@ -1,8 +1,6 @@
 import * as React from 'react';
-import {create} from 'react-test-renderer';
-import {
-  createMediaMatcher
-} from '../src';
+import { create } from 'react-test-renderer';
+import { createMediaMatcher } from '../src';
 
 describe('Specs', () => {
   it('all false branches', () => {
@@ -11,14 +9,8 @@ describe('Specs', () => {
       server: false,
     });
 
-    const wrapper =
-      create(
-        <SideMatch.Matcher
-          client="client"
-          server="server"
-        />
-      );
-    expect(wrapper.toJSON()).toEqual("server");
+    const wrapper = create(<SideMatch.Matcher client="client" server="server" />);
+    expect(wrapper.toJSON()).toEqual('server');
   });
 
   it('emulate ClientSideOnly component', () => {
@@ -27,14 +19,8 @@ describe('Specs', () => {
       server: true,
     });
 
-    const wrapper =
-      create(
-        <SideMatch.Matcher
-          client="client"
-          server="server"
-        />
-      );
-    expect(wrapper.toJSON()).toEqual("server");
+    const wrapper = create(<SideMatch.Matcher client="client" server="server" />);
+    expect(wrapper.toJSON()).toEqual('server');
   });
 
   it('emulate ServerSideOnly component', () => {
@@ -43,14 +29,8 @@ describe('Specs', () => {
       server: false,
     });
 
-    const wrapper =
-      create(
-        <SideMatch.Matcher
-          client="client"
-          server="server"
-        />
-      );
-    expect(wrapper.toJSON()).toEqual("client");
+    const wrapper = create(<SideMatch.Matcher client="client" server="server" />);
+    expect(wrapper.toJSON()).toEqual('client');
   });
 
   it('shall swap to client', () => {
@@ -67,18 +47,15 @@ describe('Specs', () => {
 
       return (
         <SideMatch.Mock client={client} server={true}>
-          <SideMatch.Matcher
-            client="client"
-            server="server"
-          />
+          <SideMatch.Matcher client="client" server="server" />
         </SideMatch.Mock>
-      )
+      );
     };
 
-    const wrapper = create(<Component/>);
-    expect(wrapper.toJSON()).toEqual("server");
-    wrapper.update(<Component/>);
-    expect(wrapper.toJSON()).toEqual("client");
+    const wrapper = create(<Component />);
+    expect(wrapper.toJSON()).toEqual('server');
+    wrapper.update(<Component />);
+    expect(wrapper.toJSON()).toEqual('client');
   });
 
   it('mock should bypass provider', () => {
@@ -88,37 +65,24 @@ describe('Specs', () => {
       c: false,
     });
 
-    expect(
-      create(
-        <Match.Matcher
-          a={1}
-          b={2}
-          c={3}
-        />
-      ).toJSON()).toEqual("3");
+    expect(create(<Match.Matcher a={1} b={2} c={3} />).toJSON()).toEqual('3');
 
     expect(
       create(
         <Match.Provider>
-          <Match.Matcher
-            a={1}
-            b={2}
-            c={3}
-          />
+          <Match.Matcher a={1} b={2} c={3} />
         </Match.Provider>
-      ).toJSON()).toEqual("3");
+      ).toJSON()
+    ).toEqual('3');
 
     expect(
       create(
         <Match.Mock a={true}>
           <Match.Provider>
-            <Match.Matcher
-              a={1}
-              b={2}
-              c={3}
-            />
+            <Match.Matcher a={1} b={2} c={3} />
           </Match.Provider>
         </Match.Mock>
-      ).toJSON()).toEqual("1");
-  })
+      ).toJSON()
+    ).toEqual('1');
+  });
 });

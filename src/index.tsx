@@ -1,10 +1,5 @@
-// @ts-ignore
-import * as React from "react";
-// @ts-ignore
-import {createMediaMatcher, MediaMatcherType} from "./createMediaMatcher";
-import mediaDefaults from './mediaDefaults'
-// @ts-ignore
-import {BoolOf, IMediaQuery, Including} from './types';
+import { createMediaMatcher } from './createMediaMatcher';
+import mediaDefaults from './mediaDefaults';
 
 const defaultMedia = createMediaMatcher(mediaDefaults);
 
@@ -65,27 +60,18 @@ const MediaConsumer = defaultMedia.Consumer;
  */
 const useMedia = defaultMedia.useMedia;
 
-
 export {
-    createMediaMatcher,
-
-    pickMatch,
-
-    ProvideMediaMatchers,
-
-    MediaMatches,
-    InlineMediaMatcher,
-    Above,
-    Below,
-
-    MediaMatcher,
-
-    MediaServerRender,
-
-    Matches,
-    MediaMock,
-
-    MediaConsumer,
-
-    useMedia,
-}
+  createMediaMatcher,
+  pickMatch,
+  ProvideMediaMatchers,
+  MediaMatches,
+  InlineMediaMatcher,
+  Above,
+  Below,
+  MediaMatcher,
+  MediaServerRender,
+  Matches,
+  MediaMock,
+  MediaConsumer,
+  useMedia,
+};
