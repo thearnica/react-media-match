@@ -2,7 +2,8 @@ import { createMediaMatcher } from './createMediaMatcher';
 
 /**
  * bootstrap breakpoints (max-width)
- * - xs, extra-small: 0px
+ * - xxs, extra-extra-small: 0px
+ * - xs, extra-small: 375px
  * - sm, small: 600px
  * - md, medium: 960px
  * - lg, large: 1280px
@@ -10,11 +11,12 @@ import { createMediaMatcher } from './createMediaMatcher';
  * @see https://material-ui.com/customization/breakpoints/
  */
 export const breakpoints = createMediaMatcher({
-  xs: '(max-width: 600px)',
-  ss: '(max-width: 960px)',
-  md: '(max-width: 1280px)',
-  lg: '(max-width: 1980px)',
-  xl: '(min-width: 1980px)',
+  xxs: '(max-width: 374px)',
+  xs: '(max-width: 599px)',
+  ss: '(max-width: 959px)',
+  md: '(max-width: 1279px)',
+  lg: '(max-width: 1919px)',
+  xl: '(min-width: 1920px)',
 });
 
 /**
@@ -42,7 +44,7 @@ export const hover = createMediaMatcher({
 });
 
 /**
- * dark mode (prefers-reduced-motion)
+ * dark mode (prefers-color-scheme)
  * - light
  * - dark
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme
