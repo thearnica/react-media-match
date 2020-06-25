@@ -21,6 +21,8 @@ const castPointsTo = (points: { [key: string]: any }, targetType: any) =>
     return acc;
   }, {});
 
+const skipProp: any = {};
+
 /**
  * Creates a group media matcher
  * @param queries - an object with keys - state names, and values - media queries
@@ -75,23 +77,25 @@ export function createMediaMatcher<T>(queries: MediaRulesOf<T>): MediaMatcherTyp
   );
 
   ProvideMediaMatchers.propTypes =
+    // @ts-ignore
     process.env.NODE_ENV !== 'production'
       ? {
           state: PropTypes.shape({
             ...castPointsTo(queries, PropTypes.bool),
           }) as any,
         }
-      : ({} as any);
+      : skipProp;
 
   const MediaMatches: React.SFC<{ children: RenderMatch<T, any> }> = ({ children }) =>
     consume((matched) => children(matched, (matches) => pickMatch(matched as BoolOf<T>, matches)));
 
   MediaMatches.propTypes =
+    // @ts-ignore
     process.env.NODE_ENV !== 'production'
       ? {
           children: PropTypes.func.isRequired,
         }
-      : {};
+      : skipProp;
 
   const InlineMediaMatcher: React.SFC<Partial<RenderOf<T>> & NoChildren> = (props) =>
     consume((matched) => pickMatchEx(matched, props));
@@ -100,11 +104,12 @@ export function createMediaMatcher<T>(queries: MediaRulesOf<T>): MediaMatcherTyp
     consume((matched) => pickMatchEx(matched, props));
 
   MediaMatcher.propTypes =
+    // @ts-ignore
     process.env.NODE_ENV !== 'production'
       ? {
           ...castPointsTo(queries, PropTypes.node),
         }
-      : {};
+      : skipProp;
 
   const Mock: React.SFC<Partial<RenderOf<T>>> = (props: any) => (
     <MediaContext.Provider value={pickMatchValues(queries, { ...nothingSet(queries), ...props })}>
