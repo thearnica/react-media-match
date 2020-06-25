@@ -3,7 +3,7 @@ import { createMediaMatcher } from './createMediaMatcher';
 /**
  * bootstrap breakpoints (max-width)
  * - xxs, extra-extra-small: 0px
- * - xs, extra-small: 375px
+ * - xs, extra-small: 359px
  * - sm, small: 600px
  * - md, medium: 960px
  * - lg, large: 1280px
@@ -11,7 +11,7 @@ import { createMediaMatcher } from './createMediaMatcher';
  * @see https://material-ui.com/customization/breakpoints/
  */
 export const breakpoints = createMediaMatcher({
-  xxs: '(max-width: 374px)',
+  xxs: '(max-width: 359px)',
   xs: '(max-width: 599px)',
   ss: '(max-width: 959px)',
   md: '(max-width: 1279px)',
