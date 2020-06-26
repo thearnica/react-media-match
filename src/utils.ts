@@ -29,8 +29,9 @@ export function getMaxMatch<T>(mediaRules: MediaRulesOf<T>, matches: Partial<Boo
 export function pickMediaMatch<T, K>(
   mediaRules: MediaRulesOf<T>,
   matches: Partial<BoolOf<any>>,
-  slots: Partial<ObjectOf<any, K>>
-): K {
+  slots: Partial<ObjectOf<any, K>>,
+  defaultValue?: K
+): K | undefined {
   const keys = Object.keys(mediaRules);
   const len = keys.length;
 
@@ -49,7 +50,7 @@ export function pickMediaMatch<T, K>(
   }
 
   // could be only possible if no slots is given, so K is undefined
-  return undefined as any;
+  return defaultValue;
 }
 
 export interface Names {

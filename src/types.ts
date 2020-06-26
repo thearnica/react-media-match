@@ -84,13 +84,17 @@ export interface MediaMatcherType<T> {
   /**
    * Renders given children only on states Below(or +including) given
    * @example
-   * <breakpoints.Below tablet>Probably mobile</breakpoints.Below>
+   * <breakpoints.Below tablet>
+   *   Probably mobile?
+   * </breakpoints.Below>
    */
   Below: FC<Partial<BoolOf<T>> & Including>;
   /**
    * Renders given children only on states Above(or +including) given
    * @example
-   * <breakpoints.Above tablet including>Probably not mobile</breakpoints.Above>
+   * <breakpoints.Above tablet including>
+   *     Probably not mobile, but could be tablet
+   * </breakpoints.Above>
    */
   Above: FC<Partial<BoolOf<T>> & Including>;
 
@@ -112,17 +116,54 @@ export interface MediaMatcherType<T> {
    * @deprecated
    */
   Consumer: Consumer<Partial<BoolOf<T>>>;
+
   // pickers
 
   /**
    * Picks value from Slots for matching Match)
+   * There are 3 forms of this function
+   * - with all slots provided - guaranteed to return something
+   * - with non all slots, but with default value - guaranteed to return something
+   * - with not all slots - might return undefined
    * @type {<K>(matches: BoolOf<T>, slots: ObjectOf<T, K>) => K}
-   * @see {useMedia}
+   * @see {@link useMedia}
+   * @example
+   *  const match = pickMatch({
+   *      server: true // MediaMatcher gives you this variable
+   *    }, {
+   *      client: "it's frontend?",
+   *      server: "that's backend!"
+   *    }
+   *  ); // == that's backend!
    */
-  pickMatch<K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>): K;
+  pickMatch<K>(matches: BoolOf<T>, slots: ObjectOf<T, K>): K;
+  pickMatch<K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>): K | undefined;
+  pickMatch<K, DK extends K = K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>, defaultValue: DK): K;
+
   /**
-   * React hook - returns the current state
-   * @see {pickMatch}
+   * Matches the current media
+   * @see {@link pickMatch}
+   * There are 3 forms of this function
+   * - with all slots provided - guaranteed to return something
+   * - with non all slots, but with default value - guaranteed to return something
+   * - with not all slots - might return undefined
+   * @example
+   * // first form
+   * too long long for this example
+   * // third form
+   * breakpoints.useMedia({
+   *   // returns undefined for xxs (!)
+   *   xs: "very small",
+   *   // everything in between is still xss (match a value to the left)
+   *   xl: "very large",
+   * })
+   * // second form
+   * breakpoints.useMedia({
+   *   // returns "small" for xxs
+   *   xs: "not that small",
+   * }, "small")
    */
-  useMedia<K>(slots: Partial<ObjectOf<T, K>>): K | null;
+  useMedia<K>(slots: ObjectOf<T, K>): K;
+  useMedia<K>(slots: Partial<ObjectOf<T, K>>): K | undefined;
+  useMedia<K, DK extends K = K>(slots: Partial<ObjectOf<T, K>>, defaultValue: DK): K;
 }

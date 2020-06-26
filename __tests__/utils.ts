@@ -39,5 +39,41 @@ describe('utils', () => {
         )
       ).toBe('client');
     });
+
+    it('pickMediaMatch - empty cases', () => {
+      expect(
+        pickMediaMatch(
+          {
+            a: false,
+            b: false,
+            c: false,
+          },
+          {
+            a: true,
+          },
+          {
+            b: 'something to the right',
+            c: 'last',
+          }
+        )
+      ).toBe(undefined);
+    });
+    it('pickMediaMatch - empty cases', () => {
+      expect(
+        pickMediaMatch(
+          {
+            a: false,
+            b: false,
+          },
+          {
+            a: true,
+          },
+          {
+            b: 'something to the right',
+          },
+          'default'
+        )
+      ).toBe('default');
+    });
   });
 });

@@ -130,18 +130,45 @@ describe('Specs', () => {
   });
 
   it('pickMatch', () => {
-    expect(
-      pickMatch(
-        {
-          mobile: false,
-          tablet: false,
-          desktop: false,
-        },
-        {
-          tablet: 2,
-        }
-      )
-    ).toBe(2);
+    const try1 = pickMatch(
+      {
+        mobile: false,
+        tablet: false,
+        desktop: false,
+      },
+      {
+        tablet: 2,
+      }
+    );
+    expect(try1).toBe(2);
+
+    const try2 = pickMatch(
+      {
+        mobile: true,
+        tablet: false,
+        desktop: false,
+      },
+      {
+        tablet: 2,
+        desktop: 24,
+      },
+      42
+    );
+    expect(try2).toBe(42);
+
+    const try3 = pickMatch(
+      {
+        mobile: false,
+        tablet: false,
+        desktop: false,
+      },
+      {
+        mobile: 1,
+        tablet: 2,
+        desktop: 3,
+      }
+    );
+    expect(try3).toBe(3);
 
     expect(
       pickMatch(

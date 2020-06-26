@@ -44,13 +44,13 @@ export function createMediaMatcher<T>(queries: MediaRulesOf<T>): MediaMatcherTyp
     <MediaContext.Consumer>{(matched) => cb(getMediaMatches(matched as BoolOf<T>))}</MediaContext.Consumer>
   );
 
-  function pickMatch<K>(matches: Partial<BoolOf<T>>, slots: Partial<ObjectOf<T, K>>): K {
-    return pickMediaMatch<T, K>(queries, matches, slots);
+  function pickMatch<K>(matches: Partial<BoolOf<T>>, slots: Partial<ObjectOf<T, K>>, defaultValue?: K): K | undefined {
+    return pickMediaMatch<T, K>(queries, matches, slots, defaultValue);
   }
 
-  function useMedia<K>(slots: Partial<ObjectOf<T, K>>): K | null {
+  function useMedia<K>(slots: Partial<ObjectOf<T, K>>, defaultValue?: K): K | undefined {
     const matches = getMediaMatches(React.useContext(MediaContext) as BoolOf<T>);
-    return pickMatch(matches, slots);
+    return pickMatch(matches, slots, defaultValue);
   }
 
   function pickMatchEx<M extends Partial<ObjectOf<T, React.ReactNode>>>(
