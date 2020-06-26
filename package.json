@@ -2,36 +2,22 @@
   "name": "react-media-match",
   "version": "1.10.2",
   "description": "React made responsible",
-  "scripts": {
-    "test": "ts-react-toolbox test",
-    "bootstrap": "ts-react-toolbox init",
-    "dev": "ts-react-toolbox dev",
-    "test:ci": "ts-react-toolbox test --runInBand --coverage",
-    "build": "rm -rf ./dist/* && ts-react-toolbox build",
-    "prepublishOnly": "yarn build",
-    "release": "ts-react-toolbox release",
-    "lint": "ts-react-toolbox lint",
-    "static": "ts-react-toolbox publish",
-    "format": "ts-react-toolbox format",
-    "analyze": "ts-react-toolbox analyze"
-  },
   "author": "Marina Korzunova<thearnica@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": ">=8.5.0"
-  },
-  "peerDependencies": {
-    "react": "^16.3.0"
+    "node": ">=10"
   },
   "types": "dist/es5/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "targets"
   ],
   "keywords": [
     "react",
     "media",
     "responsible",
-    "adaptive"
+    "adaptive",
+    "media-query"
   ],
   "repository": "https://github.com/thearnica/react-media-match",
   "dependencies": {
@@ -45,26 +31,66 @@
     }
   ],
   "sideEffects": false,
+  "peerDependencies": {
+    "@types/react": "^16.8.0",
+    "react": "^16.8.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "@size-limit/preset-small-lib": "^2.1.6",
+    "@theuiteam/lib-builder": "^0.0.11",
+    "@types/node": "^14.0.5",
     "@types/prop-types": "^15.7.1",
-    "@types/react": "^16.8.17",
     "@types/react-test-renderer": "^16.8.1",
     "codecov": "^3.0.2",
     "enzyme": "^3.3.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-test-renderer": "^16.8.6",
-    "size-limit": "^1.3.2",
-    "ts-react-toolbox": "^0.2.2",
-    "tslint": "^5.10.0",
-    "typescript": "^2.8.3"
+    "react-test-renderer": "^16.8.6"
   },
   "main": "dist/es5/index.js",
   "jsnext:main": "dist/es2015/index.js",
   "module": "dist/es2015/index.js",
-  "resolutions": {
-    "@types/react": "^16.8.17",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+  "scripts": {
+    "dev": "lib-builder dev",
+    "test": "jest",
+    "test:ci": "jest --runInBand --coverage",
+    "build": "lib-builder build && yarn size:report",
+    "release": "yarn build && yarn test",
+    "size": "npx size-limit",
+    "size:report": "npx size-limit --json > .size.json",
+    "lint": "lib-builder lint",
+    "format": "lib-builder format",
+    "update": "lib-builder update",
+    "docz:dev": "docz dev",
+    "docz:build": "docz build",
+    "prepublish": "yarn build && yarn changelog",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "changelog:rewrite": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "tslint --fix",
+      "git add"
+    ],
+    "*.{js,css,json,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "prettier": {
+    "printWidth": 120,
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true
   }
 }
