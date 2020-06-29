@@ -130,6 +130,18 @@ describe('Specs', () => {
   });
 
   it('pickMatch', () => {
+    const try0 = pickMatch(
+      {
+        mobile: false,
+        tablet: false,
+        desktop: false,
+      },
+      {
+        mobile: { notUndefined: 'yes' },
+      }
+    );
+    expect(try0.notUndefined).toBe('yes');
+
     const try1 = pickMatch(
       {
         mobile: false,
@@ -137,10 +149,10 @@ describe('Specs', () => {
         desktop: false,
       },
       {
-        tablet: 2,
+        tablet: { notUndefined: 'yes' },
       }
     );
-    expect(try1).toBe(2);
+    expect(try1!.notUndefined).toBe('yes');
 
     const try2 = pickMatch(
       {

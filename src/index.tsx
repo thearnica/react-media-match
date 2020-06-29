@@ -1,7 +1,7 @@
 import { createMediaMatcher } from './createMediaMatcher';
 import mediaDefaults from './mediaDefaults';
 
-const defaultMedia = createMediaMatcher(mediaDefaults);
+const defaultMedia = createMediaMatcher(mediaDefaults, 'mobile');
 
 /**
  * Picks value from Slots for matching Match)

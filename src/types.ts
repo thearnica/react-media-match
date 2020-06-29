@@ -20,7 +20,9 @@ export interface NoChildren {
   children?: never;
 }
 
-export interface MediaMatcherType<T> {
+export type WithRequiredKeysSet<T extends object, RequiredKey extends keyof T> = Partial<T> & Pick<T, RequiredKey>; // & Partial<Pick<T, Exclude<keyof T, RequiredKey>>>;
+
+export interface MediaMatcherType<T extends object, RequiredKey extends keyof T = keyof T> {
   /**
    * RenderProp component returning
    * - matches - a current state, an object passable to {@link pickMatch}
@@ -136,7 +138,7 @@ export interface MediaMatcherType<T> {
    *    }
    *  ); // == that's backend!
    */
-  pickMatch<K>(matches: BoolOf<T>, slots: ObjectOf<T, K>): K;
+  pickMatch<K>(matches: BoolOf<T>, slots: WithRequiredKeysSet<ObjectOf<T, K>, RequiredKey>): K;
   pickMatch<K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>): K | undefined;
   pickMatch<K, DK extends K = K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>, defaultValue: DK): K;
 
@@ -163,7 +165,7 @@ export interface MediaMatcherType<T> {
    *   xs: "not that small",
    * }, "small")
    */
-  useMedia<K>(slots: ObjectOf<T, K>): K;
+  useMedia<K>(slots: WithRequiredKeysSet<ObjectOf<T, K>, RequiredKey>): K;
   useMedia<K>(slots: Partial<ObjectOf<T, K>>): K | undefined;
   useMedia<K, DK extends K = K>(slots: Partial<ObjectOf<T, K>>, defaultValue: DK): K;
 }

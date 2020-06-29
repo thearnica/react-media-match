@@ -22,6 +22,8 @@ const castPointsTo = (points: { [key: string]: any }, targetType: any) =>
   }, {});
 
 const skipProp: any = {};
+// @ts-ignore
+const use = (...args: any[]) => null;
 
 /**
  * Creates a group media matcher
@@ -33,7 +35,16 @@ const skipProp: any = {};
  * });
  * @see https://github.com/thearnica/react-media-match#api
  */
-export function createMediaMatcher<T>(queries: MediaRulesOf<T>): MediaMatcherType<T> {
+export function createMediaMatcher<T extends object>(queries: MediaRulesOf<T>): MediaMatcherType<T, keyof T>;
+export function createMediaMatcher<T extends object, FirstKey extends keyof T = keyof T>(
+  queries: MediaRulesOf<T>,
+  firstKey: FirstKey
+): MediaMatcherType<T, FirstKey>;
+export function createMediaMatcher<T extends object, FirstKey extends keyof T = keyof T>(
+  queries: MediaRulesOf<T>,
+  firstKey?: FirstKey
+): MediaMatcherType<T, FirstKey> {
+  use(firstKey);
   const mediaDefaults = executeMediaQuery(queries);
   const initialValue = {} as any;
   const MediaContext = React.createContext<Partial<BoolOf<T>>>(initialValue);
