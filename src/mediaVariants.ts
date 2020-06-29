@@ -10,14 +10,17 @@ import { createMediaMatcher } from './createMediaMatcher';
  * - xl, extra-large: 1920px
  * @see https://material-ui.com/customization/breakpoints/
  */
-export const breakpoints = createMediaMatcher({
-  xxs: '(max-width: 359px)',
-  xs: '(max-width: 599px)',
-  ss: '(max-width: 959px)',
-  md: '(max-width: 1279px)',
-  lg: '(max-width: 1919px)',
-  xl: '(min-width: 1920px)',
-});
+export const breakpoints = createMediaMatcher(
+  {
+    xxs: '(max-width: 359px)',
+    xs: '(max-width: 599px)',
+    ss: '(max-width: 959px)',
+    md: '(max-width: 1279px)',
+    lg: '(max-width: 1919px)',
+    xl: '(min-width: 1920px)',
+  },
+  'xxs'
+);
 
 /**
  * device orientation (orientation)
@@ -25,34 +28,40 @@ export const breakpoints = createMediaMatcher({
  * - landscape
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@media/orientation
  */
-export const orientation = createMediaMatcher({
-  portrait: '(orientation: portrait)',
-  landscape: '(orientation: landscape)',
-});
+export const orientation = createMediaMatcher(
+  {
+    portrait: '(orientation: portrait)',
+    landscape: '(orientation: landscape)',
+  },
+  'portrait'
+);
 
 /**
  * hover capabilities (hover)
- * - capable (mouseDevice)
  * - incapable (touchDevice)
+ * - capable (mouseDevice)
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@media/hover
  */
-export const hover = createMediaMatcher({
-  touchDevice: '(hover: none)',
-  incapable: '(hover: none)',
-  capable: '(hover: hover)',
-  mouseDevice: '(hover: hover)',
-});
-
+export const hover = createMediaMatcher(
+  {
+    incapable: '(hover: none)',
+    capable: '(hover: hover)',
+  },
+  'incapable'
+);
 /**
  * dark mode (prefers-color-scheme)
  * - light
  * - dark
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme
  */
-export const darkMode = createMediaMatcher({
-  light: true as any,
-  dark: '(prefers-color-scheme: dark)',
-});
+export const darkMode = createMediaMatcher(
+  {
+    light: true as any,
+    dark: '(prefers-color-scheme: dark)',
+  },
+  'light'
+);
 
 /**
  * reduced motion (prefers-reduced-motion)
@@ -60,7 +69,10 @@ export const darkMode = createMediaMatcher({
  * - reduce
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion
  */
-export const reducedMotion = createMediaMatcher({
-  normal: true as any,
-  reduce: '(prefers-reduced-motion: reduce)',
-});
+export const reducedMotion = createMediaMatcher(
+  {
+    normal: true as any,
+    reduced: '(prefers-reduced-motion: reduce)',
+  },
+  'normal'
+);
