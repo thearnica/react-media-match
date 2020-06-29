@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/thearnica/react-media-match/compare/v1.10.2...v1.11.1) (2020-06-29)
+
+### Features
+
+- allow default matches ([6715736](https://github.com/thearnica/react-media-match/commit/67157368238a190ec686c823f20425358d01dabb))
+- tighten types using first key property ([2a2cba2](https://github.com/thearnica/react-media-match/commit/2a2cba2698ab4d7b29faa6f6574659f210e9987e))
+
 ## [1.10.2](https://github.com/thearnica/react-media-match/compare/v1.10.1...v1.10.2) (2019-08-13)
 
 ### Bug Fixes
