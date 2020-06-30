@@ -1,3 +1,9 @@
+## [1.11.2](https://github.com/thearnica/react-media-match/compare/v1.11.1...v1.11.2) (2020-06-30)
+
+### Features
+
+- throw on unknown slot provided ([d185df9](https://github.com/thearnica/react-media-match/commit/d185df9599e8b3d1e953f2a6d61df817e8a7107b))
+
 ## [1.11.1](https://github.com/thearnica/react-media-match/compare/v1.10.2...v1.11.1) (2020-06-29)
 
 ### Features
