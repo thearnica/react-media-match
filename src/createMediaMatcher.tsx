@@ -6,9 +6,9 @@ import { MediaServerSide } from './SSR';
 import {
   BoolOf,
   Including,
+  LeafComponent,
   MediaMatcherType,
   MediaRulesOf,
-  NoChildren,
   ObjectOf,
   RenderMatch,
   RenderOf,
@@ -97,7 +97,7 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
         }
       : skipProp;
 
-  const MediaMatches: React.SFC<{ children: RenderMatch<T, any> }> = ({ children }) =>
+  const MediaMatches: LeafComponent<{ children: RenderMatch<T, any> }> = ({ children }) =>
     consume((matched) => children(matched, (matches) => pickMatch(matched as BoolOf<T>, matches)));
 
   MediaMatches.propTypes =
@@ -108,10 +108,10 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
         }
       : skipProp;
 
-  const InlineMediaMatcher: React.SFC<Partial<RenderOf<T>> & NoChildren> = (props) =>
+  const InlineMediaMatcher: LeafComponent<Partial<RenderOf<T>>> = (props) =>
     consume((matched) => pickMatchEx(matched, props));
 
-  const MediaMatcher: React.SFC<Partial<RenderOf<T>> & NoChildren> = (props) =>
+  const MediaMatcher: LeafComponent<Partial<RenderOf<T>>> = (props) =>
     consume((matched) => pickMatchEx(matched, props));
 
   MediaMatcher.propTypes =
@@ -122,30 +122,30 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
         }
       : skipProp;
 
-  const Mock: React.SFC<Partial<RenderOf<T>>> = (props: any) => (
+  const Mock: React.SFC<Partial<RenderOf<T>>> = ({ children, ...props }) => (
     <MediaContext.Provider value={pickMatchValues(queries, { ...nothingSet(queries), ...props })}>
-      {props.children}
+      {children}
     </MediaContext.Provider>
   );
 
-  const Override: React.SFC<Partial<RenderOf<T>>> = (props: any) => (
+  const Override: React.SFC<Partial<RenderOf<T>>> = ({ children, ...props }) => (
     <MediaContext.Consumer>
       {(parentMatch: any) => {
         const value: BoolOf<T> = {
           ...notNulls(parentMatch),
           ...pickMatchValues(queries, props),
         };
-        return <MediaContext.Provider value={value} children={props.children} />;
+        return <MediaContext.Provider value={value} children={children} />;
       }}
     </MediaContext.Consumer>
   );
 
-  const Below: React.SFC<Partial<BoolOf<T>> & Including> = (props) => (
-    <MediaMatcher {...inBetween(queries, props, props.children, props.including ? false : true, true)} />
+  const Below: React.SFC<Partial<BoolOf<T>> & Including> = ({ children, including, ...props }) => (
+    <MediaMatcher {...inBetween(queries, props, children, including ? false : true, true)} />
   );
 
-  const Above: React.SFC<Partial<BoolOf<T>> & Including> = (props) => (
-    <MediaMatcher {...inBetween(queries, props, props.children, props.including ? true : false, false)} />
+  const Above: React.SFC<Partial<BoolOf<T>> & Including> = ({ children, including, ...props }) => (
+    <MediaMatcher {...inBetween(queries, props, children, including ? true : false, false)} />
   );
 
   const ServerRender: React.SFC<{ predicted: keyof T; hydrated?: boolean; children: React.ReactNode }> = ({

@@ -1,4 +1,4 @@
-import { Consumer, FC, ReactNode } from 'react';
+import { Consumer, FC, ReactElement, ReactNode, WeakValidationMap } from 'react';
 
 export type RenderMatch<T, K> = (matches: BoolOf<T>, pickMatch: (matches: Partial<ObjectOf<T, K>>) => K) => ReactNode;
 
@@ -16,8 +16,10 @@ export interface Including {
   including?: boolean;
 }
 
-export interface NoChildren {
-  children?: never;
+export interface LeafComponent<P = {}> {
+  (props: P): ReactElement<any, any> | null;
+  propTypes?: WeakValidationMap<P>;
+  displayName?: string;
 }
 
 export type WithRequiredKeysSet<T extends object, RequiredKey extends keyof T> = Partial<T> & Pick<T, RequiredKey>; // & Partial<Pick<T, Exclude<keyof T, RequiredKey>>>;
@@ -26,19 +28,28 @@ export interface MediaMatcherType<T extends object, RequiredKey extends keyof T 
   /**
    * RenderProp component returning
    * - matches - a current state, an object passable to {@link pickMatch}
-   * - pickMatch - a {@link pickMatch} version with prefilled matches
-   *
+   * - pickMatch - a {@link pickMatch} version with pre-filled matches
+   * @see {@link useMedia} and {@link pickMatch}
    * @example
    * <Matches>
-   *   {({matches, pickMatch}) =>
-   *     pickMatch({
+   *   {(matches, buildInPickMatch) =>
+   *     buildInPickMatch({
+   *       match1: ...,
+   *       match2: ...
+   *     })
+   *   }
+   * </Matches>
+   * @example
+   * <Matches>
+   *   {(matches) =>
+   *     pickMatch(matches, {
    *       match1: ...,
    *       match2: ...
    *     })
    *   }
    * </Matches>
    */
-  Matches: FC<{ children: RenderMatch<T, any> }>;
+  Matches: LeafComponent<{ children: RenderMatch<T, any> }>;
   /**
    * an isolated version of {@link Matches}.
    * DOES NOT USES GLOBAL STATE
@@ -46,26 +57,35 @@ export interface MediaMatcherType<T extends object, RequiredKey extends keyof T 
    *
    * @deprecated
    */
-  Inline: FC<Partial<RenderOf<T>>>;
+  Inline: LeafComponent<Partial<RenderOf<T>>>;
 
   // providers
   /**
    * Makes Media Matcher reactive by
    * providing context for underlying consumers
    *
-   * Without it everything would be __static__
+   * Without it matches are __static__.
+   * Keep in mind - some targets, like `hover` could be static
    *
    * @example
-   * just wrap your application with it
+   * // just wrap your application with it
+   * <someMatcher.Provider>
+   *   <App />
+   * </someMatcher.Provider>
    */
   Provider: FC<{ state?: BoolOf<T> }>;
   /**
-   * ! to be used for testing and server side rendering !
+   * ! to be used for testing and Server Side Rendering !
    *
    * Replaces a whole state with a provided values
    * expects arguments to be keys: as given, values: boolean
    *
-   * @see {Provider}
+   * @see {@link Provider}
+   * @see https://github.com/thearnica/react-media-match#non-media-based-matches
+   * @example
+   * <orientation.Mock landscape={true}>
+   *   <App/>
+   * </orientation.Mock>
    */
   Mock: FC<Partial<RenderOf<T>>>;
   /**
@@ -73,7 +93,7 @@ export interface MediaMatcherType<T extends object, RequiredKey extends keyof T 
    *
    * The same as {@link Mock}, but replaces only a part of a state
    *
-   * @see {Mock}
+   * @see {@link Mock}
    */
   Override: FC<Partial<RenderOf<T>>>;
 
@@ -108,7 +128,7 @@ export interface MediaMatcherType<T extends object, RequiredKey extends keyof T 
    *   tablet="render on anything above"
    * />
    */
-  Matcher: FC<Partial<RenderOf<T>>>;
+  Matcher: LeafComponent<Partial<RenderOf<T>>>;
 
   /**
    * @deprecated
@@ -116,6 +136,7 @@ export interface MediaMatcherType<T extends object, RequiredKey extends keyof T 
   Gearbox: Consumer<Partial<BoolOf<T>>>;
   /**
    * @deprecated
+   * @internal
    */
   Consumer: Consumer<Partial<BoolOf<T>>>;
 
@@ -139,7 +160,17 @@ export interface MediaMatcherType<T extends object, RequiredKey extends keyof T 
    *  ); // == that's backend!
    */
   pickMatch<K>(matches: BoolOf<T>, slots: WithRequiredKeysSet<ObjectOf<T, K>, RequiredKey>): K;
+
+  /**
+   * second form of {@link pickMatch}
+   * first "slot" is not provided and useMedia might return undefined
+   */
   pickMatch<K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>): K | undefined;
+
+  /**
+   * third form of {@link pickMatch}
+   * first "slot" is not provided, but there is a default value to use
+   */
   pickMatch<K, DK extends K = K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>, defaultValue: DK): K;
 
   /**
@@ -166,6 +197,16 @@ export interface MediaMatcherType<T extends object, RequiredKey extends keyof T 
    * }, "small")
    */
   useMedia<K>(slots: WithRequiredKeysSet<ObjectOf<T, K>, RequiredKey>): K;
+
+  /**
+   * second form of {@link useMedia}
+   * first "slot" is not provided and useMedia might return undefined
+   */
   useMedia<K>(slots: Partial<ObjectOf<T, K>>): K | undefined;
+
+  /**
+   * third form of {@link useMedia}
+   * first "slot" is not provided, but there is a default value to use
+   */
   useMedia<K, DK extends K = K>(slots: Partial<ObjectOf<T, K>>, defaultValue: DK): K;
 }

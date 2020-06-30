@@ -26,6 +26,26 @@ export function getMaxMatch<T>(mediaRules: MediaRulesOf<T>, matches: Partial<Boo
   return keys[index];
 }
 
+function validateSlots(rules: string[], slots: object) {
+  if (
+    // @ts-ignore
+    process.env.NODE_ENV !== 'production'
+  ) {
+    // validate slots versus rules
+    Object.keys(slots).forEach((slotKey) => {
+      if (rules.indexOf(slotKey) < 0) {
+        throw new Error(
+          'react-media-match: used slot [' +
+            slotKey +
+            '] is not among [' +
+            rules.join(',') +
+            ']. This is a development error only'
+        );
+      }
+    });
+  }
+}
+
 export function pickMediaMatch<T, K>(
   mediaRules: MediaRulesOf<T>,
   matches: Partial<BoolOf<any>>,
@@ -34,6 +54,8 @@ export function pickMediaMatch<T, K>(
 ): K | undefined {
   const keys = Object.keys(mediaRules);
   const len = keys.length;
+
+  validateSlots(keys, slots);
 
   let index = 0;
   for (; index < len; index++) {
@@ -58,7 +80,10 @@ export interface Names {
 }
 
 export function pickMatchValues(points: Names, props: Names) {
-  return Object.keys(props).reduce((acc: any, key: string) => {
+  const keys = Object.keys(points);
+  validateSlots(keys, props);
+
+  return keys.reduce((acc: any, key: string) => {
     if (points[key] !== undefined) {
       acc[key] = props[key];
     }
@@ -67,7 +92,9 @@ export function pickMatchValues(points: Names, props: Names) {
 }
 
 export function inBetween(breakPoints: Names, points: any, value: any, invert: boolean, include: boolean) {
+  const keys = Object.keys(breakPoints);
   let pass = false;
+  validateSlots(keys, points);
   return Object.keys(breakPoints).reduce((acc: any, key: string) => {
     if (invert && points[key]) {
       pass = true;
