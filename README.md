@@ -21,7 +21,7 @@ Handle it holistically. Do not use react media query - use media match.
 
 ### Sandbox
 
-https://codesandbox.io/s/o7q3zlo0n9
+https://codesandbox.io/s/react-media-match-example-g28y3
 
 # Usage
 
