@@ -14,7 +14,7 @@ export const breakpoints = createMediaMatcher(
   {
     xxs: '(max-width: 359px)',
     xs: '(max-width: 599px)',
-    ss: '(max-width: 959px)',
+    sm: '(max-width: 959px)',
     md: '(max-width: 1279px)',
     lg: '(max-width: 1919px)',
     xl: '(min-width: 1920px)',
