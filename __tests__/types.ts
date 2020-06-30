@@ -26,5 +26,18 @@ describe('types', () => {
     );
 
     expect(test2!.check).toBe(false);
+
+    const testDefault = hover.pickMatch(
+      {
+        incapable: true,
+        capable: false,
+      },
+      {
+        capable: false,
+      },
+      true
+    );
+
+    expect(testDefault).toBe(true);
   });
 });
