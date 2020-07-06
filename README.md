@@ -54,7 +54,7 @@ orientation.useMedia({
 
 ## Rules
 
-- **Rule 1**: Don't mix **conserns**
+- **Rule 1**: Don't mix **concerns**
 
 You shall never mix `size` and `orientation`, `hover` and `reduced-motion` - they are different **slices** of a one big state.
 
