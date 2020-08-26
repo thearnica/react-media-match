@@ -77,8 +77,8 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
         <Media queries={queries}>
           {(matches) => {
             const value: BoolOf<T> = state || {
-              ...notNulls(matches),
               ...(parentMatch || {}),
+              ...notNulls(matches),
             };
             return <MediaContext.Provider value={value} children={children} />;
           }}
