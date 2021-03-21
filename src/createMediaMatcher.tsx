@@ -2,6 +2,7 @@ import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { executeMediaQuery, Media } from './Media';
 
+import { useDebugValue } from 'react';
 import { MediaServerSide } from './SSR';
 import {
   BoolOf,
@@ -13,7 +14,15 @@ import {
   RenderMatch,
   RenderOf,
 } from './types';
-import { getMaxMatch, inBetween, nothingSet, notNulls, pickMatchValues, pickMediaMatch } from './utils';
+import {
+  getMaxMatch,
+  inBetween,
+  nothingSet,
+  notNulls,
+  pickMatchValues,
+  pickMediaMatch,
+  pickMediaMatchSlot,
+} from './utils';
 
 const castPointsTo = (points: { [key: string]: any }, targetType: any) =>
   Object.keys(points).reduce((acc: { [key: string]: typeof targetType }, key: string) => {
@@ -61,6 +70,9 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
 
   function useMedia<K>(slots: Partial<ObjectOf<T, K>>, defaultValue?: K): K | undefined {
     const matches = getMediaMatches(React.useContext(MediaContext) as BoolOf<T>);
+    if (process.env.NODE_ENV !== 'production') {
+      useDebugValue(pickMediaMatchSlot(queries, matches, slots) || 'default');
+    }
     return pickMatch(matches, slots, defaultValue);
   }
 
