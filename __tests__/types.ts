@@ -40,4 +40,10 @@ describe('types', () => {
 
     expect(testDefault).toBe(true);
   });
+
+  describe('extra', () => {
+    it('exposes queries', () => {
+      expect(hover.queries.capable).toEqual('(hover: hover)');
+    });
+  });
 });
