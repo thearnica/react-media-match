@@ -182,6 +182,7 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
   );
 
   return {
+    queries,
     pickMatch,
     useMedia,
 

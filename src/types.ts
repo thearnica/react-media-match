@@ -18,6 +18,7 @@ export interface Including {
 
 export interface LeafComponent<P = {}> {
   (props: P): ReactElement<any, any> | null;
+
   propTypes?: WeakValidationMap<P>;
   displayName?: string;
 }
@@ -25,6 +26,10 @@ export interface LeafComponent<P = {}> {
 export type WithRequiredKeysSet<T extends object, RequiredKey extends keyof T> = Partial<T> & Pick<T, RequiredKey>; // & Partial<Pick<T, Exclude<keyof T, RequiredKey>>>;
 
 export interface MediaMatcherType<T extends object, RequiredKey extends keyof T = keyof T> {
+  /**
+   * list of known matches
+   */
+  queries: MediaRulesOf<T>;
   /**
    * RenderProp component returning
    * - matches - a current state, an object passable to {@link pickMatch}
@@ -171,7 +176,7 @@ export interface MediaMatcherType<T extends object, RequiredKey extends keyof T 
    * third form of {@link pickMatch}
    * first "slot" is not provided, but there is a default value to use
    */
-  pickMatch<K, DK extends K = K>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>, defaultValue: DK): K;
+  pickMatch<K, DK>(matches: BoolOf<T>, slots: Partial<ObjectOf<T, K>>, defaultValue: DK): K | DK;
 
   /**
    * Matches the current media
@@ -208,5 +213,5 @@ export interface MediaMatcherType<T extends object, RequiredKey extends keyof T 
    * third form of {@link useMedia}
    * first "slot" is not provided, but there is a default value to use
    */
-  useMedia<K, DK extends K = K>(slots: Partial<ObjectOf<T, K>>, defaultValue: DK): K;
+  useMedia<K, DK>(slots: Partial<ObjectOf<T, K>>, defaultValue: DK): K | DK;
 }

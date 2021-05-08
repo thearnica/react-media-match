@@ -2,12 +2,12 @@ import { createMediaMatcher } from './createMediaMatcher';
 
 /**
  * bootstrap breakpoints (max-width)
- * - xxs, extra-extra-small: 0px
- * - xs, extra-small: 359px
- * - sm, small: 600px
- * - md, medium: 960px
- * - lg, large: 1280px
- * - xl, extra-large: 1920px
+ * - xxs, extra-extra-small: 0px, a virtual starting point
+ * - xs, extra-small: 359px, the end of "small" phones
+ * - sm, small: 600px, theoretical start of tablets
+ * - md, medium: 960px, theoretical start of desktops
+ * - lg, large: 1280px, a normal desktop
+ * - xl, extra-large: 1920px, wide desktops
  * @see https://material-ui.com/customization/breakpoints/
  */
 export const breakpoints = createMediaMatcher(
