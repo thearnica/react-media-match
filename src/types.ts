@@ -18,13 +18,22 @@ export interface Including {
 
 export interface LeafComponent<P = {}> {
   (props: P): ReactElement<any, any> | null;
+
   propTypes?: WeakValidationMap<P>;
   displayName?: string;
 }
 
 export type WithRequiredKeysSet<T extends object, RequiredKey extends keyof T> = Partial<T> & Pick<T, RequiredKey>; // & Partial<Pick<T, Exclude<keyof T, RequiredKey>>>;
 
-export interface MediaMatcherType<T extends object, RequiredKey extends keyof T = keyof T> {
+export interface MediaMatcherType<
+  T extends object,
+  RequiredKey extends keyof T = keyof T,
+  MediaRules extends MediaRulesOf<T> = MediaRulesOf<T>
+> {
+  /**
+   * list of known matches
+   */
+  queries: MediaRules;
   /**
    * RenderProp component returning
    * - matches - a current state, an object passable to {@link pickMatch}

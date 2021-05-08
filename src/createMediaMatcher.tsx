@@ -44,15 +44,17 @@ const use = (...args: any[]) => null;
  * });
  * @see https://github.com/thearnica/react-media-match#api
  */
-export function createMediaMatcher<T extends object>(queries: MediaRulesOf<T>): MediaMatcherType<T, keyof T>;
-export function createMediaMatcher<T extends object, FirstKey extends keyof T = keyof T>(
-  queries: MediaRulesOf<T>,
+export function createMediaMatcher<T extends object, MediaRules = MediaRulesOf<T>>(
+  queries: MediaRules
+): MediaMatcherType<T, keyof T, MediaRules>;
+export function createMediaMatcher<T extends object, FirstKey extends keyof T = keyof T, MediaRules = MediaRulesOf<T>>(
+  queries: MediaRules,
   firstKey: FirstKey
-): MediaMatcherType<T, FirstKey>;
-export function createMediaMatcher<T extends object, FirstKey extends keyof T = keyof T>(
-  queries: MediaRulesOf<T>,
+): MediaMatcherType<T, FirstKey, MediaRules>;
+export function createMediaMatcher<T extends object, FirstKey extends keyof T = keyof T, MediaRules = MediaRulesOf<T>>(
+  queries: MediaRules,
   firstKey?: FirstKey
-): MediaMatcherType<T, FirstKey> {
+): MediaMatcherType<T, FirstKey, MediaRules> {
   use(firstKey);
   const mediaDefaults = executeMediaQuery(queries);
   const initialValue = {} as any;
@@ -182,6 +184,7 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
   );
 
   return {
+    queries,
     pickMatch,
     useMedia,
 
