@@ -2,8 +2,7 @@ import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { executeMediaQuery, Media } from './Media';
 
-import { useDebugValue } from 'react';
-import { MediaServerSide } from './SSR';
+import { FC, useDebugValue, useEffect, useMemo, useState } from 'react';
 import {
   BoolOf,
   Including,
@@ -14,15 +13,7 @@ import {
   RenderMatch,
   RenderOf,
 } from './types';
-import {
-  getMaxMatch,
-  inBetween,
-  nothingSet,
-  notNulls,
-  pickMatchValues,
-  pickMediaMatch,
-  pickMediaMatchSlot,
-} from './utils';
+import { inBetween, nothingSet, notNulls, pickMatchValues, pickMediaMatch, pickMediaMatchSlot } from './utils';
 
 const castPointsTo = (points: { [key: string]: any }, targetType: any) =>
   Object.keys(points).reduce((acc: { [key: string]: typeof targetType }, key: string) => {
@@ -160,25 +151,38 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
     <MediaMatcher {...inBetween(queries, props, children, including ? true : false, false)} />
   );
 
+  const MediaServerSide: FC<{
+    predicted: keyof T;
+    hydrated?: boolean;
+  }> = ({ predicted, hydrated = false, children }) => {
+    const [isHydrated, setHydrated] = useState(hydrated);
+    const media = React.useContext(MediaContext) as BoolOf<T>;
+    useEffect(() => {
+      setHydrated(true);
+    }, []);
+
+    const overrides = useMemo(() => {
+      if (isHydrated) {
+        return media;
+      } else {
+        return {
+          ...nothingSet(queries),
+          [predicted]: true,
+        } as BoolOf<T>;
+      }
+    }, [media, isHydrated]);
+
+    return <MediaContext.Provider value={overrides} children={children} />;
+  };
+
   const ServerRender: React.SFC<{ predicted: keyof T; hydrated?: boolean; children: React.ReactNode }> = ({
     predicted,
     hydrated,
     children,
   }) => (
-    <MediaContext.Provider value={{ [predicted]: true } as BoolOf<T>}>
-      <ProvideMediaMatchers>
-        <MediaContext.Consumer>
-          {(matched) => (
-            <MediaServerSide
-              fact={getMaxMatch(queries, matched)}
-              predicted={predicted as any}
-              hydrated={!!hydrated}
-              children={children}
-            />
-          )}
-        </MediaContext.Consumer>
-      </ProvideMediaMatchers>
-    </MediaContext.Provider>
+    <ProvideMediaMatchers>
+      <MediaServerSide predicted={predicted as any} hydrated={hydrated} children={children} />
+    </ProvideMediaMatchers>
   );
 
   return {

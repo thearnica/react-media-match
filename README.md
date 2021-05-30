@@ -324,7 +324,7 @@ in case prediction was wrong, and rendered tree will not match hydrated one.
 ```js
 import { MediaMatcher, MediaServerRender } from 'react-media-match';
 
-<MediaServerRender predicted="desktop" hydrated>
+<MediaServerRender predicted="desktop" hydrated={set - true - after - hydration}>
   <MediaMatcher
     mobile={'render for mobile'}
     // tablet={"tablet"} // mobile will be rendered for "skipped" tablet
