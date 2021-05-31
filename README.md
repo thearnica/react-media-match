@@ -314,17 +314,16 @@ const MyComponent = () => {
 There is no way to support MediaQuery on the Server Side, so the only way to generate the expected result
 is **to mock** a predicted device.
 
-We are providing a special component which will mock data only on server size,
-and compare predicted media on componentMount on client size.
+We are providing a special component which will
 
-It also has a special prop `hydrated` which will lead to **forced react tree remount**
-in case prediction was wrong, and rendered tree will not match hydrated one.
-(use only in case of `ReactDOM.hydrated`)
+- render data in predicted device on server side,
+- hydrate into it on the client side
+- switch to the real values after initial hydration
 
 ```js
 import { MediaMatcher, MediaServerRender } from 'react-media-match';
 
-<MediaServerRender predicted="desktop" hydrated>
+<MediaServerRender predicted="desktop" hydrated={optionallyTrue}>
   <MediaMatcher
     mobile={'render for mobile'}
     // tablet={"tablet"} // mobile will be rendered for "skipped" tablet
@@ -333,7 +332,8 @@ import { MediaMatcher, MediaServerRender } from 'react-media-match';
 </MediaServerRender>;
 ```
 
-If prediction has failed - it will inform you, and might help to mitigate rendering issues.
+- set `hydrated` to `true` if your application is already _hydrated_ by any reason. **Omit** the field to let
+  `MediaServerRender` handle hydration process automatically.
 
 #### How to predict a device type
 

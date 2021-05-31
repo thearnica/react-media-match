@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { create } from 'react-test-renderer';
-import { Above, Below, MediaMatcher, MediaMock, MediaServerRender, pickMatch, ProvideMediaMatchers } from '../src';
+import { Above, Below, MediaMatcher, MediaMock, pickMatch, ProvideMediaMatchers } from '../src';
 
 describe('Specs', () => {
   it('should render mobile using ProvideMediaMatchers override', () => {
@@ -279,44 +279,5 @@ describe('Specs', () => {
         }
       )
     ).toBe(1);
-  });
-
-  describe('SSR', () => {
-    it('Render', () => {
-      const wrapper = create(
-        <MediaServerRender predicted="tablet">
-          <MediaMatcher mobile="1" tablet="2" desktop="3" />
-        </MediaServerRender>
-      );
-      expect(wrapper.toJSON()).toEqual('2');
-    });
-
-    it('Render:positive', () => {
-      jest.spyOn(console, 'error');
-      const wrapper = create(
-        <MediaMock tablet={true}>
-          <MediaServerRender predicted="tablet">
-            <MediaMatcher mobile="1" tablet="2" desktop="3" />
-          </MediaServerRender>
-        </MediaMock>
-      );
-      expect(wrapper.toJSON()).toEqual('2');
-      // tslint:disable-next-line:no-console
-      expect(console.error).not.toHaveBeenCalled();
-    });
-
-    it.skip('Render:negative', () => {
-      jest.spyOn(console, 'error');
-      const wrapper = create(
-        <MediaMock desktop={true}>
-          <MediaServerRender predicted="tablet">
-            <MediaMatcher mobile="1" tablet="2" desktop="3" />
-          </MediaServerRender>
-        </MediaMock>
-      );
-      expect(wrapper.toJSON()).toEqual('2');
-      // tslint:disable-next-line:no-console
-      expect(console.error).toHaveBeenCalled();
-    });
   });
 });
