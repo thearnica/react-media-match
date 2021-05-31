@@ -51,42 +51,47 @@ describe('SSR', () => {
 });
 
 describe('hydrate', () => {
-  beforeAll(() => {
-    jest.spyOn(console, 'error');
+  let mock: jest.SpyInstance;
+  beforeEach(() => {
+    mock = jest.spyOn(console, 'error');
+  });
+
+  afterEach(() => {
+    mock.mockRestore();
   });
 
   it('bad case', () => {
     const MobileApp = () => (
       <MediaServerRender predicted="tablet">
-        <MediaMatcher mobile="mobile" tablet="tablet" desktop="3" />
+        <MediaMatcher mobile="1mobile" tablet="2tablet" desktop="3" />
       </MediaServerRender>
     );
 
     const el = document.createElement('div');
-    el.innerHTML = 'mobile';
+    el.innerHTML = '1mobile';
     ReactDOM.hydrate(<MobileApp />, el);
     // tslint:disable-next-line:no-console
     expect(console.error).toHaveBeenCalled();
-    expect(el.innerHTML).toBe('tablet');
+    expect(el.innerHTML).toBe('2tablet');
   });
 
   it('good case', async () => {
     const MobileApp = () => (
       <MediaMock mobile={true}>
         <MediaServerRender predicted="tablet">
-          <MediaMatcher mobile="mobile" tablet="tablet" desktop="3" />
+          <MediaMatcher mobile="1mobile" tablet="2tablet" desktop="3" />
         </MediaServerRender>
       </MediaMock>
     );
 
     const el = document.createElement('div');
-    el.innerHTML = 'tablet';
+    el.innerHTML = '2tablet';
     ReactDOM.hydrate(<MobileApp />, el);
     // tslint:disable-next-line:no-console
     expect(console.error).not.toHaveBeenCalled();
-    expect(el.innerHTML).toBe('tablet');
+    expect(el.innerHTML).toBe('2tablet');
     // give react time to useEffect
     await new Promise((res) => setTimeout(res, 1));
-    expect(el.innerHTML).toBe('mobile');
+    expect(el.innerHTML).toBe('1mobile');
   });
 });
