@@ -77,9 +77,10 @@ describe('hydrate', () => {
   });
 
   it('good case', async () => {
+    const onPrediction = jest.fn();
     const MobileApp = () => (
       <MediaMock mobile={true}>
-        <MediaServerRender predicted="tablet">
+        <MediaServerRender predicted="tablet" onWrongPrediction={onPrediction}>
           <MediaMatcher mobile="1mobile" tablet="2tablet" desktop="3" />
         </MediaServerRender>
       </MediaMock>
@@ -94,6 +95,8 @@ describe('hydrate', () => {
     // give react time to useEffect
     await new Promise((res) => setTimeout(res, 1));
     expect(el.innerHTML).toBe('1mobile');
+
+    expect(onPrediction).toHaveBeenCalledWith('tablet', 'mobile');
   });
 
   it('delay-unlock case', async () => {

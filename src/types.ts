@@ -106,7 +106,12 @@ export interface MediaMatcherType<T extends object, RequiredKey extends keyof T 
    * A Server side helper - accepts a "predicted" target (the one used during SSR)
    * and if it does not match - safely remounts the app
    */
-  ServerRender: FC<{ predicted: keyof T; hydrated?: boolean; children: ReactNode }>;
+  ServerRender: FC<{
+    predicted: keyof T;
+    hydrated?: boolean;
+    children: ReactNode;
+    onWrongPrediction?(predicted: keyof T, factual: keyof T): void;
+  }>;
 
   /**
    * Renders given children only on states Below(or +including) given

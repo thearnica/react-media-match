@@ -13,7 +13,15 @@ import {
   RenderMatch,
   RenderOf,
 } from './types';
-import { inBetween, nothingSet, notNulls, pickMatchValues, pickMediaMatch, pickMediaMatchSlot } from './utils';
+import {
+  getMaxMatch,
+  inBetween,
+  nothingSet,
+  notNulls,
+  pickMatchValues,
+  pickMediaMatch,
+  pickMediaMatchSlot,
+} from './utils';
 
 const castPointsTo = (points: { [key: string]: any }, targetType: any) =>
   Object.keys(points).reduce((acc: { [key: string]: typeof targetType }, key: string) => {
@@ -154,12 +162,22 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
   const MediaServerSide: FC<{
     predicted: keyof T;
     hydrated?: boolean;
-  }> = ({ predicted, hydrated, children }) => {
+    onWrongPrediction?(predicted: keyof T, factual: keyof T): void;
+  }> = ({ predicted, hydrated, onWrongPrediction, children }) => {
     const [isHydrated, setHydrated] = useState(hydrated === undefined ? false : hydrated);
     const media = React.useContext(MediaContext) as BoolOf<T>;
+
     useEffect(() => {
       setHydrated(hydrated === undefined ? true : hydrated);
     }, [hydrated]);
+
+    useEffect(() => {
+      if (isHydrated && !media[predicted]) {
+        if (onWrongPrediction) {
+          onWrongPrediction(predicted, getMaxMatch(queries, media));
+        }
+      }
+    }, [isHydrated]);
 
     const overrides = useMemo(() => {
       if (isHydrated) {
@@ -175,13 +193,19 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
     return <MediaContext.Provider value={overrides} children={children} />;
   };
 
-  const ServerRender: React.SFC<{ predicted: keyof T; hydrated?: boolean; children: React.ReactNode }> = ({
-    predicted,
-    hydrated,
-    children,
-  }) => (
+  const ServerRender: React.SFC<{
+    predicted: keyof T;
+    hydrated?: boolean;
+    children: React.ReactNode;
+    onWrongPrediction?(predicted: keyof T, factual: keyof T): void;
+  }> = ({ predicted, hydrated, onWrongPrediction, children }) => (
     <ProvideMediaMatchers>
-      <MediaServerSide predicted={predicted as any} hydrated={hydrated} children={children} />
+      <MediaServerSide
+        predicted={predicted as any}
+        hydrated={hydrated}
+        onWrongPrediction={onWrongPrediction}
+        children={children}
+      />
     </ProvideMediaMatchers>
   );
 
