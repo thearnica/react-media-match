@@ -154,12 +154,12 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
   const MediaServerSide: FC<{
     predicted: keyof T;
     hydrated?: boolean;
-  }> = ({ predicted, hydrated = false, children }) => {
-    const [isHydrated, setHydrated] = useState(hydrated);
+  }> = ({ predicted, hydrated, children }) => {
+    const [isHydrated, setHydrated] = useState(hydrated === undefined ? false : hydrated);
     const media = React.useContext(MediaContext) as BoolOf<T>;
     useEffect(() => {
-      setHydrated(true);
-    }, []);
+      setHydrated(hydrated === undefined ? true : hydrated);
+    }, [hydrated]);
 
     const overrides = useMemo(() => {
       if (isHydrated) {
