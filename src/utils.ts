@@ -12,8 +12,8 @@ export function forEachName<T, K, R = { [key in keyof T]: K }>(object: MediaRule
     );
 }
 
-export function getMaxMatch<T>(mediaRules: MediaRulesOf<T>, matches: Partial<BoolOf<any>>): string {
-  const keys = Object.keys(mediaRules);
+export function getMaxMatch<T>(mediaRules: MediaRulesOf<T>, matches: Partial<BoolOf<any>>): keyof T {
+  const keys = Object.keys(mediaRules) as Array<keyof T>;
   const len = keys.length;
 
   let index = 0;

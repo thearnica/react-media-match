@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import ReactDOM = require('react-dom');
 import { create } from 'react-test-renderer';
 import { MediaMatcher, MediaMock, MediaServerRender } from '../src';
@@ -76,9 +77,10 @@ describe('hydrate', () => {
   });
 
   it('good case', async () => {
+    const onPrediction = jest.fn();
     const MobileApp = () => (
       <MediaMock mobile={true}>
-        <MediaServerRender predicted="tablet">
+        <MediaServerRender predicted="tablet" onWrongPrediction={onPrediction}>
           <MediaMatcher mobile="1mobile" tablet="2tablet" desktop="3" />
         </MediaServerRender>
       </MediaMock>
@@ -90,6 +92,36 @@ describe('hydrate', () => {
     // tslint:disable-next-line:no-console
     expect(console.error).not.toHaveBeenCalled();
     expect(el.innerHTML).toBe('2tablet');
+    // give react time to useEffect
+    await new Promise((res) => setTimeout(res, 1));
+    expect(el.innerHTML).toBe('1mobile');
+
+    expect(onPrediction).toHaveBeenCalledWith('tablet', 'mobile');
+  });
+
+  it('delay-unlock case', async () => {
+    let updateHydrated: any;
+    const MobileApp = () => {
+      const [isHydrated, setHydrated] = useState(false);
+      updateHydrated = setHydrated;
+      return (
+        <MediaMock mobile={true}>
+          <MediaServerRender predicted="tablet" hydrated={isHydrated}>
+            <MediaMatcher mobile="1mobile" tablet="2tablet" desktop="3" />
+          </MediaServerRender>
+        </MediaMock>
+      );
+    };
+
+    const el = document.createElement('div');
+    el.innerHTML = '2tablet';
+    ReactDOM.hydrate(<MobileApp />, el);
+    expect(el.innerHTML).toBe('2tablet');
+    // give react time to useEffect
+    await new Promise((res) => setTimeout(res, 1));
+    expect(el.innerHTML).toBe('2tablet');
+    // update hydration state
+    updateHydrated(true);
     // give react time to useEffect
     await new Promise((res) => setTimeout(res, 1));
     expect(el.innerHTML).toBe('1mobile');
