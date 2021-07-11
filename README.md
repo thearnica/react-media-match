@@ -116,7 +116,12 @@ const Orientation = createMediaMatcher({
   landscape: '(orientation: landscape)',
 });
 
-<Orientation.Match portrait="One" landscape="Second" />;
+const height = Orientation.useMedia({
+  portrait: "50vw",
+  landscape: "50vw"
+});
+<Orientation.Matcher portrait="One" landscape="Second" />;
+<Orientation.ServerRender portrait="rendering on portrait" landscape="rendering on landscape" />;
 ```
 
 ### More examples of usage
@@ -143,7 +148,7 @@ import { MediaMatcher, ProvideMediaMatchers } from 'react-media-match';
   <Below desktop>will be rendered on mobile and tablet</Above>
   <Below including desktop>
     will be rendered on mobile, tablet and desktop
-  </Above>
+  </Below>
   <MediaMatches>
     {' '}
     // will provide matches information via render-props
@@ -199,7 +204,7 @@ react-media-match provides an API for "default" queries, and a factory method to
   - `Matcher`
   - `Provider`
   - `Mock`
-  - `SSR`
+  - `ServerRender`
   - `Consumer`
 
 ## Default API
