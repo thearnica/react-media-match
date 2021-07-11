@@ -1,3 +1,35 @@
+# [1.14.0](https://github.com/thearnica/react-media-match/compare/v1.13.1...v1.14.0) (2021-07-11)
+
+### Bug Fixes
+
+- fix predicted ssr value overwrite window.matchMedia value ([#1](https://github.com/thearnica/react-media-match/issues/1)) ([8242ccc](https://github.com/thearnica/react-media-match/commit/8242ccce5afc368a79a7a4b24c5b021aec7fef7d))
+
+### Features
+
+- allow control SSR hydration process ([636203f](https://github.com/thearnica/react-media-match/commit/636203f4988f0e60d8972839be3de78ce5fb6444))
+
+## [1.13.1](https://github.com/thearnica/react-media-match/compare/v1.13.0...v1.13.1) (2021-05-31)
+
+# [1.13.0](https://github.com/thearnica/react-media-match/compare/v1.12.0...v1.13.0) (2021-05-08)
+
+### Features
+
+- expose used queries ([aa3f5e8](https://github.com/thearnica/react-media-match/commit/aa3f5e8e13203e2809a253ad28a5c5809989ae3c))
+
+# [1.12.0](https://github.com/thearnica/react-media-match/compare/v1.11.4...v1.12.0) (2021-03-21)
+
+### Bug Fixes
+
+- correct Override behavior. Setting empty object should have no effect ([00a66e7](https://github.com/thearnica/react-media-match/commit/00a66e7f8b706752b0d4aaced881c22d3bcae02a))
+
+## [1.11.4](https://github.com/thearnica/react-media-match/compare/v1.11.3...v1.11.4) (2020-11-26)
+
+## [1.11.3](https://github.com/thearnica/react-media-match/compare/v1.11.2...v1.11.3) (2020-06-30)
+
+### Bug Fixes
+
+- sm should be sm ([889321d](https://github.com/thearnica/react-media-match/commit/889321d89b5dea6757a3ed11f54e085d1cc3a3f4))
+
 ## [1.11.2](https://github.com/thearnica/react-media-match/compare/v1.11.1...v1.11.2) (2020-06-30)
 
 ### Features
