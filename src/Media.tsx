@@ -83,12 +83,12 @@ export class Media extends React.Component<MediaProps, MediaState> {
 
   public componentDidMount() {
     const { matchers } = this.state;
-    Object.keys(matchers).forEach((match) => matchers[match].addListener(this.updateMatches));
+    Object.keys(matchers).forEach((match) => matchers[match].addEventListener('change', this.updateMatches));
   }
 
   public componentWillUnmount() {
     const { matchers } = this.state;
-    Object.keys(matchers).forEach((match) => matchers[match].removeListener(this.updateMatches));
+    Object.keys(matchers).forEach((match) => matchers[match].removeEventListener('change', this.updateMatches));
   }
 
   public render() {
