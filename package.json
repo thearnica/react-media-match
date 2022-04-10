@@ -9,8 +9,7 @@
   },
   "types": "dist/es5/index.d.ts",
   "files": [
-    "dist",
-    "targets"
+    "dist"
   ],
   "keywords": [
     "react",
@@ -21,8 +20,8 @@
   ],
   "repository": "https://github.com/thearnica/react-media-match",
   "dependencies": {
-    "prop-types": "^15.6.1",
-    "tslib": "^1.9.3"
+    "tslib": "^1.9.3",
+    "prop-types": "^15.6.1"
   },
   "size-limit": [
     {
@@ -32,8 +31,8 @@
   ],
   "sideEffects": false,
   "peerDependencies": {
-    "@types/react": "^16.8.0 || ^17.0.0",
-    "react": "^16.8.0 || ^17.0.0"
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+    "@types/react": "^16.8.0 || ^17.0.0 || ^18.0.0"
   },
   "peerDependenciesMeta": {
     "@types/react": {
@@ -41,10 +40,11 @@
     }
   },
   "devDependencies": {
+    "@theuiteam/lib-builder": "^0.1.4",
     "@size-limit/preset-small-lib": "^2.1.6",
-    "@theuiteam/lib-builder": "^0.0.11",
     "@types/node": "^14.0.5",
     "@types/prop-types": "^15.7.1",
+    "@types/react": "^18.0.0",
     "@types/react-test-renderer": "^16.8.1",
     "codecov": "^3.0.2",
     "enzyme": "^3.3.0",
@@ -53,6 +53,7 @@
   "main": "dist/es5/index.js",
   "jsnext:main": "dist/es2015/index.js",
   "module": "dist/es2015/index.js",
+  "module:es2019": "dist/es2019/index.js",
   "scripts": {
     "dev": "lib-builder dev",
     "test": "jest",
@@ -78,7 +79,7 @@
   "lint-staged": {
     "*.{ts,tsx}": [
       "prettier --write",
-      "tslint --fix",
+      "eslint --fix",
       "git add"
     ],
     "*.{js,css,json,md}": [

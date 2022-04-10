@@ -1,4 +1,4 @@
-import { BoolOf, MediaRulesOf, ObjectOf } from './types';
+import { BoolOf, MediaRulesOf, ObjectOf, ObjectShape } from './types';
 
 export function forEachName<T, K, R = { [key in keyof T]: K }>(object: MediaRulesOf<T>, map: (key: string) => K): R {
   return Object.keys(object)
@@ -17,6 +17,7 @@ export function getMaxMatch<T>(mediaRules: MediaRulesOf<T>, matches: Partial<Boo
   const len = keys.length;
 
   let index = 0;
+
   for (; index < len; index++) {
     if (matches[keys[index]]) {
       break;
@@ -26,7 +27,7 @@ export function getMaxMatch<T>(mediaRules: MediaRulesOf<T>, matches: Partial<Boo
   return keys[index];
 }
 
-function validateSlots(rules: string[], slots: object) {
+function validateSlots(rules: string[], slots: ObjectShape) {
   if (
     // @ts-ignore
     process.env.NODE_ENV !== 'production'
@@ -57,6 +58,7 @@ export function pickMediaMatchSlot<T, K>(
   validateSlots(keys, slots);
 
   let index = 0;
+
   for (; index < len; index++) {
     if (matches[keys[index]]) {
       break;
@@ -65,10 +67,12 @@ export function pickMediaMatchSlot<T, K>(
 
   for (; index >= 0; index--) {
     const value = slots[keys[index]];
+
     if (value !== undefined) {
-      return (keys[index] as unknown) as T;
+      return keys[index] as unknown as T;
     }
   }
+
   return undefined;
 }
 
@@ -84,6 +88,7 @@ export function pickMediaMatch<T, K>(
   validateSlots(keys, slots);
 
   let index = 0;
+
   for (; index < len; index++) {
     if (matches[keys[index]]) {
       break;
@@ -92,6 +97,7 @@ export function pickMediaMatch<T, K>(
 
   for (; index >= 0; index--) {
     const value = slots[keys[index]];
+
     if (value !== undefined) {
       return value;
     }
@@ -113,6 +119,7 @@ export function pickMatchValues(points: Names, props: Names) {
     if (props[key] !== undefined) {
       acc[key] = props[key];
     }
+
     return acc;
   }, {});
 }
@@ -121,14 +128,18 @@ export function inBetween(breakPoints: Names, points: any, value: any, invert: b
   const keys = Object.keys(breakPoints);
   let pass = false;
   validateSlots(keys, points);
+
   return Object.keys(breakPoints).reduce((acc: any, key: string) => {
     if (invert && points[key]) {
       pass = true;
     }
+
     acc[key] = (include ? pass : !pass) ? null : value;
+
     if (!invert && points[key]) {
       pass = true;
     }
+
     return acc;
   }, {});
 }

@@ -1,8 +1,10 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
+
+import { FC, ReactNode, useDebugValue, useEffect, useMemo, useState } from 'react';
+
 import { executeMediaQuery, Media } from './Media';
 
-import { FC, useDebugValue, useEffect, useMemo, useState } from 'react';
 import {
   BoolOf,
   Including,
@@ -12,6 +14,7 @@ import {
   ObjectOf,
   RenderMatch,
   RenderOf,
+  ObjectShape,
 } from './types';
 import {
   getMaxMatch,
@@ -26,6 +29,7 @@ import {
 const castPointsTo = (points: { [key: string]: any }, targetType: any) =>
   Object.keys(points).reduce((acc: { [key: string]: typeof targetType }, key: string) => {
     acc[key] = targetType;
+
     return acc;
   }, {});
 
@@ -43,16 +47,18 @@ const use = (...args: any[]) => null;
  * });
  * @see https://github.com/thearnica/react-media-match#api
  */
-export function createMediaMatcher<T extends object>(queries: MediaRulesOf<T>): MediaMatcherType<T, keyof T>;
-export function createMediaMatcher<T extends object, FirstKey extends keyof T = keyof T>(
+export function createMediaMatcher<T extends ObjectShape>(queries: MediaRulesOf<T>): MediaMatcherType<T, keyof T>;
+export function createMediaMatcher<T extends ObjectShape, FirstKey extends keyof T = keyof T>(
   queries: MediaRulesOf<T>,
   firstKey: FirstKey
 ): MediaMatcherType<T, FirstKey>;
-export function createMediaMatcher<T extends object, FirstKey extends keyof T = keyof T>(
+
+export function createMediaMatcher<T extends ObjectShape, FirstKey extends keyof T = keyof T>(
   queries: MediaRulesOf<T>,
   firstKey?: FirstKey
 ): MediaMatcherType<T, FirstKey> {
   use(firstKey);
+
   const mediaDefaults = executeMediaQuery(queries);
   const initialValue = {} as any;
   const MediaContext = React.createContext<Partial<BoolOf<T>>>(initialValue);
@@ -69,9 +75,12 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
 
   function useMedia<K>(slots: Partial<ObjectOf<T, K>>, defaultValue?: K): K | undefined {
     const matches = getMediaMatches(React.useContext(MediaContext) as BoolOf<T>);
+
     if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       useDebugValue(pickMediaMatchSlot(queries, matches, slots) || 'default');
     }
+
     return pickMatch(matches, slots, defaultValue);
   }
 
@@ -82,7 +91,7 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
     return pickMediaMatch<T, React.ReactNode>(queries, matches, slots);
   }
 
-  const ProvideMediaMatchers: React.SFC<{ state?: BoolOf<T> }> = ({ children, state = null }) => (
+  const ProvideMediaMatchers: React.FC<{ state?: BoolOf<T>; children: ReactNode }> = ({ children, state = null }) => (
     <MediaContext.Consumer>
       {(parentMatch: any) => (
         <Media queries={queries}>
@@ -91,6 +100,7 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
               ...(parentMatch || {}),
               ...notNulls(matches),
             };
+
             return <MediaContext.Provider value={value} children={children} />;
           }}
         </Media>
@@ -133,33 +143,39 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
         }
       : skipProp;
 
-  const Mock: React.SFC<Partial<RenderOf<T>>> = ({ children, ...props }) => (
+  const Mock: React.FC<Partial<RenderOf<T>> & { children: ReactNode }> = ({ children, ...props }) => (
     <MediaContext.Provider value={pickMatchValues(queries, { ...nothingSet(queries), ...props })}>
       {children}
     </MediaContext.Provider>
   );
 
-  const Override: React.SFC<Partial<RenderOf<T>>> = ({ children, ...props }) => (
+  const Override: React.FC<Partial<RenderOf<T>> & { children: ReactNode }> = ({ children, ...props }) => (
     <MediaContext.Consumer>
       {(parentMatch: any) => {
         const value: BoolOf<T> = {
           ...notNulls(parentMatch),
           ...pickMatchValues(queries, props),
         };
+
         return <MediaContext.Provider value={value} children={children} />;
       }}
     </MediaContext.Consumer>
   );
 
-  const Below: React.SFC<Partial<BoolOf<T>> & Including> = ({ children, including, ...props }) => (
-    <MediaMatcher {...inBetween(queries, props, children, including ? false : true, true)} />
-  );
+  const Below: React.FC<Partial<BoolOf<T>> & Including & { children: ReactNode }> = ({
+    children,
+    including,
+    ...props
+  }) => <MediaMatcher {...inBetween(queries, props, children, !including, true)} />;
 
-  const Above: React.SFC<Partial<BoolOf<T>> & Including> = ({ children, including, ...props }) => (
-    <MediaMatcher {...inBetween(queries, props, children, including ? true : false, false)} />
-  );
+  const Above: React.FC<Partial<BoolOf<T>> & Including & { children: ReactNode }> = ({
+    children,
+    including,
+    ...props
+  }) => <MediaMatcher {...inBetween(queries, props, children, !!including, false)} />;
 
   const MediaServerSide: FC<{
+    children: ReactNode;
     predicted: keyof T;
     hydrated?: boolean;
     onWrongPrediction?(predicted: keyof T, factual: keyof T): void;
@@ -193,7 +209,7 @@ export function createMediaMatcher<T extends object, FirstKey extends keyof T = 
     return <MediaContext.Provider value={overrides} children={children} />;
   };
 
-  const ServerRender: React.SFC<{
+  const ServerRender: React.FC<{
     predicted: keyof T;
     hydrated?: boolean;
     children: React.ReactNode;

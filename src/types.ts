@@ -16,16 +16,19 @@ export interface Including {
   including?: boolean;
 }
 
-export interface LeafComponent<P = {}> {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type ObjectShape = {};
+
+export interface LeafComponent<P = ObjectShape> {
   (props: P): ReactElement<any, any> | null;
 
   propTypes?: WeakValidationMap<P>;
   displayName?: string;
 }
 
-export type WithRequiredKeysSet<T extends object, RequiredKey extends keyof T> = Partial<T> & Pick<T, RequiredKey>; // & Partial<Pick<T, Exclude<keyof T, RequiredKey>>>;
+export type WithRequiredKeysSet<T extends ObjectShape, RequiredKey extends keyof T> = Partial<T> & Pick<T, RequiredKey>; // & Partial<Pick<T, Exclude<keyof T, RequiredKey>>>;
 
-export interface MediaMatcherType<T extends object, RequiredKey extends keyof T = keyof T> {
+export interface MediaMatcherType<T extends ObjectShape, RequiredKey extends keyof T = keyof T> {
   /**
    * list of known matches
    */
@@ -78,7 +81,7 @@ export interface MediaMatcherType<T extends object, RequiredKey extends keyof T 
    *   <App />
    * </someMatcher.Provider>
    */
-  Provider: FC<{ state?: BoolOf<T> }>;
+  Provider: FC<{ state?: BoolOf<T>; children: ReactNode }>;
   /**
    * ! to be used for testing and Server Side Rendering !
    *
@@ -92,7 +95,7 @@ export interface MediaMatcherType<T extends object, RequiredKey extends keyof T 
    *   <App/>
    * </orientation.Mock>
    */
-  Mock: FC<Partial<RenderOf<T>>>;
+  Mock: FC<Partial<RenderOf<T>> & { children: ReactNode }>;
   /**
    * ! to be used for testing and server side rendering !
    *
@@ -100,7 +103,7 @@ export interface MediaMatcherType<T extends object, RequiredKey extends keyof T 
    *
    * @see {@link Mock}
    */
-  Override: FC<Partial<RenderOf<T>>>;
+  Override: FC<Partial<RenderOf<T>> & { children: ReactNode }>;
 
   /**
    * A Server side helper - accepts a "predicted" target (the one used during SSR)
@@ -120,7 +123,7 @@ export interface MediaMatcherType<T extends object, RequiredKey extends keyof T 
    *   Probably mobile?
    * </breakpoints.Below>
    */
-  Below: FC<Partial<BoolOf<T>> & Including>;
+  Below: FC<Partial<BoolOf<T>> & Including & { children: ReactNode }>;
   /**
    * Renders given children only on states Above(or +including) given
    * @example
@@ -128,7 +131,7 @@ export interface MediaMatcherType<T extends object, RequiredKey extends keyof T 
    *     Probably not mobile, but could be tablet
    * </breakpoints.Above>
    */
-  Above: FC<Partial<BoolOf<T>> & Including>;
+  Above: FC<Partial<BoolOf<T>> & Including & { children: ReactNode }>;
 
   /**
    * renders only one matching path

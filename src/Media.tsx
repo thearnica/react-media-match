@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { BoolOf, MediaRulesOf } from './types';
 
 export interface BoolHash {
@@ -32,6 +33,7 @@ const matchWindowMedia = (query: string) => {
 
 export function executeMediaQuery<T>(queries: MediaRulesOf<T>): BoolOf<T> {
   const matches: BoolOf<T> = {} as any;
+
   Object.keys(queries).forEach((media) => {
     const query = (queries as any)[media];
 
@@ -58,8 +60,10 @@ export class Media extends React.Component<MediaProps, MediaState> {
     const { queries } = props;
     const keys = Object.keys(queries);
     this.state.keys = keys;
+
     Object.keys(queries).forEach((media) => {
       const query = queries[media];
+
       if (typeof query === 'string') {
         this.state.matches[media] = (this.state.matchers[media] = window.matchMedia(query)).matches;
       } else {
@@ -73,6 +77,7 @@ export class Media extends React.Component<MediaProps, MediaState> {
       matches: keys.reduce(
         (acc: BoolHash, key) => {
           acc[key] = matchers[key].matches;
+
           return acc;
         },
         {
