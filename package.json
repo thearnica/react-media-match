@@ -1,6 +1,6 @@
 {
   "name": "react-media-match",
-  "version": "1.14.2",
+  "version": "1.14.3",
   "description": "React made responsible",
   "author": "Marina Korzunova<thearnica@gmail.com>",
   "license": "MIT",
@@ -9,7 +9,8 @@
   },
   "types": "dist/es5/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "targets"
   ],
   "keywords": [
     "react",
